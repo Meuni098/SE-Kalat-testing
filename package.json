@@ -1,0 +1,52 @@
+{
+  "name": "custodia-app",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint",
+    "test:forms": "tsx --test tests/form-export.test.ts tests/form-autofill.test.ts tests/report-section-filtering.test.ts tests/form-batch.test.ts tests/form-collections.test.ts tests/single-workbook.test.ts tests/document-preview.test.ts tests/compact-template-export.test.ts",
+    "test:audit": "tsx --test tests/audit-log.test.ts",
+    "test:audit:integration": "tsx tests/audit-log.integration.ts",
+    "test:products": "tsx --test tests/asset-code.test.ts",
+    "test:products:integration": "tsx tests/asset-code.integration.ts",
+    "test:security": "tsx --test tests/session-secret.test.ts"
+  },
+  "prisma": {
+    "seed": "npx tsx prisma/seed.ts"
+  },
+  "dependencies": {
+    "@prisma/client": "^6.4.1",
+    "@types/exceljs": "^0.5.3",
+    "@xmldom/xmldom": "^0.9.12",
+    "bcryptjs": "^3.0.3",
+    "cfb": "^1.2.2",
+    "clsx": "^2.1.1",
+    "exceljs": "^4.4.0",
+    "jose": "^6.2.13",
+    "jszip": "^3.10.2",
+    "next": "16.4.3",
+    "qrcode": "^1.5.4",
+    "react": "19.3.0",
+    "react-dom": "19.3.0",
+    "tailwind-merge": "^3.7.0"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4.3.3",
+    "@tailwindcss/turbopack": "^4",
+    "@types/bcryptjs": "^2.4.6",
+    "@types/node": "^20",
+    "@types/qrcode": "^1.5.6",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "eslint": "^9",
+    "eslint-config-next": "16.4.3",
+    "postcss": "^8.5.32",
+    "prisma": "^6.4.1",
+    "tailwindcss": "^4",
+    "tsx": "^4.23.15",
+    "typescript": "^5"
+  }
+}

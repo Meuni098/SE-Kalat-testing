@@ -1,0 +1,18 @@
+{
+  "par": {
+    "sourceHash": "aadb34aceb9d346625a00ac8add58c8a0432b07f297fad5dcfd9fbd5c53b655b",
+    "workbookHash": "595d73e0900e3d7ff412fd8f6a1dcedff7f80575216e579679080d4034cb808e"
+  },
+  "ptr": {
+    "sourceHash": "1e79d6d057feb28eb0a13db2cc52c6bb18eb3aafc17d7b7a9aa03679d713a41c",
+    "workbookHash": "5c1a67a5abb051989f99376d64134b2d101d6c08fe9dc082cfe76fbad0830492"
+  },
+  "itr": {
+    "sourceHash": "391a85f7d28a9c5ce7ab765adc2f6a8c9333904c4d62073e90cb6113b634b19c",
+    "workbookHash": "b51c71b2033434a951c7ab526f0080618bc1d49c1cc0b280295d784d976bddd5"
+  },
+  "rpcppe": {
+    "sourceHash": "a953bccf34de4c1327956c4081476f05d237fcb8d21c8261f26252ff60d29a77",
+    "workbookHash": "909e69356caf30f43336729c6bb92485e90eac4ee76a82ad92dbc88e31e75902"
+  }
+}

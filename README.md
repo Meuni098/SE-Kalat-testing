@@ -1,0 +1,99 @@
+# CUSTODIA asset management
+
+CUSTODIA is a Next.js application for inventory, accountability, item receipts, transfers, returns, physical counts, audit history, product codes, QR labels, and supplied-template document exports. PostgreSQL stores application data through Prisma.
+
+## Requirements
+
+- Node.js compatible with the locked Next.js release and npm.
+- A PostgreSQL database that you control.
+- Windows PowerShell only if using the optional Windows launcher.
+
+## Local setup
+
+Run commands from the repository root:
+
+```bash
+npm ci
+npx prisma generate
+```
+
+Copy `.env.example` to `.env`, then fill in your own values. Never commit `.env`.
+
+- `DATABASE_URL`: your PostgreSQL connection URL. Use a dedicated database/user and keep its password private.
+- `NEXTAUTH_SECRET`: a private random value of at least 32 bytes. Authentication has no built-in fallback secret. Generate a value locally, for example:
+
+```bash
+node -e "console.log(require('node:crypto').randomBytes(48).toString('base64'))"
+```
+
+Apply migrations to a new, empty database:
+
+```bash
+npx prisma migrate deploy
+```
+
+For an existing database, back it up and reconcile its schema/migration history before deployment. Do not reset application data or blindly mark the baseline applied.
+
+## Optional administrator bootstrap
+
+The seed creates an administrator from environment variables; it does not publish demo accounts, credentials, personnel, or inventory records. Set `SEED_ADMIN_EMAIL` and a private `SEED_ADMIN_PASSWORD` of at least 12 characters in your local `.env`. `SEED_ADMIN_NAME` is optional.
+
+```bash
+npx prisma db seed
+```
+
+Keep seed credentials private and remove the bootstrap password from the environment when no longer needed. There is no public demo-account login shortcut.
+
+## Run
+
+```bash
+npm run dev
+```
+
+Open `http://localhost:3000`. On Windows, `./Start-Custodia.ps1` starts this repository's application regardless of the shell's current directory. Use `-Port 3001` to select another port or `-Check` to inspect the resolved paths.
+
+For production:
+
+```bash
+npx next build --webpack
+npm run start
+```
+
+Configure production secrets and the database separately; they are not included in this repository. Set up HTTPS and keep database access restricted to the application and authorized administrators.
+
+## Verify
+
+```bash
+npm run test:forms
+npm run test:audit
+npm run test:products
+npm run test:security
+npx tsc --noEmit
+npm run lint
+```
+
+Database integration suites require a local test database. Read the relevant scripts before running them, and never point disposable-schema tests at an unreviewed production environment.
+
+```bash
+npm run test:audit:integration
+npm run test:products:integration
+```
+
+## Reports
+
+Exports fill the supplied templates rather than adding a replacement report design. Automatic Excel exports contain all matching records in one workbook, including both classifications when selected. Description cells contain the saved description only; unused item rows are removed. A visual layout preview is available before downloading. Office pagination and some native drawing details can differ from the browser preview.
+
+Required original forms are in `resources/export-templates`; verified XLSX working copies and their manifest are in `resources/workbook-templates`. Keep both directories when packaging the server. Published templates retain their layouts with personal sample identities removed. Use the application's actual records to populate them.
+
+## Documentation
+
+- [Supplied-document exports](docs/single-workbook-export.md)
+- [Report purpose and data mapping](docs/report-autofill-consistency.md)
+- [All classifications](docs/all-classifications.md)
+- [College-wide exports](docs/college-batch-export.md)
+- [Reference-form API and access](docs/reference-form-export.md)
+- [Receiving custodians and item receipts](docs/receiving-custodians.md)
+- [Audit Log and My Activity](docs/audit-log.md)
+- [Product codes and QR labels](docs/product-codes.md)
+
+Local configuration, database backups, build/dependency folders, QA artifacts, screenshots, private notes, and AI skill/prompt files are excluded from publication.

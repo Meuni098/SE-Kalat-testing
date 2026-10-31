@@ -1,0 +1,135 @@
+@import "tailwindcss";
+
+@theme {
+  --color-crimson: #A60212;
+  --color-primary: #A60212;
+  --color-primary-hover: #85010E;
+  --color-amber: #F5AB29;
+  --color-accent: #F5AB29;
+  --color-cream: #FFF4E0;
+  --color-background: #FFF4E0;
+  --color-maroon: #3B0A0F;
+  --color-text: #3B0A0F;
+  --color-soft-maroon: #6E2B32;
+  --color-text-muted: #6E2B32;
+  --color-burnt-orange: #D97B1A;
+  --color-support: #D97B1A;
+  --color-solid-white: #FFFFFF;
+  --color-card: #FFFFFF;
+  --color-sand: #EBD3B2;
+  --color-border: #EBD3B2;
+  --color-sidebar: #3B0A0F;
+  --color-sidebar-active: #4E1117;
+}
+
+@layer base {
+  :root {
+    --color-primary: #A60212;
+    --color-primary-hover: #85010E;
+    --color-accent: #F5AB29;
+    --color-background: #FFF4E0;
+    --color-text: #3B0A0F;
+    --color-text-muted: #6E2B32;
+    --color-support: #D97B1A;
+    --color-card: #FFFFFF;
+    --color-border: #EBD3B2;
+    --color-sidebar: #3B0A0F;
+    --color-sidebar-active: #4E1117;
+  }
+
+  * {
+    border-color: #EBD3B2;
+    box-sizing: border-box;
+  }
+
+  body {
+    background-color: #FFF4E0;
+    color: #3B0A0F;
+    font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+    min-height: 100vh;
+    margin: 0;
+    padding: 0;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* Enforce tabular figures for codes, property numbers, monetary amounts */
+  .font-tnum, .tabular-nums, .font-mono {
+    font-feature-settings: 'tnum' 1, 'cv05' 1;
+    font-family: 'Plus Jakarta Sans', sans-serif !important;
+  }
+}
+
+/* Material Symbols Outlined icon utility */
+.material-symbols-outlined {
+  font-family: 'Material Symbols Outlined';
+  font-weight: normal;
+  font-style: normal;
+  font-size: 20px;
+  line-height: 1;
+  letter-spacing: normal;
+  text-transform: none;
+  display: inline-block;
+  white-space: nowrap;
+  word-wrap: normal;
+  direction: ltr;
+  -webkit-font-feature-settings: 'liga';
+  -webkit-font-smoothing: antialiased;
+  vertical-align: middle;
+}
+
+/* Strict solid background utility classes */
+.bg-cream {
+  background-color: #FFF4E0;
+}
+.bg-crimson {
+  background-color: #A60212;
+}
+.bg-amber {
+  background-color: #F5AB29;
+}
+.bg-maroon {
+  background-color: #3B0A0F;
+}
+.bg-burnt-orange {
+  background-color: #D97B1A;
+}
+.bg-sand {
+  background-color: #EBD3B2;
+}
+.bg-solid-white {
+  background-color: #FFFFFF;
+}
+
+/* Text utility classes */
+.text-crimson {
+  color: #A60212;
+}
+.text-amber {
+  color: #F5AB29;
+}
+.text-maroon {
+  color: #3B0A0F;
+}
+.text-soft-maroon {
+  color: #6E2B32;
+}
+.text-burnt-orange {
+  color: #D97B1A;
+}
+.text-cream {
+  color: #FFF4E0;
+}
+
+/* Border utility classes */
+.border-sand {
+  border-color: #EBD3B2;
+}
+.border-crimson {
+  border-color: #A60212;
+}
+.border-amber {
+  border-color: #F5AB29;
+}
+.border-maroon {
+  border-color: #3B0A0F;
+}

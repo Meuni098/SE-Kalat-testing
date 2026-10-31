@@ -1,0 +1,22 @@
+{
+  "name": "CUSTODIA Asset Management System",
+  "short_name": "CUSTODIA",
+  "description": "Bulacan State University AMO Property, Plant & Equipment Management",
+  "start_url": "/dashboard",
+  "display": "standalone",
+  "background_color": "#FFF4E0",
+  "theme_color": "#3B0A0F",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

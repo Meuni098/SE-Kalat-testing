@@ -1,0 +1,328 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id           String    @id @default(uuid())
+  name         String
+  email        String    @unique
+  passwordHash String
+  role         String    @default("CUSTODIAN") // ADMIN, STAFF, CUSTODIAN, AUDITOR
+  isActive     Boolean   @default(true)
+  unitId       String?
+  unit         Unit?     @relation(fields: [unitId], references: [id])
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+
+  inspections        Inspection[]
+  requestedTransfers TransferRequest[] @relation("RequestedByUser")
+  decidedTransfers   TransferRequest[] @relation("DecidedByUser")
+  missingReports     MissingReport[]
+  auditLogs          AuditLog[]
+  recordedItemReceipts ItemReceipt[]
+}
+
+model Unit {
+  id           String    @id @default(uuid())
+  code         String    @unique
+  name         String
+  unitType     String    @default("ACADEMIC") // ACADEMIC, ADMINISTRATIVE, AUXILIARY
+  parentUnitId String?
+  parentUnit   Unit?     @relation("UnitHierarchy", fields: [parentUnitId], references: [id])
+  childUnits   Unit[]    @relation("UnitHierarchy")
+  isActive     Boolean   @default(true)
+  campus       String    @default("MAIN_CAMPUS") // MAIN_CAMPUS, BUSTOS, MENESES, SARMIENTO, HAGONOY
+
+  receivingCustodianId         String?   @unique
+  receivingCustodian           Person?   @relation("UnitReceivingCustodian", fields: [receivingCustodianId], references: [id], onDelete: Restrict)
+  receivingCustodianRevision   Int       @default(0)
+  receivingCustodianAssignedAt DateTime?
+
+  users          User[]
+  persons        Person[]
+  assets         Asset[]
+  transfersFrom  TransferRequest[] @relation("FromUnit")
+  transfersTo    TransferRequest[] @relation("ToUnit")
+  itemReceipts   ItemReceipt[]
+}
+
+model Person {
+  id            String    @id @default(uuid())
+  employeeNo    String    @unique
+  fullName      String
+  position      String
+  email         String?
+  unitId        String
+  unit          Unit      @relation(fields: [unitId], references: [id])
+  isAccountable Boolean   @default(true)
+  createdAt     DateTime  @default(now())
+  receivingUnit Unit?     @relation("UnitReceivingCustodian")
+  itemReceipts  ItemReceipt[]
+
+  assets        Asset[]
+  fromTransfers TransferRequest[] @relation("FromPerson")
+  toTransfers   TransferRequest[] @relation("ToPerson")
+}
+
+model Category {
+  id              String   @id @default(uuid())
+  code            String   @unique
+  name            String
+  classification  String   @default("PPE") // PPE, SEMI_EXPENDABLE
+  usefulLifeYears Int      @default(5)
+
+  assets           Asset[]
+  productTemplates ProductTemplate[]
+}
+
+model Asset {
+  id                  String    @id @default(uuid())
+  // Product Code. Global ProductCodeSequence is managed by SQL migration.
+  propertyNo          String    @unique
+  name                String
+  description         String?
+  classification      String    @default("PPE") // PPE, SEMI_EXPENDABLE
+  categoryId          String
+  category            Category  @relation(fields: [categoryId], references: [id])
+  serialNo            String?
+  acquisitionDate     DateTime
+  acquisitionCost     Float
+  unitId              String
+  unit                Unit      @relation(fields: [unitId], references: [id])
+  accountablePersonId String?
+  accountablePerson   Person?   @relation(fields: [accountablePersonId], references: [id])
+  status              String    @default("IN_USE") // IN_USE, IN_STORAGE, UNDER_REPAIR, MISSING, FOR_DISPOSAL, DISPOSED
+  condition           String    @default("GOOD") // EXCELLENT, GOOD, FAIR, UNSERVICEABLE
+  qrCodeData          String?
+  lastVerifiedAt      DateTime?
+  isDeleted           Boolean   @default(false)
+  createdAt           DateTime  @default(now())
+  updatedAt           DateTime  @updatedAt
+
+  intakeItems          IntakeItem[]
+  inspections          Inspection[]
+  transferRequests     TransferRequest[]
+  returnRequests       ReturnRequest[]
+  physicalCountEntries PhysicalCountEntry[]
+  missingReports       MissingReport[]
+  disposals            Disposal[]
+  itemReceipts         ItemReceipt[]
+
+  @@index([propertyNo])
+  @@index([serialNo])
+  @@index([unitId])
+  @@index([status])
+}
+
+model ItemReceipt {
+  id                 String   @id @default(uuid())
+  operationId        String   @unique
+  requestHash        String
+  assetId            String
+  asset              Asset    @relation(fields: [assetId], references: [id], onDelete: Restrict)
+  unitId             String
+  unit               Unit     @relation(fields: [unitId], references: [id], onDelete: Restrict)
+  receivedByPersonId String
+  receivedByPerson   Person   @relation(fields: [receivedByPersonId], references: [id], onDelete: Restrict)
+  recordedById       String
+  recordedBy         User     @relation(fields: [recordedById], references: [id], onDelete: Restrict)
+  receiverName       String
+  receiverEmployeeNo String
+  receiverPosition   String
+  unitCode           String
+  propertyNo         String
+  assetName          String
+  recordedByName     String
+  remarks            String
+  receivedAt         DateTime @default(now())
+
+  @@index([unitId, receivedAt])
+  @@index([assetId, receivedAt])
+}
+
+model IntakeRecord {
+  id                String       @id @default(uuid())
+  poNumber          String
+  supplierName      String
+  deliveryReceiptNo String
+  deliveryDate      DateTime
+  totalAmount       Float
+  remarks           String?
+  createdAt         DateTime     @default(now())
+
+  items             IntakeItem[]
+}
+
+model IntakeItem {
+  id             String       @id @default(uuid())
+  intakeRecordId String
+  intakeRecord   IntakeRecord @relation(fields: [intakeRecordId], references: [id], onDelete: Cascade)
+  description    String
+  quantity       Int          @default(1)
+  unitCost       Float
+  classification String       @default("PPE") // PPE, SEMI_EXPENDABLE
+  assetId        String?
+  asset          Asset?       @relation(fields: [assetId], references: [id])
+
+  inspections    Inspection[]
+}
+
+model Inspection {
+  id           String      @id @default(uuid())
+  assetId      String?
+  asset        Asset?      @relation(fields: [assetId], references: [id])
+  intakeItemId String?
+  intakeItem   IntakeItem? @relation(fields: [intakeItemId], references: [id])
+  inspectorId  String
+  inspector    User        @relation(fields: [inspectorId], references: [id])
+  result       String      @default("ACCEPTED") // ACCEPTED, REJECTED, CONDITIONAL
+  remarks      String?
+  inspectedAt  DateTime    @default(now())
+}
+
+model TransferRequest {
+  id           String    @id @default(uuid())
+  assetId      String
+  asset        Asset     @relation(fields: [assetId], references: [id])
+  fromUnitId   String
+  fromUnit     Unit      @relation("FromUnit", fields: [fromUnitId], references: [id])
+  toUnitId     String
+  toUnit       Unit      @relation("ToUnit", fields: [toUnitId], references: [id])
+  fromPersonId String?
+  fromPerson   Person?   @relation("FromPerson", fields: [fromPersonId], references: [id])
+  toPersonId   String?
+  toPerson     Person?   @relation("ToPerson", fields: [toPersonId], references: [id])
+  requestedById String
+  requestedBy  User      @relation("RequestedByUser", fields: [requestedById], references: [id])
+  status       String    @default("PENDING") // PENDING, APPROVED, REJECTED, COMPLETED
+  requestedAt  DateTime  @default(now())
+  decidedById  String?
+  decidedBy    User?     @relation("DecidedByUser", fields: [decidedById], references: [id])
+  decidedAt    DateTime?
+  remarks      String?
+}
+
+model ReturnRequest {
+  id          String    @id @default(uuid())
+  assetId     String
+  asset       Asset     @relation(fields: [assetId], references: [id])
+  returnedBy  String
+  reason      String
+  status      String    @default("PENDING") // PENDING, APPROVED, REJECTED
+  requestedAt DateTime  @default(now())
+  decidedAt   DateTime?
+}
+
+model PhysicalCountSession {
+  id         String               @id @default(uuid())
+  title      String
+  fiscalYear Int
+  status     String               @default("ACTIVE") // ACTIVE, PAUSED, CLOSED
+  startedAt  DateTime             @default(now())
+  endedAt    DateTime?
+
+  entries    PhysicalCountEntry[]
+}
+
+model PhysicalCountEntry {
+  id              String               @id @default(uuid())
+  sessionId       String
+  session         PhysicalCountSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  assetId         String
+  asset           Asset                @relation(fields: [assetId], references: [id])
+  countedById     String
+  countedAt       DateTime             @default(now())
+  foundStatus     String               @default("VERIFIED_IN_PLACE") // VERIFIED_IN_PLACE, RELOCATED, UNACCOUNTED
+  scannedLocation String?
+  remarks         String?
+}
+
+model MissingReport {
+  id                String    @id @default(uuid())
+  assetId           String
+  asset             Asset     @relation(fields: [assetId], references: [id])
+  reportedById      String
+  reportedBy        User      @relation(fields: [reportedById], references: [id])
+  lastSeenDate      DateTime
+  locationLastSeen  String
+  circumstances     String
+  policeBlotterUrl  String?
+  status            String    @default("REPORTED") // REPORTED, UNDER_INVESTIGATION, FOUND, WRITTEN_OFF
+  reportedAt        DateTime  @default(now())
+  resolvedAt        DateTime?
+}
+
+model Disposal {
+  id                 String    @id @default(uuid())
+  assetId            String
+  asset              Asset     @relation(fields: [assetId], references: [id])
+  docketNo           String    @unique
+  reason             String
+  method             String    @default("PUBLIC_AUCTION") // PUBLIC_AUCTION, DONATION, DESTRUCTION
+  appraisedScrapValue Float    @default(0)
+  status             String    @default("PROPOSED") // PROPOSED, APPRAISED, APPROVED, DISPOSED
+  proposedAt         DateTime  @default(now())
+  approvedAt         DateTime?
+  coaApprovalRef     String?
+}
+
+model AuditLog {
+  id          String   @id @default(uuid())
+  actorId     String?
+  actorNameSnapshot String?
+  actorRoleSnapshot String?
+  actorKind String @default("UNKNOWN")
+  eventKind String @default("LEGACY") // CREATE, UPDATE, DELETE, EVENT, LEGACY
+  entityReference String?
+  relatedAssetIds String[] @default([])
+  operationId String?
+  reason String?
+  actor       User?    @relation(fields: [actorId], references: [id])
+  action      String   // CREATE, UPDATE, TRANSFER, VERIFY, REPORT_MISSING, MERGE, DISPOSE, EXPORT
+  entityType  String   // ASSET, TRANSFER, AUDIT, DISPOSAL, USER
+  entityId    String
+  beforeState Json?
+  afterState  Json?
+  ipAddress   String?
+  createdAt   DateTime @default(now())
+
+  @@index([entityId])
+  @@index([createdAt])
+  @@index([createdAt, id])
+  @@index([actorId, createdAt, id])
+  @@index([entityType, entityId, createdAt, id])
+  @@index([relatedAssetIds], type: Gin)
+  @@unique([operationId, action, entityType, entityId])
+}
+
+model ProductTemplate {
+  id             String    @id @default(uuid())
+  name           String
+  categoryId     String
+  category       Category  @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  classification String    @default("PPE") // PPE, SEMI_EXPENDABLE
+  benchmarkCost  Float?
+  specifications String?
+  isActive       Boolean   @default(true)
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+
+  @@index([categoryId])
+  @@index([name])
+}
+
+// Durable retry results; independent of immutable audit evidence.
+model AuditOperation {
+  id String @id @default(uuid())
+  actorId String
+  operationId String
+  requestHash String
+  result Json
+  createdAt DateTime @default(now())
+  @@unique([actorId, operationId])
+}
