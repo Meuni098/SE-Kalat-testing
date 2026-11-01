@@ -62,9 +62,9 @@ export function NewReturnModal({ assets }: ReturnModalProps) {
       </button>
 
       {isOpen && (
-        <div className="fixed inset-0 z-50 bg-[#3B0A0F]/60 backdrop-blur-[2px] flex items-center justify-center p-4">
+        <div className="fixed inset-0 z-50 bg-[#3B0A0F] flex items-center justify-center p-4">
           <div className="bg-[#FFFFFF] border-2 border-[#A60212] rounded-lg max-w-xl w-full max-h-[90vh] overflow-y-auto p-6 shadow-2xl relative animate-in fade-in zoom-in duration-150">
-            <div className="flex items-center justify-between pb-3 border-b border-[#EBD3B2]">
+            <div className="flex items-center justify-between pb-3 border-b border-border">
               <div>
                 <span className="text-[10px] uppercase font-bold tracking-wider text-[#A60212]">
                   Property Custody Surrender
@@ -75,20 +75,20 @@ export function NewReturnModal({ assets }: ReturnModalProps) {
               </div>
               <button
                 onClick={() => setIsOpen(false)}
-                className="text-[#6E2B32] hover:text-[#3B0A0F] p-1 rounded hover:bg-[#FFF4E0]"
+                className="text-[#6E2B32] hover:text-[#3B0A0F] p-1 rounded hover:bg-cream"
               >
                 <span className="material-symbols-outlined text-[20px]">close</span>
               </button>
             </div>
 
             {error && (
-              <div className="mt-3 bg-[#FFF4E0] border border-[#A60212] text-[#A60212] px-3 py-2 rounded text-xs font-semibold flex items-center gap-2">
+              <div className="mt-3 bg-cream border border-[#A60212] text-[#A60212] px-3 py-2 rounded text-xs font-semibold flex items-center gap-2">
                 <span className="material-symbols-outlined text-[16px]">error</span>
                 <span>{error}</span>
               </div>
             )}
             {success && (
-              <div className="mt-3 bg-[#FFF4E0] border border-[#D97B1A] text-[#3B0A0F] px-3 py-2 rounded text-xs font-bold flex items-center gap-2">
+              <div className="mt-3 bg-cream border border-[#D97B1A] text-[#3B0A0F] px-3 py-2 rounded text-xs font-bold flex items-center gap-2">
                 <span className="material-symbols-outlined text-[18px] text-[#A60212]">
                   check_circle
                 </span>
@@ -106,7 +106,7 @@ export function NewReturnModal({ assets }: ReturnModalProps) {
                   required
                   value={selectedAssetId}
                   onChange={(e) => setSelectedAssetId(e.target.value)}
-                  className="w-full h-10 px-3 rounded border border-[#EBD3B2] bg-[#FFF4E0] text-xs font-semibold text-[#3B0A0F] focus:outline-none focus:border-[#A60212]"
+                  className="w-full h-10 px-3 rounded border border-border bg-cream text-xs font-semibold text-[#3B0A0F] focus:outline-none focus:border-[#A60212]"
                 >
                   <option value="">-- Choose asset by product code --</option>
                   {assets.map((a) => (
@@ -117,19 +117,19 @@ export function NewReturnModal({ assets }: ReturnModalProps) {
                 </select>
               </div>
 
-              <ManualPersonFields label="Person returning the item" college={<label className="block text-xs font-bold">College<input readOnly value={assets.find(a => a.id === selectedAssetId)?.unitCode || "Select an asset"} className="mt-1 w-full rounded border border-[#EBD3B2] px-3 py-2 text-sm" /></label>} />
-              <div className="flex items-center justify-end gap-2 pt-3 border-t border-[#EBD3B2]">
+              <ManualPersonFields label="Person returning the item" college={<label className="block text-xs font-bold">College<input readOnly value={assets.find(a => a.id === selectedAssetId)?.unitCode || "Select an asset"} className="mt-1 w-full rounded border border-border px-3 py-2 text-sm" /></label>} />
+              <div className="flex items-center justify-end gap-2 pt-3 border-t border-border">
                 <button
                   type="button"
                   onClick={() => setIsOpen(false)}
-                  className="h-9 px-4 rounded border border-[#EBD3B2] text-[#3B0A0F] hover:bg-[#FFF4E0] font-bold text-xs"
+                  className="h-9 px-4 rounded border border-border text-[#3B0A0F] hover:bg-cream font-bold text-xs"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={loading}
-                  className="h-9 px-4 rounded bg-[#A60212] hover:bg-[#85010E] text-[#FFF4E0] font-bold text-xs flex items-center gap-1.5 shadow-sm disabled:opacity-50"
+                  className="h-9 px-4 rounded bg-[#A60212] hover:bg-[#85010E] text-[#FFF4E0] font-bold text-xs flex items-center gap-1.5 shadow-sm disabled:bg-sand disabled:text-[#6E2B32] disabled:border-border disabled:cursor-not-allowed"
                 >
                   {loading ? (
                     <span>Submitting...</span>

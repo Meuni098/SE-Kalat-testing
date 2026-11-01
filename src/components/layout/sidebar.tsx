@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { logoutAction } from "@/actions/auth-actions";
 import { SessionUser } from "@/lib/auth";
@@ -225,39 +226,21 @@ export function Sidebar({ user }: SidebarProps) {
 
   return (
     <aside className="w-[260px] min-w-[260px] h-screen bg-[#3B0A0F] border-r border-[#4E1117] flex flex-col justify-between select-none fixed top-0 left-0 z-40">
-      {/* Top Brand Lockup - BulSU-Bustos Campus Inventory System */}
+      {/* University brand */}
       <div className="flex flex-col">
         <div className="flex items-center gap-3 px-4 py-3.5 border-b border-[#4E1117] bg-[#32080C]">
-          <div className="w-10 h-10 rounded-full bg-[#A60212] flex items-center justify-center border-2 border-[#F5AB29] shadow-sm flex-shrink-0">
-            <span
-              className="material-symbols-outlined text-[#F5AB29] text-[22px]"
-              style={{ fontVariationSettings: "'FILL' 1" }}
-            >
-              account_balance
-            </span>
-          </div>
+          <Image src="/branding/bulsu-main-campus.png" alt="Bulacan State University seal" width={48} height={48} className="h-12 w-12 shrink-0 object-contain" />
           <div className="flex flex-col">
             <span className="text-xs font-black text-[#FFF4E0] tracking-tight uppercase leading-tight font-sans">
-              BulSU-Bustos Campus
+              BULSU-MAIN CAMPUS
             </span>
             <span className="text-[11px] text-[#F5AB29] font-bold tracking-wide leading-tight">
               Inventory System
             </span>
-            <span className="text-[9px] text-[#EBD3B2] font-semibold leading-none mt-1 opacity-80">
+            <span className="text-[9px] text-[#EBD3B2] font-semibold leading-none mt-1 ">
               AMO Property Division
             </span>
           </div>
-        </div>
-
-        {/* Quick QR Scanner CTA */}
-        <div className="p-2.5 pb-1">
-          <Link
-            href="/inventory/scanner"
-            className="w-full bg-[#A60212] hover:bg-[#85010E] text-[#FFF4E0] py-1.5 px-3 rounded flex items-center justify-center gap-2 text-xs font-bold border border-[#F5AB29] transition-all shadow-sm"
-          >
-            <span className="material-symbols-outlined text-[17px]">qr_code_scanner</span>
-            <span>Scan Asset QR</span>
-          </Link>
         </div>
 
         {/* Navigation Groups */}
@@ -271,7 +254,7 @@ export function Sidebar({ user }: SidebarProps) {
 
             return (
               <div key={group.group} className="flex flex-col space-y-0.5">
-                <span className="text-[10px] uppercase font-black tracking-wider text-[#F5AB29] px-3 py-1 opacity-90">
+                <span className="text-[10px] uppercase font-black tracking-wider text-[#F5AB29] px-3 py-1 ">
                   {group.group}
                 </span>
                 {filteredItems.map((item) => {
@@ -304,7 +287,7 @@ export function Sidebar({ user }: SidebarProps) {
                         <span className="truncate">{item.name}</span>
                       </div>
                       {item.badge && (
-                        <span className="bg-[#D97B1A] text-[#FFFFFF] text-[9px] font-bold px-1.5 py-0.5 rounded">
+                        <span className="text-[9px] font-bold px-1.5 py-0.5 rounded badge-solid badge-amber">
                           {item.badge}
                         </span>
                       )}
@@ -320,7 +303,7 @@ export function Sidebar({ user }: SidebarProps) {
       {/* Footer User Profile & System Controls */}
       <div className="p-2.5 border-t border-[#4E1117] flex flex-col gap-1.5 bg-[#32080C]">
         <div className="bg-[#4E1117] border border-[#6E2B32] rounded p-2 flex items-center justify-between">
-          <Link href="/account/profile" className="flex items-center gap-2 overflow-hidden hover:opacity-90 transition-opacity">
+          <Link href="/account/profile" className="flex items-center gap-2 overflow-hidden transition-opacity">
             <div className="w-8 h-8 rounded bg-[#A60212] text-[#F5AB29] flex items-center justify-center font-black text-xs border border-[#F5AB29] flex-shrink-0">
               {getInitials(displayName)}
             </div>
@@ -341,8 +324,8 @@ export function Sidebar({ user }: SidebarProps) {
             <span className="material-symbols-outlined text-[18px]">logout</span>
           </button>
         </div>
-        <div className="flex items-center justify-between px-1 text-[9px] text-[#EBD3B2]">
-          <span>BulSU Bustos • COA 2020-006</span>
+        <div className="flex flex-wrap items-center justify-between gap-x-2 gap-y-1 px-1 text-[9px] text-[#EBD3B2]">
+          <span>BULSU-MAIN CAMPUS • COA 2020-006</span>
           <span className="font-mono text-[#F5AB29] font-bold">v3.0-CAMPUS</span>
         </div>
       </div>

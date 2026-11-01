@@ -1,0 +1,10 @@
+import { cp,mkdir } from "node:fs/promises";
+import path from "node:path";
+import { createRequire } from "node:module";
+const require=createRequire(import.meta.url);
+const source=path.dirname(require.resolve("pdfjs-dist/package.json"));
+const target=path.join(process.cwd(),"public","pdfjs");
+await mkdir(target,{recursive:true});
+await cp(path.join(source,"build","pdf.worker.min.mjs"),path.join(target,"pdf.worker.min.mjs"));
+for(const directory of ["cmaps","standard_fonts","wasm"])await cp(path.join(source,directory),path.join(target,directory),{recursive:true});
+await cp(path.join(source,"LICENSE"),path.join(target,"LICENSE"));

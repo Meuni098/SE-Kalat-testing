@@ -1,3 +1,4 @@
+import { actualProductDescription, productDescriptionInclude } from "./product-description";
 import type { PrismaClient } from "@prisma/client";
 import { requireAuditActor } from "./audit-log-write";
 import { rateLimit } from "./rate-limit";
@@ -11,11 +12,11 @@ export async function lookupProduct(db: PrismaClient, actorId: string, input: st
   const asset = await db.asset.findFirst({
     where: { propertyNo: input.trim(), isDeleted: false,
       ...(actor.role === "CUSTODIAN" ? { unitId: actor.unitId ?? "" } : {}) },
-    include: { category: true, unit: true, accountablePerson: true },
+    include: { ...productDescriptionInclude, category: true, unit: true, accountablePerson: true },
   });
   if (!asset) return { error: "Item not found or unavailable.", code: "NOT_FOUND" };
   return { success: true as const, asset: {
-    id: asset.id, propertyNo: asset.propertyNo, name: asset.name, description: asset.description,
+    id: asset.id, propertyNo: asset.propertyNo, name: asset.name, description: actualProductDescription(asset),
     classification: asset.classification, categoryName: asset.category.name,
     unitCode: asset.unit.code, unitName: asset.unit.name,
     accountablePerson: asset.accountablePerson?.fullName || "Unassigned",

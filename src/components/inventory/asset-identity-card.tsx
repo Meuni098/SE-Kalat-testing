@@ -1,9 +1,10 @@
 "use client";
 
-import * as React from "react";
 import { formatCurrency, formatDate } from "@/lib/utils";
 import { getStatusBadgeStyle } from "@/config/theme";
-import { updateAssetStatusAction, requestTransferAction } from "@/actions/inventory-actions";
+import { IncidentFilingModal } from "@/components/missing/incident-filing-modal";
+import Link from "next/link";
+import { NewTransferModal } from "./new-transfer-modal";
 import { Button } from "@/components/ui/button";
 
 interface AssetIdentityCardProps {
@@ -23,12 +24,13 @@ interface AssetIdentityCardProps {
     condition: string;
     lastVerifiedAt?: Date | null;
   };
+  canTransfer: boolean;
+  canReportMissing: boolean;
+  hasActiveMissingReport: boolean;
   allUnits: { id: string; code: string; name: string }[];
 }
 
-export function AssetIdentityCard({ asset, allUnits }: AssetIdentityCardProps) {
-  const [transferModalOpen, setTransferModalOpen] = React.useState(false);
-  const [isPending, setIsPending] = React.useState(false);
+export function AssetIdentityCard({ asset, allUnits, canTransfer, canReportMissing, hasActiveMissingReport }: AssetIdentityCardProps) {
 
   const badge = getStatusBadgeStyle(asset.status);
 
@@ -45,38 +47,22 @@ export function AssetIdentityCard({ asset, allUnits }: AssetIdentityCardProps) {
   const bookValue = Math.max(0, asset.acquisitionCost - accumulatedDepreciation);
   const amortizedPercent = Math.min(100, Math.round((accumulatedDepreciation / asset.acquisitionCost) * 100));
 
-  const handleTransferSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    setIsPending(true);
-    const formData = new FormData(e.currentTarget);
-    formData.set("assetId", asset.id);
-    await requestTransferAction(formData);
-    setIsPending(false);
-    setTransferModalOpen(false);
-  };
-
-  const handleMarkStatus = async (status: string) => {
-    if (confirm(`Change asset status to ${status}?`)) {
-      await updateAssetStatusAction(asset.id, status);
-    }
-  };
-
   return (
-    <div className="bg-[#FFFFFF] border border-[#EBD3B2] rounded p-6 select-none">
+    <div className="bg-[#FFFFFF] border border-border rounded p-6 select-none">
       {/* Top Identity Lockup */}
-      <div className="flex flex-col md:flex-row md:items-start justify-between gap-4 pb-4 border-b border-[#EBD3B2]">
+      <div className="flex flex-col md:flex-row md:items-start justify-between gap-4 pb-4 border-b border-border">
         <div>
           <div className="flex items-center gap-2 mb-2 flex-wrap">
-            <span className="bg-[#FFF4E0] text-[#A60212] border border-[#D97B1A] font-black text-xs px-2.5 py-1 rounded font-mono">
+            <span className="border font-black text-xs px-2.5 py-1 rounded font-mono badge-solid badge-amber">
               PRODUCT CODE: {asset.propertyNo}
             </span>
             <span
-              className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded text-xs font-bold border ${badge.bg} ${badge.border} ${badge.text}`}
+              className={` inline-flex items-center gap-1.5 px-2.5 py-1 rounded text-xs font-bold border  badge-solid ${badge.bg} ${badge.border} ${badge.text}`}
             >
               <span className={`w-1.5 h-1.5 rounded-full ${badge.dotColor}`} />
               {badge.label}
             </span>
-            <span className="bg-[#FFFFFF] text-[#3B0A0F] border border-[#EBD3B2] text-xs font-bold px-2 py-1 rounded font-mono">
+            <span className={`border text-xs font-bold px-2 py-1 rounded font-mono badge-solid ${asset.classification === "PPE" ? "badge-maroon" : "badge-slate"}`}>
               {asset.classification}
             </span>
           </div>
@@ -91,25 +77,18 @@ export function AssetIdentityCard({ asset, allUnits }: AssetIdentityCardProps) {
 
         {/* Quick Operations Button Cluster */}
         <div className="flex items-center gap-2 flex-wrap shrink-0">
-          <Button
-            variant="secondary"
-            size="sm"
-            onClick={() => setTransferModalOpen(true)}
-            className="gap-1"
-          >
-            <span className="material-symbols-outlined text-[15px]">swap_horiz</span>
-            <span>Transfer Unit</span>
-          </Button>
+          {canTransfer && <NewTransferModal
+            assets={[{ id: asset.id, propertyNo: asset.propertyNo, name: asset.name, unitId: asset.unit.id, unitCode: asset.unit.code }]}
+            units={allUnits}
+            defaultAssetId={asset.id}
+            triggerButton={<Button variant="secondary" size="sm" className="gap-1"><span aria-hidden="true" className="material-symbols-outlined text-[15px]">swap_horiz</span><span>Transfer Unit</span></Button>}
+          />}
 
-          <Button
-            variant="danger"
-            size="sm"
-            onClick={() => handleMarkStatus("MISSING")}
-            className="gap-1"
-          >
-            <span className="material-symbols-outlined text-[15px]">warning</span>
-            <span>Report Missing</span>
-          </Button>
+          {hasActiveMissingReport ? <Link href="/missing" className="text-xs font-bold text-[#A60212] hover:underline">View missing incident</Link> : canReportMissing && <IncidentFilingModal
+            assets={[{ id: asset.id, propertyNo: asset.propertyNo, name: asset.name, unitCode: asset.unit.code }]}
+            defaultAssetId={asset.id}
+            triggerLabel={asset.status === "MISSING" ? "Complete incident report" : "Report Missing"}
+          />}
         </div>
       </div>
 
@@ -132,7 +111,7 @@ export function AssetIdentityCard({ asset, allUnits }: AssetIdentityCardProps) {
         <div>
           <p className="font-bold text-[#6E2B32] uppercase tracking-wider text-[11px]">Condition</p>
           <p className="text-[#3B0A0F] font-semibold mt-0.5 flex items-center gap-1">
-            <span className="material-symbols-outlined text-[#D97B1A] text-[16px]">
+            <span aria-hidden="true" className="material-symbols-outlined text-[#D97B1A] text-[16px]">
               verified
             </span>
             <span>{asset.condition} (Inspected)</span>
@@ -175,80 +154,12 @@ export function AssetIdentityCard({ asset, allUnits }: AssetIdentityCardProps) {
 
       {/* Description Strip */}
       {asset.description && (
-        <div className="mt-4 pt-3 border-t border-[#EBD3B2] bg-[#FFF4E0] p-3 rounded text-xs text-[#3B0A0F]">
+        <div className="mt-4 pt-3 border-t border-border bg-cream p-3 rounded text-xs text-[#3B0A0F]">
           <strong className="text-[#A60212] font-bold">Specs &amp; Configuration: </strong>
           {asset.description}
         </div>
       )}
 
-      {/* Transfer Request Modal */}
-      {transferModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#3B0A0F]/80">
-          <div className="bg-[#FFFFFF] border-2 border-[#A60212] rounded w-full max-w-md p-6 select-none">
-            <h3 className="text-sm font-bold text-[#3B0A0F] uppercase pb-2 border-b border-[#EBD3B2]">
-              Initiate Custody Transfer Request
-            </h3>
-            <p className="text-xs text-[#6E2B32] mt-2">
-              Transfer asset <strong className="text-[#A60212]">{asset.propertyNo}</strong> from{" "}
-              {asset.unit.code} to another operating unit.
-            </p>
-
-            <form onSubmit={handleTransferSubmit} className="mt-4 space-y-3">
-              <div>
-                <label className="block text-xs font-bold text-[#3B0A0F] uppercase mb-1">
-                  Destination Operating Unit *
-                </label>
-                <select
-                  name="toUnitId"
-                  required
-                  className="w-full bg-[#FFF4E0] border border-[#EBD3B2] rounded p-2 text-xs text-[#3B0A0F] font-semibold"
-                >
-                  <option value="">Select target unit...</option>
-                  {allUnits
-                    .filter((u) => u.id !== asset.unit.id)
-                    .map((u) => (
-                      <option key={u.id} value={u.id}>
-                        {u.code} — {u.name}
-                      </option>
-                    ))}
-                </select>
-              </div>
-
-              <div>
-                <label className="block text-xs font-bold text-[#3B0A0F] uppercase mb-1">
-                  Transfer Justification / Purpose
-                </label>
-                <textarea
-                  name="remarks"
-                  rows={2}
-                  required
-                  placeholder="e.g. Laboratory re-allocation for academic research..."
-                  className="w-full bg-[#FFF4E0] border border-[#EBD3B2] rounded p-2 text-xs text-[#3B0A0F]"
-                />
-              </div>
-
-              <div className="pt-3 border-t border-[#EBD3B2] flex items-center justify-end gap-2">
-                <Button
-                  type="button"
-                  variant="secondary"
-                  size="sm"
-                  onClick={() => setTransferModalOpen(false)}
-                >
-                  Cancel
-                </Button>
-                <Button
-                  type="submit"
-                  variant="primary"
-                  size="sm"
-                  disabled={isPending}
-                >
-                  {isPending ? "Submitting..." : "Submit Transfer Request"}
-                </Button>
-              </div>
-            </form>
-          </div>
-        </div>
-      )}
     </div>
   );
 }

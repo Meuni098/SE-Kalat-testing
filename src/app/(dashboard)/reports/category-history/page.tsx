@@ -28,12 +28,11 @@ export default async function CategoryHistoryPage({searchParams}:PageProps) {
   }catch(err){if(err instanceof FormExportError)error=err.message;else throw err;}
   return <div className="space-y-5 pb-16">
     <ReportSectionSelect value="category-history"/>
-    <header className="bg-white border border-[#EBD3B2] rounded p-5 space-y-2 print:hidden">
+    <header className="bg-white border border-border rounded p-5 space-y-2 print:hidden">
       <h1 className="text-2xl font-bold text-[#3B0A0F]">Recorded asset history</h1>
-      <p className="text-sm text-[#6E2B32]">Filter the chronological history by college, category and event type. Each event links to its applicable supporting form.</p>
       <div className="flex gap-4 text-sm underline"><Link href="/inventory">Inventory</Link><Link href="/reports">Reports</Link></div>
     </header>
-    <form method="get" className="bg-white border border-[#EBD3B2] rounded p-4 flex flex-wrap items-end gap-3 print:hidden">
+    <form method="get" className="bg-white border border-border rounded p-4 flex flex-wrap items-end gap-3 print:hidden">
       <label className="text-sm">Product category<select className="block border rounded p-2 mt-1" name="categoryId" defaultValue={categoryId}><option value="ALL">All categories</option>{categories.map(c=><option key={c.id} value={c.id}>{c.code} — {c.name}</option>)}</select></label>
       <label className="text-sm">College / operating unit<select className="block border rounded p-2 mt-1" name="unitId" defaultValue={scope||"ALL"}>{user.role!=="CUSTODIAN"&&<option value="ALL">All authorized units</option>}{units.map(u=><option key={u.id} value={u.id}>{u.code} — {u.name}</option>)}</select></label>
       <label className="text-sm">Classification<select className="block border rounded p-2 mt-1" name="classification" defaultValue={classification}><option value="ALL">All classifications</option><option value="PPE">PPE</option><option value="SEMI_EXPENDABLE">Semi-expendable</option></select></label>

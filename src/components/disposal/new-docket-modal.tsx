@@ -50,10 +50,10 @@ export function NewDocketModal({ unserviceableAssets }: NewDocketModalProps) {
       </Button>
 
       {isOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#3B0A0F]/80">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#3B0A0F]">
           <div className="bg-[#FFFFFF] border-2 border-[#A60212] rounded w-full max-w-lg p-6 select-none max-h-[90vh] overflow-y-auto">
             {/* Header */}
-            <div className="flex items-center justify-between pb-3 border-b border-[#EBD3B2]">
+            <div className="flex items-center justify-between pb-3 border-b border-border">
               <div className="flex items-center gap-2">
                 <span className="material-symbols-outlined text-[#A60212] text-[22px]">
                   gavel
@@ -84,7 +84,7 @@ export function NewDocketModal({ unserviceableAssets }: NewDocketModalProps) {
                 <select
                   name="assetId"
                   required
-                  className="w-full bg-[#FFF4E0] border border-[#EBD3B2] rounded p-2 text-xs text-[#3B0A0F] font-semibold"
+                  className="w-full bg-cream border border-border rounded p-2 text-xs text-[#3B0A0F] font-semibold"
                 >
                   <option value="">Select asset for condemnation...</option>
                   {unserviceableAssets.map((a) => (
@@ -103,7 +103,7 @@ export function NewDocketModal({ unserviceableAssets }: NewDocketModalProps) {
                   <select
                     name="method"
                     required
-                    className="w-full bg-[#FFFFFF] border border-[#EBD3B2] rounded p-2 text-xs text-[#3B0A0F]"
+                    className="w-full bg-[#FFFFFF] border border-border rounded p-2 text-xs text-[#3B0A0F]"
                   >
                     <option value="PUBLIC_AUCTION">Public Auction (Bidding)</option>
                     <option value="DONATION">Donation to Public School</option>
@@ -121,7 +121,7 @@ export function NewDocketModal({ unserviceableAssets }: NewDocketModalProps) {
                     name="appraisedScrapValue"
                     defaultValue="2500"
                     placeholder="2500.00"
-                    className="w-full bg-[#FFF4E0] border border-[#EBD3B2] rounded p-2 text-xs font-mono font-bold text-[#3B0A0F]"
+                    className="w-full bg-cream border border-border rounded p-2 text-xs font-mono font-bold text-[#3B0A0F]"
                   />
                 </div>
               </div>
@@ -135,11 +135,11 @@ export function NewDocketModal({ unserviceableAssets }: NewDocketModalProps) {
                   rows={3}
                   required
                   placeholder="Detail parts obsolescence, repair cost vs residual value analysis, and why property is beyond economical repair..."
-                  className="w-full bg-[#FFF4E0] border border-[#EBD3B2] rounded p-2 text-xs text-[#3B0A0F]"
+                  className="w-full bg-cream border border-border rounded p-2 text-xs text-[#3B0A0F]"
                 />
               </div>
 
-              <div className="pt-3 border-t border-[#EBD3B2] flex items-center justify-end gap-2">
+              <div className="pt-3 border-t border-border flex items-center justify-end gap-2">
                 <Button
                   type="button"
                   variant="secondary"

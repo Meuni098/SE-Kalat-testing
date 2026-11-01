@@ -8,6 +8,8 @@ import { NewTransferModal } from "./new-transfer-modal";
 
 export interface TransferredAssetRow {
   id: string;
+  unitId: string;
+  canTransfer: boolean;
   propertyNo: string;
   name: string;
   description?: string | null;
@@ -30,14 +32,12 @@ interface CollegeTransferredTableProps {
   assets: TransferredAssetRow[];
   colleges: { id: string; code: string; name: string }[];
   allUnits: { id: string; code: string; name: string }[];
-  persons: { id: string; fullName: string; position: string; unitId: string }[];
 }
 
 export function CollegeTransferredTable({
   assets,
   colleges,
   allUnits,
-  persons,
 }: CollegeTransferredTableProps) {
   const [searchTerm, setSearchTerm] = React.useState("");
   const [collegeFilter, setCollegeFilter] = React.useState("ALL");
@@ -72,31 +72,22 @@ export function CollegeTransferredTable({
 
   // Modal assets shape
   const modalAssets = React.useMemo(() => {
-    return assets.map((a) => ({
+    return assets.filter((a) => a.canTransfer).map((a) => ({
       id: a.id,
       propertyNo: a.propertyNo,
       name: a.name,
-      unitId: colleges.find((u) => u.code === a.unitCode)?.id || "",
+      unitId: a.unitId,
       unitCode: a.unitCode,
       currentCustodian: a.accountablePerson || "College Custodian",
     }));
-  }, [assets, colleges]);
-
-  const modalPersons = React.useMemo(() => {
-    return persons.map((p) => ({
-      id: p.id,
-      fullName: p.fullName,
-      position: p.position,
-      unitId: p.unitId,
-    }));
-  }, [persons]);
+  }, [assets]);
 
   return (
     <div className="space-y-4 select-none">
       {/* Search and Filters Bar */}
-      <div className="bg-[#FFFFFF] border border-[#EBD3B2] p-3.5 rounded flex flex-col md:flex-row md:items-center justify-between gap-3 shadow-xs">
+      <div className="bg-[#FFFFFF] border border-border p-3.5 rounded flex flex-col md:flex-row md:items-center justify-between gap-3 shadow-xs">
         <div className="flex-1 max-w-md relative">
-          <span className="material-symbols-outlined absolute left-3 top-2.5 text-[#6E2B32] text-[18px]">
+          <span aria-hidden="true" className="material-symbols-outlined absolute left-3 top-2.5 text-[#6E2B32] text-[18px]">
             search
           </span>
           <input
@@ -104,7 +95,7 @@ export function CollegeTransferredTable({
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             placeholder="Search product code, item name, college, custodian, or PTR #..."
-            className="w-full pl-9 pr-3 py-1.5 bg-[#FFF4E0] border border-[#EBD3B2] rounded text-xs font-medium text-[#3B0A0F] placeholder-[#6E2B32]/70 focus:outline-none focus:border-[#A60212]"
+            className="w-full pl-9 pr-3 py-1.5 bg-cream border border-border rounded text-xs font-medium text-[#3B0A0F] placeholder-[#6E2B32]/70 focus:outline-none focus:border-[#A60212]"
           />
         </div>
 
@@ -115,7 +106,7 @@ export function CollegeTransferredTable({
             <select
               value={collegeFilter}
               onChange={(e) => setCollegeFilter(e.target.value)}
-              className="bg-[#FFFFFF] border border-[#EBD3B2] rounded px-2.5 py-1.5 text-xs text-[#3B0A0F] font-semibold focus:outline-none focus:border-[#A60212]"
+              className="bg-[#FFFFFF] border border-border rounded px-2.5 py-1.5 text-xs text-[#3B0A0F] font-semibold focus:outline-none focus:border-[#A60212]"
             >
               <option value="ALL">All Deployed Colleges</option>
               {colleges.map((c) => (
@@ -132,7 +123,7 @@ export function CollegeTransferredTable({
             <select
               value={classFilter}
               onChange={(e) => setClassFilter(e.target.value)}
-              className="bg-[#FFFFFF] border border-[#EBD3B2] rounded px-2.5 py-1.5 text-xs text-[#3B0A0F] font-semibold focus:outline-none focus:border-[#A60212]"
+              className="bg-[#FFFFFF] border border-border rounded px-2.5 py-1.5 text-xs text-[#3B0A0F] font-semibold focus:outline-none focus:border-[#A60212]"
             >
               <option value="ALL">All Classifications</option>
               <option value="PPE">PPE (Capital Equipment)</option>
@@ -156,15 +147,15 @@ export function CollegeTransferredTable({
       </div>
 
       {/* Table Container */}
-      <div className="bg-[#FFFFFF] border border-[#EBD3B2] rounded shadow-sm overflow-hidden">
+      <div className="bg-[#FFFFFF] border border-border rounded shadow-sm overflow-hidden">
         <div className="bg-[#3B0A0F] px-4 py-3 border-b border-[#4E1117] flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <span className="material-symbols-outlined text-[#F5AB29] text-[20px]">domain</span>
+            <span aria-hidden="true" className="material-symbols-outlined text-[#F5AB29] text-[20px]">domain</span>
             <span className="text-xs font-bold text-[#FFF4E0] uppercase tracking-wider">
               College Deployed Property &amp; Inter-Unit Asset Registry
             </span>
           </div>
-          <span className="text-[11px] font-mono text-[#F5AB29] bg-[#4E1117] px-2 py-0.5 rounded border border-[#6E2B32]">
+          <span className="text-[11px] font-mono px-2 py-0.5 rounded border badge-solid badge-amber">
             {filteredAssets.length} of {assets.length} Deployed Asset(s)
           </span>
         </div>
@@ -172,7 +163,7 @@ export function CollegeTransferredTable({
         <div className="overflow-x-auto">
           <table className="w-full text-left text-xs border-collapse">
             <thead>
-              <tr className="bg-[#FFF4E0] text-[#3B0A0F] border-b border-[#EBD3B2] font-black uppercase text-[11px]">
+              <tr className="bg-cream text-[#3B0A0F] border-b border-border font-black uppercase text-[11px]">
                 <th className="py-2.5 px-3">Product Code</th>
                 <th className="py-2.5 px-3">Equipment / Asset Item</th>
                 <th className="py-2.5 px-3">Current College</th>
@@ -183,11 +174,11 @@ export function CollegeTransferredTable({
                 <th className="py-2.5 px-3 text-right">Actions</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-[#EBD3B2]">
+            <tbody className="divide-y divide-border">
               {filteredAssets.length === 0 ? (
                 <tr>
                   <td colSpan={8} className="py-12 text-center text-[#6E2B32] font-medium">
-                    <span className="material-symbols-outlined text-[36px] block text-[#EBD3B2] mb-1">
+                    <span aria-hidden="true" className="material-symbols-outlined text-[36px] block text-[#EBD3B2] mb-1">
                       domain_disabled
                     </span>
                     No deployed assets match the selected college or filter criteria.
@@ -195,7 +186,7 @@ export function CollegeTransferredTable({
                 </tr>
               ) : (
                 filteredAssets.map((asset) => (
-                  <tr key={asset.id} className="hover:bg-[#FFF4E0]/50 transition-colors">
+                  <tr key={asset.id} className="hover:bg-cream transition-colors">
                     {/* Property No */}
                     <td className="py-3 px-3 font-mono">
                       <Link
@@ -224,7 +215,7 @@ export function CollegeTransferredTable({
                     {/* Current College */}
                     <td className="py-3 px-3">
                       <div className="flex items-center gap-1.5 font-bold text-[#3B0A0F]">
-                        <span className="px-2 py-0.5 rounded text-[10px] font-black font-mono bg-[#FFF4E0] text-[#A60212] border border-[#A60212]">
+                        <span className="px-2 py-0.5 rounded text-[10px] font-black font-mono border badge-solid badge-maroon">
                           {asset.unitCode}
                         </span>
                       </div>
@@ -267,10 +258,10 @@ export function CollegeTransferredTable({
                         {formatCurrency(asset.acquisitionCost)}
                       </span>
                       <span
-                        className={`inline-block text-[9px] font-bold uppercase px-1.5 py-0.2 rounded mt-0.5 border ${
+                        className={` inline-block text-[9px] font-bold uppercase px-1.5 py-0.2 rounded mt-0.5 border  badge-solid ${
                           asset.classification === "PPE"
-                            ? "bg-[#FFF4E0] text-[#A60212] border-[#A60212]"
-                            : "bg-[#FFFFFF] text-[#D97B1A] border-[#D97B1A]"
+                            ? " badge-solid badge-maroon"
+                            : " badge-solid badge-slate"
                         }`}
                       >
                         {asset.classification}
@@ -286,28 +277,27 @@ export function CollegeTransferredTable({
                           title="View Complete Movement History & PTR Chain"
                           className="bg-[#A60212] hover:bg-[#85010E] text-[#FFF4E0] px-2.5 py-1.5 text-xs font-bold rounded flex items-center gap-1 border border-[#A60212] transition-colors shadow-xs"
                         >
-                          <span className="material-symbols-outlined text-[15px]">history</span>
+                          <span aria-hidden="true" className="material-symbols-outlined text-[15px]">history</span>
                           <span>History</span>
                         </button>
 
                         {/* Inter-College Re-Transfer or Return */}
-                        <NewTransferModal
+                        {asset.canTransfer && <NewTransferModal
                           assets={modalAssets}
                           units={allUnits}
-                          persons={modalPersons}
                           defaultAssetId={asset.id}
                           triggerButton={
                             <button
                               title="Initiate Re-Transfer to another college or return to AMO"
-                              className="bg-[#FFFFFF] hover:bg-[#FFF4E0] text-[#3B0A0F] border border-[#EBD3B2] px-2.5 py-1.5 text-xs font-bold rounded flex items-center gap-1 transition-colors"
+                              className="bg-[#FFFFFF] hover:bg-cream text-[#3B0A0F] border border-border px-2.5 py-1.5 text-xs font-bold rounded flex items-center gap-1 transition-colors"
                             >
-                              <span className="material-symbols-outlined text-[15px] text-[#D97B1A]">
+                              <span aria-hidden="true" className="material-symbols-outlined text-[15px] text-[#D97B1A]">
                                 swap_horiz
                               </span>
                               <span>Move</span>
                             </button>
                           }
-                        />
+                        />}
                       </div>
                     </td>
                   </tr>

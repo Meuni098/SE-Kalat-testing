@@ -41,22 +41,12 @@ export default async function DisposalPage() {
   return (
     <div className="space-y-6 pb-16 select-none">
       {/* Page Header */}
-      <div className="bg-[#FFFFFF] border border-[#EBD3B2] p-5 rounded flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <div className="bg-[#FFFFFF] border border-border p-5 rounded flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <div className="flex items-center gap-2">
-            <span className="bg-[#FFF4E0] text-[#A60212] border border-[#A60212] px-2 py-0.5 rounded text-[11px] font-bold font-mono">
-              COA CIRCULAR NO. 89-296
-            </span>
-            <span className="bg-[#FFF4E0] text-[#6E2B32] border border-[#EBD3B2] px-2 py-0.5 rounded text-[11px] font-mono">
-              UNSERVICEABLE PROPERTY RETIREMENT
-            </span>
-          </div>
+
           <h1 className="text-2xl font-black text-[#3B0A0F] tracking-tight uppercase mt-1">
             Legal Disposal &amp; Condemnation Docket Management
           </h1>
-          <p className="text-xs text-[#6E2B32] font-medium mt-0.5">
-            Institutional property retirement, committee appraisal, public auction documentation, and irreversible ledger archiving
-          </p>
         </div>
 
         <div>
@@ -74,7 +64,7 @@ export default async function DisposalPage() {
 
       {/* Summary KPI Strip */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <div className="bg-[#FFFFFF] border border-[#EBD3B2] p-4 rounded flex items-center justify-between">
+        <div className="bg-[#FFFFFF] border border-border p-4 rounded flex items-center justify-between">
           <div>
             <span className="text-xs font-bold text-[#6E2B32] uppercase tracking-wider block">
               Pending Dockets
@@ -83,12 +73,12 @@ export default async function DisposalPage() {
               {pendingDockets} <span className="text-xs font-normal text-[#6E2B32]">In Review</span>
             </span>
           </div>
-          <div className="w-10 h-10 rounded bg-[#FFF4E0] border border-[#F5AB29] text-[#D97B1A] flex items-center justify-center">
+          <div className="w-10 h-10 rounded bg-cream border border-[#F5AB29] text-[#D97B1A] flex items-center justify-center">
             <span className="material-symbols-outlined text-[20px]">pending_actions</span>
           </div>
         </div>
 
-        <div className="bg-[#FFFFFF] border border-[#EBD3B2] p-4 rounded flex items-center justify-between">
+        <div className="bg-[#FFFFFF] border border-border p-4 rounded flex items-center justify-between">
           <div>
             <span className="text-xs font-bold text-[#6E2B32] uppercase tracking-wider block">
               Appraised Scrap Value
@@ -97,12 +87,12 @@ export default async function DisposalPage() {
               {formatCurrency(totalScrapValue)}
             </span>
           </div>
-          <div className="w-10 h-10 rounded bg-[#FFF4E0] border border-[#EBD3B2] text-[#3B0A0F] flex items-center justify-center">
+          <div className="w-10 h-10 rounded bg-cream border border-border text-[#3B0A0F] flex items-center justify-center">
             <span className="material-symbols-outlined text-[20px]">price_change</span>
           </div>
         </div>
 
-        <div className="bg-[#FFFFFF] border border-[#EBD3B2] p-4 rounded flex items-center justify-between">
+        <div className="bg-[#FFFFFF] border border-border p-4 rounded flex items-center justify-between">
           <div>
             <span className="text-xs font-bold text-[#6E2B32] uppercase tracking-wider block">
               Executed Disposals
@@ -111,12 +101,12 @@ export default async function DisposalPage() {
               {disposedCount} <span className="text-xs font-normal text-[#6E2B32]">Archived</span>
             </span>
           </div>
-          <div className="w-10 h-10 rounded bg-[#FFF4E0] border border-[#A60212] text-[#A60212] flex items-center justify-center">
+          <div className="w-10 h-10 rounded bg-cream border border-[#A60212] text-[#A60212] flex items-center justify-center">
             <span className="material-symbols-outlined text-[20px]">inventory_2</span>
           </div>
         </div>
 
-        <div className="bg-[#FFFFFF] border border-[#EBD3B2] p-4 rounded flex items-center justify-between">
+        <div className="bg-[#FFFFFF] border border-border p-4 rounded flex items-center justify-between">
           <div>
             <span className="text-xs font-bold text-[#6E2B32] uppercase tracking-wider block">
               Disposal Methods
@@ -125,15 +115,15 @@ export default async function DisposalPage() {
               Public Auction, Donation to DepEd schools, or Destruction / Scrapping.
             </span>
           </div>
-          <div className="w-10 h-10 rounded bg-[#FFF4E0] border border-[#EBD3B2] text-[#3B0A0F] flex items-center justify-center">
+          <div className="w-10 h-10 rounded bg-cream border border-border text-[#3B0A0F] flex items-center justify-center">
             <span className="material-symbols-outlined text-[20px]">gavel</span>
           </div>
         </div>
       </div>
 
       {/* Condemnation Dockets Table */}
-      <div className="bg-[#FFFFFF] border border-[#EBD3B2] rounded overflow-hidden">
-        <div className="p-4 bg-[#FFF4E0] border-b border-[#EBD3B2] flex items-center justify-between">
+      <div className="bg-[#FFFFFF] border border-border rounded overflow-hidden">
+        <div className="p-4 bg-cream border-b border-border flex items-center justify-between">
           <div className="flex items-center gap-2">
             <span className="material-symbols-outlined text-[#A60212] text-[20px]">
               folder_managed
@@ -150,17 +140,17 @@ export default async function DisposalPage() {
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse text-xs">
             <thead>
-              <tr className="h-9 bg-[#FFFFFF] border-b border-[#EBD3B2] text-[#3B0A0F] font-bold uppercase select-none">
-                <th className="px-3.5 py-2 border-r border-[#EBD3B2]">Docket No.</th>
-                <th className="px-3.5 py-2 border-r border-[#EBD3B2]">Condemned Property</th>
-                <th className="px-3.5 py-2 border-r border-[#EBD3B2]">Unit &amp; Category</th>
-                <th className="px-3.5 py-2 border-r border-[#EBD3B2]">Disposal Method</th>
-                <th className="px-3.5 py-2 border-r border-[#EBD3B2]">Scrap Value</th>
-                <th className="px-3.5 py-2 border-r border-[#EBD3B2]">3-Step Approval Stage</th>
+              <tr className="h-9 bg-[#FFFFFF] border-b border-border text-[#3B0A0F] font-bold uppercase select-none">
+                <th className="px-3.5 py-2 border-r border-border">Docket No.</th>
+                <th className="px-3.5 py-2 border-r border-border">Condemned Property</th>
+                <th className="px-3.5 py-2 border-r border-border">Unit &amp; Category</th>
+                <th className="px-3.5 py-2 border-r border-border">Disposal Method</th>
+                <th className="px-3.5 py-2 border-r border-border">Scrap Value</th>
+                <th className="px-3.5 py-2 border-r border-border">3-Step Approval Stage</th>
                 <th className="px-3.5 py-2 text-center">Action</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-[#EBD3B2]">
+            <tbody className="divide-y divide-border">
               {disposals.length === 0 ? (
                 <tr>
                   <td colSpan={7} className="p-8 text-center text-[#6E2B32]">
@@ -172,13 +162,13 @@ export default async function DisposalPage() {
                   const isDisposed = d.status === "DISPOSED";
 
                   return (
-                    <tr key={d.id} className="hover:bg-[#FFF4E0] transition-colors">
-                      <td className="px-3.5 py-3 border-r border-[#EBD3B2] font-mono font-bold text-[#A60212] whitespace-nowrap">
+                    <tr key={d.id} className="hover:bg-cream transition-colors">
+                      <td className="px-3.5 py-3 border-r border-border font-mono font-bold text-[#A60212] whitespace-nowrap">
                         {d.docketNo}<TransactionAttributionButton entityType="DISPOSAL" entityId={d.id} />
                         <div className="text-[10px] text-[#6E2B32]">{formatDate(d.proposedAt)}</div>
                       </td>
 
-                      <td className="px-3.5 py-3 border-r border-[#EBD3B2]">
+                      <td className="px-3.5 py-3 border-r border-border">
                         <Link
                           href={`/inventory/${d.asset.id}`}
                           className="font-bold text-[#3B0A0F] hover:underline"
@@ -191,22 +181,22 @@ export default async function DisposalPage() {
                         <div className="text-[10px] text-[#6E2B32] mt-0.5">{d.reason}</div>
                       </td>
 
-                      <td className="px-3.5 py-3 border-r border-[#EBD3B2]">
+                      <td className="px-3.5 py-3 border-r border-border">
                         <div className="font-bold text-[#3B0A0F]">{d.asset.unit.code}</div>
                         <div className="text-[10px] text-[#6E2B32]">{d.asset.category.name}</div>
                       </td>
 
-                      <td className="px-3.5 py-3 border-r border-[#EBD3B2] whitespace-nowrap">
-                        <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-[#FFF4E0] border border-[#EBD3B2] text-[#3B0A0F]">
+                      <td className="px-3.5 py-3 border-r border-border whitespace-nowrap">
+                        <span className="px-2 py-0.5 rounded text-[10px] font-bold border badge-solid badge-slate">
                           {d.method.replace(/_/g, " ")}
                         </span>
                       </td>
 
-                      <td className="px-3.5 py-3 border-r border-[#EBD3B2] font-mono font-bold text-[#3B0A0F] whitespace-nowrap">
+                      <td className="px-3.5 py-3 border-r border-border font-mono font-bold text-[#3B0A0F] whitespace-nowrap">
                         {formatCurrency(d.appraisedScrapValue)}
                       </td>
 
-                      <td className="px-3.5 py-3 border-r border-[#EBD3B2]">
+                      <td className="px-3.5 py-3 border-r border-border">
                         <div className="flex items-center gap-1.5 text-[10px] font-bold">
                           <span
                             className={`w-2 h-2 rounded-full ${
@@ -240,7 +230,7 @@ export default async function DisposalPage() {
                                   ? "Only ADMIN can approve disposal"
                                   : "Approve and soft-delete asset from active ledger"
                               }
-                              className="px-2.5 py-1 rounded bg-[#A60212] hover:bg-[#85010E] text-[#FFF4E0] font-bold text-[11px] border border-[#A60212] transition-colors disabled:opacity-40"
+                              className="px-2.5 py-1 rounded bg-[#A60212] hover:bg-[#85010E] text-[#FFF4E0] font-bold text-[11px] border border-[#A60212] transition-colors disabled:bg-sand disabled:text-[#6E2B32] disabled:border-border disabled:cursor-not-allowed"
                             >
                               Approve &amp; Archive
                             </button>

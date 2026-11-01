@@ -38,7 +38,7 @@ export function QrVerifiedCard({ propertyNo, assetName, unitCode }: QrVerifiedCa
 
   return <div className="bg-white border-2 border-[#3B0A0F] rounded p-5 text-center">
     <h3 className="text-sm font-bold text-[#3B0A0F]">Product QR Label</h3>
-    <p className="text-xs text-[#6E2B32] my-2">Scan or enter the product code in CUSTODIA to look up this item.</p>
+    <p className="text-xs text-[#6E2B32] my-2">Scan or enter the product code to look up this item.</p>
     {qrDataUrl ? (
       // eslint-disable-next-line @next/next/no-img-element
       <img src={qrDataUrl} alt={`QR code for ${propertyNo}`} width={200} height={200} className="mx-auto" />
@@ -49,6 +49,6 @@ export function QrVerifiedCard({ propertyNo, assetName, unitCode }: QrVerifiedCa
     {error && <div role="alert" className="text-sm text-[#A60212] mt-3">{error}
       {!qrDataUrl && <button type="button" className="underline ml-2" onClick={() => { setError(null); setAttempt(value => value + 1); }}>Retry QR</button>}
     </div>}
-    <button type="button" disabled={!qrDataUrl} onClick={handlePrint} className="mt-4 text-sm text-[#A60212] font-bold underline disabled:opacity-50">Print QR Label</button>
+    <button type="button" disabled={!qrDataUrl} onClick={handlePrint} className="mt-4 text-sm text-[#A60212] font-bold underline disabled:bg-sand disabled:text-[#6E2B32] disabled:border-border disabled:cursor-not-allowed">Print QR Label</button>
   </div>;
 }

@@ -43,7 +43,7 @@ export function ReturnDecisionButtons({ returnId, status, canDecide }: ReturnDec
           onClick={() => setShowPrompt(true)}
           disabled={loading}
           title="Verify physical return and check-in to warehouse"
-          className="h-8 px-2.5 rounded bg-[#A60212] hover:bg-[#85010E] text-[#FFF4E0] font-bold text-xs flex items-center gap-1 disabled:opacity-50 transition-colors shadow-sm"
+          className="h-8 px-2.5 rounded bg-[#A60212] hover:bg-[#85010E] text-[#FFF4E0] font-bold text-xs flex items-center gap-1 disabled:bg-sand disabled:text-[#6E2B32] disabled:border-border disabled:cursor-not-allowed transition-colors shadow-sm"
         >
           <span className="material-symbols-outlined text-[15px]">inventory</span>
           <span>Acknowledge Intake</span>
@@ -52,14 +52,14 @@ export function ReturnDecisionButtons({ returnId, status, canDecide }: ReturnDec
           onClick={handleReject}
           disabled={loading}
           title="Reject return"
-          className="h-8 px-2 rounded border border-[#6E2B32] text-[#6E2B32] hover:bg-[#FFF4E0] font-bold text-xs flex items-center gap-1 disabled:opacity-50 transition-colors"
+          className="h-8 px-2 rounded border border-[#6E2B32] text-[#6E2B32] hover:bg-cream font-bold text-xs flex items-center gap-1 disabled:bg-sand disabled:text-[#6E2B32] disabled:border-border disabled:cursor-not-allowed transition-colors"
         >
           <span className="material-symbols-outlined text-[15px]">cancel</span>
         </button>
       </div>
 
       {showPrompt && (
-        <div className="fixed inset-0 z-50 bg-[#3B0A0F]/60 backdrop-blur-[2px] flex items-center justify-center p-4">
+        <div className="fixed inset-0 z-50 bg-[#3B0A0F] flex items-center justify-center p-4">
           <div className="bg-[#FFFFFF] border-2 border-[#A60212] rounded-lg max-w-sm w-full p-5 shadow-2xl relative">
             <h4 className="text-sm font-black text-[#3B0A0F] uppercase">
               Verify Physical Condition
@@ -74,8 +74,8 @@ export function ReturnDecisionButtons({ returnId, status, canDecide }: ReturnDec
                   key={c}
                   className={`flex items-center justify-between p-2.5 rounded border text-xs font-bold cursor-pointer transition-colors ${
                     condition === c
-                      ? "bg-[#FFF4E0] border-[#A60212] text-[#A60212]"
-                      : "border-[#EBD3B2] text-[#3B0A0F] hover:bg-[#FFF4E0]/50"
+                      ? "bg-cream border-[#A60212] text-[#A60212]"
+                      : "border-border text-[#3B0A0F] hover:bg-cream"
                   }`}
                 >
                   <div className="flex items-center gap-2">
@@ -99,11 +99,11 @@ export function ReturnDecisionButtons({ returnId, status, canDecide }: ReturnDec
               ))}
             </div>
 
-            <div className="flex items-center justify-end gap-2 mt-4 pt-3 border-t border-[#EBD3B2]">
+            <div className="flex items-center justify-end gap-2 mt-4 pt-3 border-t border-border">
               <button
                 type="button"
                 onClick={() => setShowPrompt(false)}
-                className="h-8 px-3 rounded border border-[#EBD3B2] text-xs font-bold text-[#3B0A0F]"
+                className="h-8 px-3 rounded border border-border text-xs font-bold text-[#3B0A0F]"
               >
                 Cancel
               </button>

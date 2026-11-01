@@ -78,7 +78,7 @@ export async function registerDelivery(db: PrismaClient, actorId: string, form: 
     for (let offset = 0; offset < quantity; offset += 250) {
       const assets = codes.slice(offset, offset + 250).map(propertyNo => ({
         id: randomUUID(), propertyNo, qrCodeData: propertyNo, name: itemDescription,
-        description: `Delivered under PO #${poNumber}, DR #${deliveryReceiptNo} by ${supplierName}`,
+        description: itemDescription,
         classification, categoryId, unitId, acquisitionCost: unitCost, acquisitionDate: now,
         status: "IN_STORAGE", condition: "EXCELLENT", lastVerifiedAt: now,
       }));

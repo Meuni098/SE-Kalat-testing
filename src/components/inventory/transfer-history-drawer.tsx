@@ -70,7 +70,7 @@ export function TransferHistoryDrawer({
       {/* Backdrop */}
       <div
         onClick={onClose}
-        className="fixed inset-0 bg-[#3B0A0F]/60 backdrop-blur-sm transition-opacity"
+        className="fixed inset-0 bg-[#3B0A0F] transition-opacity"
       />
 
       <div className="fixed inset-y-0 right-0 max-w-full flex pl-10">
@@ -88,7 +88,7 @@ export function TransferHistoryDrawer({
                   <span className="text-[10px] font-bold uppercase tracking-wider text-[#F5AB29] font-mono">
                     CHAIN OF CUSTODY LEDGER
                   </span>
-                  <span className="bg-[#4E1117] text-[#EBD3B2] border border-[#6E2B32] text-[9px] px-1.5 py-0.2 rounded font-mono">
+                  <span className="border text-[9px] px-1.5 py-0.2 rounded font-mono badge-solid badge-slate">
                     COA PTR COMPLIANT
                   </span>
                 </div>
@@ -111,7 +111,7 @@ export function TransferHistoryDrawer({
           <div className="flex-1 overflow-y-auto p-5 space-y-5 bg-[#FAF7F2]">
             {isLoading && (
               <div className="py-12 flex flex-col items-center justify-center text-center space-y-3">
-                <div className="w-8 h-8 border-3 border-[#EBD3B2] border-t-[#A60212] rounded-full animate-spin" />
+                <div className="w-8 h-8 border-3 border-border border-t-[#A60212] rounded-full animate-spin" />
                 <span className="text-xs font-semibold text-[#6E2B32]">
                   Compiling chronological transfer records...
                 </span>
@@ -146,24 +146,24 @@ export function TransferHistoryDrawer({
 
             {visibleData && (
               <>
-                <div className="rounded border border-[#EBD3B2] bg-white p-3 text-xs print:hidden">
+                <div className="rounded border border-border bg-white p-3 text-xs print:hidden">
                   <p><strong>Originally logged by: </strong>{visibleData.attribution.originallyLoggedBy?.name ?? "Not recorded"}</p>
                   <p><strong>Last updated by: </strong>{visibleData.attribution.lastUpdatedBy?.name ?? "No updates yet"}</p>
                   {visibleData.canViewAudit && <Link href={`/admin/security-audit?assetId=${visibleData.assetId}`} className="mt-2 block underline">View audit history</Link>}
                 </div>
                 {/* Asset Identity Card */}
-                <div className="bg-[#FFFFFF] border border-[#EBD3B2] rounded p-4 shadow-sm space-y-3">
+                <div className="bg-[#FFFFFF] border border-border rounded p-4 shadow-sm space-y-3">
                   <div className="flex items-start justify-between gap-3">
                     <div>
                       <div className="flex items-center gap-2">
-                        <span className="font-mono text-sm font-black text-[#A60212] bg-[#FFF4E0] border border-[#EBD3B2] px-2 py-0.5 rounded">
+                        <span className="font-mono text-sm font-black border px-2 py-0.5 rounded badge-solid badge-maroon">
                           {visibleData.propertyNo}
                         </span>
                         <span
-                          className={`text-[10px] font-bold uppercase px-2 py-0.5 rounded border ${
+                          className={` text-[10px] font-bold uppercase px-2 py-0.5 rounded border  badge-solid ${
                             visibleData.classification === "PPE"
-                              ? "bg-[#FFF4E0] text-[#A60212] border-[#A60212]"
-                              : "bg-[#FFFFFF] text-[#D97B1A] border-[#D97B1A]"
+                              ? " badge-solid badge-maroon"
+                              : " badge-solid badge-slate"
                           }`}
                         >
                           {visibleData.classification}
@@ -193,7 +193,7 @@ export function TransferHistoryDrawer({
                   <div
                     className={`p-3 rounded border flex items-center justify-between gap-3 ${
                       visibleData.isInAmoCustody
-                        ? "bg-[#FFF4E0] border-[#F5AB29] text-[#3B0A0F]"
+                        ? "bg-cream border-[#F5AB29] text-[#3B0A0F]"
                         : "bg-[#E8F5E9] border-[#A5D6A7] text-[#1B5E20]"
                     }`}
                   >
@@ -207,7 +207,7 @@ export function TransferHistoryDrawer({
                         {visibleData.isInAmoCustody ? "warehouse" : "domain"}
                       </span>
                       <div>
-                        <span className="text-[10px] uppercase font-bold tracking-wider block opacity-90">
+                        <span className="text-[10px] uppercase font-bold tracking-wider block ">
                           {visibleData.isInAmoCustody
                             ? "Current Location: AMO Central Storage"
                             : `Deployed in College: ${visibleData.currentUnit.code}`}
@@ -219,7 +219,7 @@ export function TransferHistoryDrawer({
                     </div>
 
                     <div className="text-right flex-shrink-0">
-                      <span className="text-[10px] font-bold uppercase block opacity-80">
+                      <span className="text-[10px] font-bold uppercase block ">
                         Designated Custodian
                       </span>
                       <span className="text-xs font-bold font-mono">
@@ -243,7 +243,7 @@ export function TransferHistoryDrawer({
                 </div>
 
                 {/* Vertical Timeline */}
-                <div className="relative pl-6 space-y-6 before:content-[''] before:absolute before:left-2.5 before:top-2 before:bottom-2 before:w-0.5 before:bg-[#EBD3B2]">
+                <div className="relative pl-6 space-y-6 before:content-[''] before:absolute before:left-2.5 before:top-2 before:bottom-2 before:w-0.5 before:bg-sand">
                   {visibleData.events.map((ev) => {
                     const isIntake = ev.type === "INTAKE";
                     const isTransfer = ev.type === "TRANSFER";
@@ -277,15 +277,15 @@ export function TransferHistoryDrawer({
                         </div>
 
                         {/* Event Card */}
-                        <div className="bg-[#FFFFFF] border border-[#EBD3B2] rounded p-3.5 shadow-xs hover:border-[#A60212] transition-colors space-y-2">
+                        <div className="bg-[#FFFFFF] border border-border rounded p-3.5 shadow-xs hover:border-[#A60212] transition-colors space-y-2">
                           <div className="flex items-start justify-between gap-2">
                             <div>
                               <div className="flex items-center gap-1.5">
-                                <span className="text-[10px] font-bold uppercase font-mono px-1.5 py-0.2 rounded bg-[#FFF4E0] text-[#A60212] border border-[#EBD3B2]">
+                                <span className="text-[10px] font-bold uppercase font-mono px-1.5 py-0.2 rounded border badge-solid badge-maroon">
                                   {ev.type}
                                 </span>
                                 {ev.ptrNumber && (
-                                  <span className="text-[10px] font-bold font-mono text-[#3B0A0F] bg-[#FAF7F2] px-1.5 py-0.2 rounded border border-[#EBD3B2]">
+                                  <span className="text-[10px] font-bold font-mono px-1.5 py-0.2 rounded border badge-solid badge-slate">
                                     {ev.ptrNumber}
                                   </span>
                                 )}
@@ -300,12 +300,12 @@ export function TransferHistoryDrawer({
                                 {formatDate(ev.date)}
                               </span>
                               <span
-                                className={`inline-block text-[9px] font-bold uppercase px-1.5 py-0.2 rounded mt-0.5 ${
+                                className={` inline-block text-[9px] font-bold uppercase px-1.5 py-0.2 rounded mt-0.5  badge-solid ${
                                   ev.status === "APPROVED" || ev.status === "COMPLETED" || ev.status === "ACCEPTED"
-                                    ? "bg-[#E8F5E9] text-[#2E7D32]"
+                                    ? " badge-solid badge-green"
                                     : ev.status === "PENDING"
-                                    ? "bg-[#FFF4E0] text-[#D97B1A]"
-                                    : "bg-[#FFEBEE] text-[#C62828]"
+                                    ? " badge-solid badge-amber"
+                                    : " badge-solid badge-crimson"
                                 }`}
                               >
                                 {ev.status}
@@ -314,7 +314,7 @@ export function TransferHistoryDrawer({
                           </div>
 
                           {/* Origin -> Destination Flow */}
-                          <div className="bg-[#FFF4E0]/60 border border-[#EBD3B2]/60 rounded p-2 text-xs flex items-center justify-between">
+                          <div className="bg-cream border border-border/60 rounded p-2 text-xs flex items-center justify-between">
                             <div className="flex items-center gap-1 font-bold text-[#3B0A0F]">
                               <span className="text-[10px] font-normal text-[#6E2B32] uppercase block">
                                 From:
@@ -336,7 +336,7 @@ export function TransferHistoryDrawer({
 
                           {/* Releasing & Receiving People */}
                           {(ev.releasingPerson || ev.receivingPerson) && (
-                            <div className="grid grid-cols-2 gap-2 text-[11px] pt-0.5 border-t border-[#EBD3B2]/50">
+                            <div className="grid grid-cols-2 gap-2 text-[11px] pt-0.5 border-t border-border/50">
                               {ev.releasingPerson && (
                                 <div>
                                   <span className="text-[9px] uppercase font-bold text-[#6E2B32] block">
@@ -362,7 +362,7 @@ export function TransferHistoryDrawer({
 
                           {/* Remarks */}
                           {ev.remarks && (
-                            <div className="text-[11px] text-[#6E2B32] italic bg-[#FFFFFF] p-2 rounded border border-[#EBD3B2]/50">
+                            <div className="text-[11px] text-[#6E2B32] italic bg-[#FFFFFF] p-2 rounded border border-border/50">
                               &quot;{ev.remarks}&quot;
                             </div>
                           )}
@@ -376,7 +376,7 @@ export function TransferHistoryDrawer({
           </div>
 
           {/* Drawer Footer */}
-          <div className="p-4 bg-[#FFFFFF] border-t border-[#EBD3B2] flex items-center justify-between gap-3">
+          <div className="p-4 bg-[#FFFFFF] border-t border-border flex items-center justify-between gap-3">
             {visibleData ? (
               <Link
                 href={`/inventory/${visibleData.assetId}`}

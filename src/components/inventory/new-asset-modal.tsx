@@ -63,10 +63,10 @@ export function NewAssetModal({ units, categories }: NewAssetModalProps) {
       </Button>
 
       {isOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#3B0A0F]/80">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#3B0A0F]">
           <div ref={dialogRef} role="dialog" tabIndex={-1} aria-busy={isPending} aria-modal="true" aria-labelledby="registration-title" className="bg-[#FFFFFF] border-2 border-[#A60212] rounded w-full max-w-xl max-h-[90vh] overflow-y-auto p-6">
             {/* Modal Header */}
-            <div className="flex items-center justify-between pb-3 border-b border-[#EBD3B2]">
+            <div className="flex items-center justify-between pb-3 border-b border-border">
               <div className="flex items-center gap-2">
                 <span className="material-symbols-outlined text-[#A60212] text-[22px]">
                   post_add
@@ -109,7 +109,7 @@ export function NewAssetModal({ units, categories }: NewAssetModalProps) {
                     type="text"
                     name="serialNo"
                     placeholder="SN-XXXX-9999"
-                    className="w-full bg-[#FFF4E0] border border-[#EBD3B2] rounded px-3 py-1.5 text-xs font-mono text-[#3B0A0F] focus:outline-none focus:border-[#A60212]"
+                    className="w-full bg-cream border border-border rounded px-3 py-1.5 text-xs font-mono text-[#3B0A0F] focus:outline-none focus:border-[#A60212]"
                   />
                 </div>
               </div>
@@ -123,7 +123,7 @@ export function NewAssetModal({ units, categories }: NewAssetModalProps) {
                   name="name"
                   required
                   placeholder="e.g. Dell Latitude 7440 Laptop"
-                  className="w-full bg-[#FFF4E0] border border-[#EBD3B2] rounded px-3 py-1.5 text-xs text-[#3B0A0F] focus:outline-none focus:border-[#A60212]"
+                  className="w-full bg-cream border border-border rounded px-3 py-1.5 text-xs text-[#3B0A0F] focus:outline-none focus:border-[#A60212]"
                 />
               </div>
 
@@ -135,7 +135,7 @@ export function NewAssetModal({ units, categories }: NewAssetModalProps) {
                   name="description"
                   rows={2}
                   placeholder="CPU, RAM, storage, optical parts, dimensions..."
-                  className="w-full bg-[#FFF4E0] border border-[#EBD3B2] rounded px-3 py-1.5 text-xs text-[#3B0A0F] focus:outline-none focus:border-[#A60212]"
+                  className="w-full bg-cream border border-border rounded px-3 py-1.5 text-xs text-[#3B0A0F] focus:outline-none focus:border-[#A60212]"
                 />
               </div>
 
@@ -147,7 +147,7 @@ export function NewAssetModal({ units, categories }: NewAssetModalProps) {
                   <select id="register-categoryId"
                     name="categoryId"
                     required
-                    className="w-full bg-[#FFFFFF] border border-[#EBD3B2] rounded px-2.5 py-1.5 text-xs text-[#3B0A0F] focus:outline-none focus:border-[#A60212]"
+                    className="w-full bg-[#FFFFFF] border border-border rounded px-2.5 py-1.5 text-xs text-[#3B0A0F] focus:outline-none focus:border-[#A60212]"
                   >
                     {categories.map((c) => (
                       <option key={c.id} value={c.id}>
@@ -168,7 +168,7 @@ export function NewAssetModal({ units, categories }: NewAssetModalProps) {
                   <select id="register-unitId"
                     name="unitId"
                     required
-                    className="w-full bg-[#FFFFFF] border border-[#EBD3B2] rounded px-2.5 py-1.5 text-xs text-[#3B0A0F] focus:outline-none focus:border-[#A60212]"
+                    className="w-full bg-[#FFFFFF] border border-border rounded px-2.5 py-1.5 text-xs text-[#3B0A0F] focus:outline-none focus:border-[#A60212]"
                   >
                     {units.map((u) => (
                       <option key={u.id} value={u.id}>
@@ -186,7 +186,7 @@ export function NewAssetModal({ units, categories }: NewAssetModalProps) {
                     type="date"
                     name="acquisitionDate"
                     defaultValue={new Date().toISOString().split("T")[0]}
-                    className="w-full bg-[#FFF4E0] border border-[#EBD3B2] rounded px-3 py-1.5 text-xs text-[#3B0A0F] focus:outline-none focus:border-[#A60212]"
+                    className="w-full bg-cream border border-border rounded px-3 py-1.5 text-xs text-[#3B0A0F] focus:outline-none focus:border-[#A60212]"
                   />
                 </div>
               </div>
@@ -205,13 +205,13 @@ export function NewAssetModal({ units, categories }: NewAssetModalProps) {
                     required
                     value={cost}
                     onChange={(e) => setCost(parseFloat(e.target.value) || 0)}
-                    className="w-1/2 bg-[#FFF4E0] border border-[#EBD3B2] rounded px-3 py-1.5 text-xs font-mono font-bold text-[#3B0A0F] focus:outline-none focus:border-[#A60212]"
+                    className="w-1/2 bg-cream border border-border rounded px-3 py-1.5 text-xs font-mono font-bold text-[#3B0A0F] focus:outline-none focus:border-[#A60212]"
                   />
                   <div
                     className={`px-3 py-1.5 rounded text-xs font-bold border flex items-center gap-1.5 ${
                       isPPE
-                        ? "bg-[#FFF4E0] text-[#A60212] border-[#A60212]"
-                        : "bg-[#FFFFFF] text-[#D97B1A] border-[#D97B1A]"
+                        ? "bg-[#6E1829] text-[#FFFFFF] border-[#6E1829]"
+                        : "bg-[#455468] text-[#FFFFFF] border-[#455468]"
                     }`}
                   >
                     <span className="material-symbols-outlined text-[16px]">
@@ -228,7 +228,7 @@ export function NewAssetModal({ units, categories }: NewAssetModalProps) {
               </div>
 
               {/* Action Buttons */}
-              <div className="pt-3 border-t border-[#EBD3B2] flex items-center justify-end gap-2">
+              <div className="pt-3 border-t border-border flex items-center justify-end gap-2">
                 <Button
                   type="button"
                   variant="secondary"

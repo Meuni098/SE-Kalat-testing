@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 import { REPORT_SECTIONS,compatibleExportTemplates,reportSection,type ReportSection } from "@/lib/report-sections";
 import { exportPurpose,resolveExportTemplate,formCollection } from "@/lib/form-collections";
 import { DocumentLayoutPreviewPanel } from "./document-layout-preview";
-import type { DocumentLayoutPreview } from "@/lib/document-preview";
+import type { DocumentPrintPreview } from "@/lib/document-print-preview-types";
 import { Button } from "@/components/ui/button";
 import { FORM_PURPOSES,formClassification,type FormDescription,type AutofillPreview,type AutofillOption } from "@/lib/form-templates";
 
@@ -15,7 +15,7 @@ interface Props {defaultCategoryId?:string;defaultUnitId?:string;defaultClassifi
 const valueMap=(plan:AutofillPreview|null)=>Object.fromEntries(plan?.changes.map(c=>[c.fieldId,c.value])??[]);
 export function ReferenceFormExport({defaultCategoryId,defaultUnitId,defaultClassification,reportSection:sectionProp,defaultTemplateId,defaultRecordId,defaultEventId,label="Export official document"}:Props={}) {
   const router=useRouter();
-  const [layoutPreview,setLayoutPreview]=React.useState<{key:string;document:DocumentLayoutPreview;original:boolean}|null>(null);
+  const [layoutPreview,setLayoutPreview]=React.useState<{key:string;document:DocumentPrintPreview;original:boolean}|null>(null);
   const sourceScopeChanged=React.useRef(false);
   const [open,setOpen]=React.useState(false),[id,setId]=React.useState<string>("");
   const [selectionMode,setSelectionMode]=React.useState<SelectionMode>("all");
@@ -49,7 +49,7 @@ export function ReferenceFormExport({defaultCategoryId,defaultUnitId,defaultClas
       if(Object.keys(values).length)setRecovery({version:form?.version??"",values});
       retry.current=()=>void load(id);
     }
-    if(response.status===401||response.status===403){setPlan(null);setDraft({});setApplied({});}throw new Error(data.error||"The form could not be prepared. Please retry.");}return data;}
+    if(response.status===401||response.status===403){setLayoutPreview(null);setPlan(null);setDraft({});setApplied({});}throw new Error(data.error||"The form could not be prepared. Please retry.");}return data;}
   async function post(body:object){return json(await fetch("/api/export/forms",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(body)}));}
   async function populate(templateId:string,recordId:string,page:number,currentScope:Scope,request:number,mode:SelectionMode=selectionMode){
     const next:AutofillPreview=await post({action:"autofill",templateId,selection:mode,...(mode==="single"?{recordId}:{}),page,...currentScope});
@@ -133,11 +133,11 @@ export function ReferenceFormExport({defaultCategoryId,defaultUnitId,defaultClas
   async function previewDocument(original=false){
     retry.current=()=>void previewDocument(original);
     if(!form)return;const request=generation.current,key=previewKey;
-    setBusy(true);setError("");setLayoutPreview(null);
+    setBusy(true);setError("");setLayoutPreview(null);setStatus("Preparing document preview…");
     try{
-      const document:DocumentLayoutPreview=await post({action:"preview",templateId:id,version:referenceVersion||form.version,...scope,changes:original?[]:overrides,...(!original&&plan?{autofill:{selection:plan.selection??"single",...(plan.selection==="all"?{}:{recordId:plan.recordId}),sourceVersion:plan.sourceVersion,page:plan.page},excludedFields:excluded}:{})});
+      const document:DocumentPrintPreview=await post({action:"preview",templateId:id,version:referenceVersion||form.version,...scope,changes:original?[]:overrides,...(!original&&plan?{autofill:{selection:plan.selection??"single",...(plan.selection==="all"?{}:{recordId:plan.recordId}),sourceVersion:plan.sourceVersion,page:plan.page},excludedFields:excluded}:{})});
       if(request===generation.current){setLayoutPreview({key,document,original});setStatus(original?"Original reference layout ready.":"Complete filled document preview ready.");}
-    }catch(error){if(request===generation.current)setError(error instanceof Error?error.message:"Could not preview the document.");}
+    }catch(error){if(request===generation.current){setStatus("");setError(error instanceof Error?error.message:"Could not preview the document.");}}
     finally{if(request===generation.current)setBusy(false);}
   }
   async function download(original=false){
@@ -170,14 +170,14 @@ export function ReferenceFormExport({defaultCategoryId,defaultUnitId,defaultClas
       setOpen(true);const params=new URLSearchParams(window.location.search);const requested=defaultTemplateId||params.get("templateId")||"";
       void load(requested,true);
     }}>{label}</Button></span>
-    <dialog ref={dialog} aria-labelledby="form-export-title" onCancel={e=>{e.preventDefault();close();}} onClose={()=>{if(open)close();}} className="fixed inset-0 m-auto w-[min(1100px,95vw)] max-h-[90vh] overflow-auto rounded-lg border border-[#EBD3B2] bg-white p-0 text-[#3B0A0F] shadow-xl backdrop:bg-black/50 print:hidden">
+    <dialog ref={dialog} aria-labelledby="form-export-title" onCancel={e=>{e.preventDefault();close();}} onClose={()=>{if(open)close();}} className="fixed inset-0 m-auto w-[min(1100px,95vw)] max-h-[90vh] overflow-auto rounded-lg border border-border bg-white p-0 text-[#3B0A0F] shadow-xl backdrop:bg-[#3B0A0F] print:hidden">
       <div className="p-5 space-y-4">
         <fieldset disabled={discardPrompt} className="space-y-4 min-w-0">
-        <div className="flex justify-between items-start gap-3"><div><h2 id="form-export-title" className="font-bold text-lg">Prepare an official document</h2><p className="text-sm">{manualRequest?"Request copies of documents using the supplied Word form. Fill the fields, apply edits, then preview before downloading.":"Choose a college and document purpose. All matching records fill automatically; use one-record mode only when you need a specific transaction."}</p></div><Button variant="secondary" size="sm" onClick={close}>Close</Button></div>
+        <div className="flex justify-between items-start gap-3"><div><h2 id="form-export-title" className="font-bold text-lg">Prepare an official document</h2></div><Button variant="secondary" size="sm" onClick={close}>Close</Button></div>
         {!manualRequest&&<label className="block text-sm font-bold">Export coverage<select aria-label="Export coverage" className="block border rounded p-2 w-full mt-1" value={selectionMode} disabled={busy} onChange={e=>void load(id,false,{...scope,eventId:undefined},undefined,e.target.value==="single"?"single":"all")}><option value="all">All matching records (automatic)</option><option value="single">One transaction / session</option></select></label>}
         <div className="grid sm:grid-cols-2 gap-3">
           {purposes.length>1&&<label className="text-sm font-bold">Document purpose<select aria-label="Document purpose" className="block border rounded p-2 w-full mt-1" value={purposeId} disabled={busy} onChange={e=>void load("",false,purposeScope(e.target.value),e.target.value)}>{purposes.map(p=><option key={p.id} value={p.id}>{p.name}</option>)}</select></label>}
-          <label className="text-sm font-bold">Original form<select aria-label="Original form" className="block border rounded p-2 w-full mt-1" value={id} disabled={busy} onChange={e=>void load(e.target.value,false,{...scope,classification:formClassification(e.target.value)??"ALL",eventId:undefined})}><option value="">Choose a document form</option>{available.filter(t=>exportPurpose(t.id)===purpose.id).map(t=><option key={t.id} value={t.id}>{t.name} — {t.filename}</option>)}</select></label>
+          <label className="text-sm font-bold">Original form<select aria-label="Original form" className="block border rounded p-2 w-full mt-1" value={id} disabled={busy} onChange={e=>void load(e.target.value,false,{...scope,classification:formClassification(e.target.value)??"ALL",eventId:undefined})}><option value="">Choose a document form</option>{available.filter(t=>exportPurpose(t.id)===purpose.id).map(t=><option key={t.id} value={t.id}>{t.name}</option>)}</select></label>
         </div>
         {!manualRequest&&<div className="grid sm:grid-cols-3 gap-3 text-sm">
           <label>Product category<select aria-label="Category scope" className="block border rounded p-2 w-full mt-1" value={scope.categoryId} disabled={busy} onChange={e=>void load(id,false,{...scope,categoryId:e.target.value,eventId:undefined})}><option value="ALL">All categories</option>{options?.categories.map(c=><option key={c.id} value={c.id}>{c.name}</option>)}</select></label>
@@ -190,9 +190,9 @@ export function ReferenceFormExport({defaultCategoryId,defaultUnitId,defaultClas
           {["transfer","return"].includes(purposeId)&&<label>Transaction status<select aria-label="Transaction status" className="block border rounded p-2 w-full" value={scope.status??""} disabled={busy} onChange={e=>void load(id,false,{...scope,status:e.target.value||undefined,eventId:undefined})}><option value="">All supported statuses</option>{(purposeId==="transfer"?["PENDING","APPROVED","COMPLETED"]:["PENDING","APPROVED"]).map(s=><option key={s}>{s}</option>)}</select></label>}
 
         </div>
-        {busy&&<p role="status">Loading matching records and filling the document…</p>}
+        {busy&&<p role="status">{status==="Preparing document preview…"?status:"Loading matching records and filling the document…"}</p>}
         {error&&<p role="alert" className="text-red-700">{error} <button type="button" className="underline" disabled={busy} onClick={()=>retry.current?.()}>Retry</button></p>}
-        {status&&<p role="status" className="text-sm">{status}</p>}
+        {status&&!busy&&<p role="status" className="text-sm">{status}</p>}
         {recovery&&<details className="border rounded p-3 text-sm"><summary>Saved manual corrections from the stale preview</summary>
           <p>Review these against the refreshed source. If the reference format changed, copy corrections into the new matching fields individually.</p>
           <ul>{Object.entries(recovery.values).map(([key,value])=><li key={key}>{fields.get(key)?.label??"Previous field"}: {value||"(blank)"}</li>)}</ul>
@@ -202,14 +202,14 @@ export function ReferenceFormExport({defaultCategoryId,defaultUnitId,defaultClas
         </details>}
         {form&&<>
           <div className="flex flex-wrap gap-2 items-center"><span className="text-xs break-all">{form.filename}</span><Button variant="secondary" size="sm" disabled={busy||pending} onClick={()=>void previewDocument(true)}>Preview original</Button><Button variant="secondary" size="sm" disabled={busy} onClick={()=>void download(true)}>Download original</Button></div>
-          {!manualRequest&&selectionMode==="all"&&records.length>0&&<section className="bg-[#FFF4E0] border rounded p-3 space-y-2" aria-label="Included records">
+          {!manualRequest&&selectionMode==="all"&&records.length>0&&<section className="bg-cream border rounded p-3 space-y-2" aria-label="Included records">
             <p className="font-bold">All {records.length} matching records are included automatically.</p>
-            <p className="text-sm">Includes every record matching this college, product category, classification, purpose and other filters. Products fill one continuous table per supplied worksheet. Descriptions contain only saved product descriptions. Unused item rows are removed, and conflicting shared receiver/date fields stay blank.</p>
+            <details className="text-sm"><summary className="cursor-pointer">How matching records are filled</summary><p className="mt-2">Includes every record matching this college, product category, classification, purpose and other filters. Products fill one continuous table per supplied worksheet. Descriptions contain only saved product descriptions. Unused item rows are removed, and conflicting shared receiver/date fields stay blank.</p></details>
             {plan&&<p className="text-sm">{plan.totalRowCount} items · {plan.groupCount} compatible groups · {plan.pageCount} preview sections. This section contains {plan.rowCount} items.</p>}
             <details><summary className="cursor-pointer text-sm">Review included records</summary><ul className="list-disc pl-5 text-sm">{records.slice(0,300).map(r=><li key={r.id}>{r.label}</li>)}</ul>{records.length>300&&<p className="text-xs">Showing the first 300 labels; all {records.length} records are included.</p>}</details>
             <Button variant="secondary" size="sm" disabled={busy} onClick={()=>void load(id)}>Refresh all matching records</Button>
           </section>}
-          {!manualRequest&&(selectionMode==="single"&&records.length>0?<section className="bg-[#FFF4E0] border rounded p-3 space-y-2">
+          {!manualRequest&&(selectionMode==="single"&&records.length>0?<section className="bg-cream border rounded p-3 space-y-2">
             {records.length>20&&<label className="text-sm block">Find a record<input aria-label="Find a matching record" className="block border rounded p-2 w-full bg-white" value={recordQuery} onChange={e=>setRecordQuery(e.target.value)}/></label>}
             <label className="text-sm font-bold block">Matching transaction / session<select aria-label="Matching transaction or session" className="block border rounded p-2 w-full bg-white mt-1" value={plan?.recordId??""} disabled={busy} onChange={e=>void selectRecord(e.target.value)}><option value="">Choose a matching record ({matches.length})</option>{visible.map(r=><option key={r.id} value={r.id}>{r.label}</option>)}</select></label>
             {matches.length>300&&<p className="text-xs">Showing the first 300 matches. Search to find another record.</p>}
@@ -218,16 +218,16 @@ export function ReferenceFormExport({defaultCategoryId,defaultUnitId,defaultClas
           {plan&&<>
             <section className="space-y-2" aria-label="Automatically populated fields">
               <h3 className="font-bold">Automatically populated values</h3>
-              {plan.variants&&<section aria-label="Classification coverage" className="text-sm bg-[#FFF4E0] p-3 rounded space-y-1"><p className="font-bold">{plan.selection==="all"?"Included":"Available"} classification forms</p>{plan.variants.map(v=><p key={v.templateId}>{v.filename}: {v.recordCount} matching records · {v.rowCount} items{v.recordCount===0?" — no matching data":""}</p>)}<p>Current preview: {form.filename}. The complete download includes both populated classification sections in one workbook.</p></section>}<p className="text-sm">Draft for review · {missing.length} fields may need manual information. Names are not signatures.</p>
+              {plan.variants&&<section aria-label="Classification coverage" className="text-sm bg-cream p-3 rounded space-y-1"><p className="font-bold">{plan.selection==="all"?"Included":"Available"} classification forms</p>{plan.variants.map(v=><p key={v.templateId}>{v.filename}: {v.recordCount} matching records · {v.rowCount} items{v.recordCount===0?" — no matching data":""}</p>)}<p>Current preview: {form.filename}. The complete download includes both populated classification sections in one workbook.</p></section>}<p className="text-sm">Draft for review · {missing.length} fields may need manual information. Names are not signatures.</p>
               {plan.pageCount>1&&<div className="flex gap-2 items-center text-sm"><Button size="sm" variant="secondary" disabled={busy||plan.page===1} onClick={()=>void selectRecord(plan.recordId,plan.page-1)}>Previous preview</Button><span>Preview section {plan.page} of {plan.pageCount}</span><Button size="sm" variant="secondary" disabled={busy||plan.page===plan.pageCount} onClick={()=>void selectRecord(plan.recordId,plan.page+1)}>Next preview</Button></div>}
-              <p className="text-xs">Preview of field values. The download uses a compact supplied template: only selected item rows remain, with saved descriptions only. Asset descriptions, costs and condition use current inventory data; transaction dates and parties use matching recorded data for the current form group.</p>
-              <div className="max-h-72 overflow-auto border rounded"><table className="w-full text-sm text-left"><thead><tr className="bg-[#FFF4E0]"><th className="p-2">Field</th><th className="p-2">Populated value</th><th className="p-2">Source / state</th></tr></thead><tbody>{plan.changes.filter(c=>c.value!=="").map(c=><tr key={c.fieldId}><td className="p-2 border-t">{fields.get(c.fieldId)?.section} {fields.get(c.fieldId)?.label??({"0:A11":"Quantity (copy 1)","0:C11":"Unit cost (copy 1)","0:D11":"Total cost (copy 1)","0:C39":"Unit cost (copy 2)","0:D39":"Total cost (copy 2)","0:F26":"Received date (copy 1)","0:F54":"Received date (copy 2)"}[c.fieldId]??"Additional recorded value")}</td><td className="p-2 border-t whitespace-pre-wrap break-words">{applied[c.fieldId]??""}</td><td className="p-2 border-t">{applied[c.fieldId]!==automatic[c.fieldId]?"Manual correction":plan.fieldReview?.find(f=>f.fieldId===c.fieldId)?.source.replaceAll("-"," ")??"Recorded value"}</td></tr>)}</tbody></table></div>
+              <details className="text-sm"><summary className="cursor-pointer">About these populated values</summary><p className="mt-2">Preview of field values. The download uses a compact supplied template: only selected item rows remain, with saved descriptions only. Asset descriptions, costs and condition use current inventory data; transaction dates and parties use matching recorded data for the current form group.</p></details>
+              <div className="max-h-72 overflow-auto border rounded"><table className="w-full text-sm text-left"><thead><tr className="bg-cream"><th className="p-2">Field</th><th className="p-2">Populated value</th><th className="p-2">Source / state</th></tr></thead><tbody>{plan.changes.filter(c=>c.value!=="").map(c=><tr key={c.fieldId}><td className="p-2 border-t">{fields.get(c.fieldId)?.section} {fields.get(c.fieldId)?.label??({"0:A11":"Quantity (copy 1)","0:C11":"Unit cost (copy 1)","0:D11":"Total cost (copy 1)","0:C39":"Unit cost (copy 2)","0:D39":"Total cost (copy 2)","0:F26":"Received date (copy 1)","0:F54":"Received date (copy 2)"}[c.fieldId]??"Additional recorded value")}</td><td className="p-2 border-t whitespace-pre-wrap break-words">{applied[c.fieldId]??""}</td><td className="p-2 border-t">{applied[c.fieldId]!==automatic[c.fieldId]?"Manual correction":plan.fieldReview?.find(f=>f.fieldId===c.fieldId)?.source.replaceAll("-"," ")??"Recorded value"}</td></tr>)}</tbody></table></div>
               <details className="text-xs"><summary className="cursor-pointer">Fields requiring review</summary><ul className="list-disc pl-5 mt-2 space-y-1">{missing.map(f=><li key={f.fieldId}>{fields.get(f.fieldId)?.section} {fields.get(f.fieldId)?.label??f.fieldId}: missing / requires review</li>)}{plan.warnings.map(w=><li key={w}>{w}</li>)}</ul></details>
             </section>
           </>}
           <details open={manualRequest||undefined} className="border rounded p-3"><summary className="cursor-pointer text-sm font-bold">{manualRequest?"Fill document request fields":"Review or edit individual fields"}</summary>
-            {manualRequest&&<p className="text-sm">Enter the document-copy request here. No asset history or approvals are inferred. Apply your edits, then preview the completed Word form.</p>}
-            {!manualRequest&&<p className="text-xs mt-2">Automatic values are ready to download. Apply manual edits before exporting; deselecting an automatically filled field leaves a safe blank. Formula inputs and computed totals are protected from manual editing.</p>}
+            {manualRequest&&<p className="text-sm">Enter the copy request, apply edits, then preview. This form does not imply asset history or approval.</p>}
+            {!manualRequest&&<p className="text-xs mt-2">Apply edits before exporting. Unchecked fields stay blank; formulas and totals cannot be edited.</p>}
             <label className="block text-sm my-2">Sheet / copy<select className="block border rounded p-2 w-full" value={section} onChange={e=>setSection(e.target.value)}>{Array.from(new Set(form.fields.map(f=>f.section))).map(s=><option key={s}>{s}</option>)}</select></label>
             <div className="max-h-80 overflow-auto space-y-2">{form.fields.filter(f=>f.section===section&&(!plan||activeFields.has(f.id))).map(f=>{
               const selected=Object.hasOwn(draft,f.id);
@@ -239,11 +239,11 @@ export function ReferenceFormExport({defaultCategoryId,defaultUnitId,defaultClas
             {pending&&<p className="text-sm">Unapplied manual edits will not be exported.</p>}
             <div className="flex flex-wrap gap-2"><Button disabled={busy||stale||pending||(!plan&&!manualRequest)} onClick={()=>void previewDocument()}>Preview document</Button><Button variant="secondary" disabled={busy||stale||pending||(!plan&&(!manualRequest||!overrides.length))} onClick={()=>void download()}>Download complete document</Button></div>
             {!pending&&!stale&&layoutPreview?.key===previewKey&&<><p className="text-sm">{layoutPreview.original?"Original reference — no recorded values applied":"Complete document with applied values"}</p><DocumentLayoutPreviewPanel key={layoutPreview.key+String(layoutPreview.original)} preview={layoutPreview.document}/></>}
-            <p className="text-xs">The supplied template contains every matching record. Row corrections follow the previewed records; header corrections apply to the whole worksheet. No additional report sheet is created.</p>
+            <details className="text-sm"><summary className="cursor-pointer">How corrections appear in the download</summary><p className="mt-2">The supplied template contains every matching record. Row corrections follow the previewed records; header corrections apply to the whole worksheet. No additional report sheet is created.</p></details>
           </div>
         </>}
         </fieldset>
-        {discardPrompt&&<section role="alertdialog" aria-labelledby="discard-report-title" className="border rounded p-4 bg-[#FFF4E0] space-y-3">
+        {discardPrompt&&<section role="alertdialog" aria-labelledby="discard-report-title" className="border rounded p-4 bg-cream space-y-3">
           <h3 id="discard-report-title" className="font-bold">Discard manual changes?</h3>
           <p>Changing the selection will discard the manual changes on the current page.</p>
           <div className="flex gap-3 flex-wrap">

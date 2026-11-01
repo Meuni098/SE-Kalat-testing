@@ -1,3 +1,4 @@
+import { actualProductDescription, productDescriptionInclude } from "@/lib/product-description";
 import { prisma } from "@/lib/db";
 import { getSession } from "@/lib/auth";
 import Link from "next/link";
@@ -9,10 +10,11 @@ import { NewTransferModal } from "@/components/inventory/new-transfer-modal";
 export const dynamic = "force-dynamic";
 
 export default async function AmoCentralHoldingsPage() {
-  await getSession();
+  const user = await getSession();
+  const canRequestTransfer = ["ADMIN", "STAFF", "CUSTODIAN"].includes(user?.role ?? "");
 
   // Query in-house assets: unit code AMO or STORAGE/AUXILIARY/ADMINISTRATIVE
-  const [inHouseRaw, allUnits, categories, persons, transferredCount, totalCount] =
+  const [inHouseRaw, allUnits, transferredCount, totalCount] =
     await Promise.all([
       prisma.asset.findMany({
         where: {
@@ -25,9 +27,11 @@ export default async function AmoCentralHoldingsPage() {
           ],
         },
         include: {
+          ...productDescriptionInclude,
           category: true,
           unit: true,
           accountablePerson: true,
+          returnRequests: { where: { status: "PENDING" }, select: { id: true } },
           transferRequests: {
             where: { status: "PENDING" },
             include: { toUnit: true },
@@ -36,8 +40,6 @@ export default async function AmoCentralHoldingsPage() {
         orderBy: { acquisitionDate: "desc" },
       }),
       prisma.unit.findMany({ where: { isActive: true }, orderBy: { code: "asc" } }),
-      prisma.category.findMany({ orderBy: { name: "asc" } }),
-      prisma.person.findMany({ where: { assets: { some: { isDeleted: false } } }, orderBy: { fullName: "asc" } }),
       prisma.asset.count({
         where: {
           isDeleted: false,
@@ -54,9 +56,13 @@ export default async function AmoCentralHoldingsPage() {
     const pendingTr = a.transferRequests[0];
     return {
       id: a.id,
+      unitId: a.unitId,
+      unitCode: a.unit.code,
+      isTransferAvailable: ["IN_USE", "IN_STORAGE", "UNDER_REPAIR"].includes(a.status) && !a.transferRequests.some((transfer) => transfer.status === "PENDING") && a.returnRequests.length === 0,
+      canTransfer: canRequestTransfer && (user?.role !== "CUSTODIAN" || user.unitId === a.unitId) && ["IN_USE", "IN_STORAGE", "UNDER_REPAIR"].includes(a.status) && !a.transferRequests.some((transfer) => transfer.status === "PENDING") && a.returnRequests.length === 0,
       propertyNo: a.propertyNo,
       name: a.name,
-      description: a.description,
+      description: actualProductDescription(a),
       classification: a.classification,
       categoryName: a.category.name,
       acquisitionCost: a.acquisitionCost,
@@ -73,45 +79,28 @@ export default async function AmoCentralHoldingsPage() {
 
   const totalValue = assetRows.reduce((sum, a) => sum + a.acquisitionCost, 0);
   const pendingCount = assetRows.filter((a) => a.hasPendingTransfer).length;
-  const readyCount = assetRows.length - pendingCount;
+  const readyCount = assetRows.filter((asset) => asset.isTransferAvailable).length;
 
   const modalAssets = assetRows
-    .filter((a) => !a.hasPendingTransfer)
+    .filter((a) => a.canTransfer)
     .map((a) => ({
       id: a.id,
       propertyNo: a.propertyNo,
       name: a.name,
-      unitId: allUnits.find((u) => u.code === "AMO")?.id || "",
-      unitCode: "AMO",
+      unitId: a.unitId,
+      unitCode: a.unitCode,
       currentCustodian: "AMO Central Property Storage",
     }));
-
-  const modalPersons = persons.map((p) => ({
-    id: p.id,
-    fullName: p.fullName,
-    position: p.position,
-    unitId: p.unitId,
-  }));
 
   return (
     <div className="space-y-5 pb-16 select-none">
       {/* Page Header */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-[#FFFFFF] p-5 border border-[#EBD3B2] rounded shadow-xs">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-[#FFFFFF] p-5 border border-border rounded shadow-xs">
         <div>
-          <div className="flex items-center gap-2">
-            <span className="bg-[#FFF4E0] text-[#A60212] border border-[#A60212] px-2 py-0.5 rounded text-[11px] font-bold font-mono">
-              AMO CENTRAL WAREHOUSE
-            </span>
-            <span className="bg-[#FFF4E0] text-[#6E2B32] border border-[#EBD3B2] px-2 py-0.5 rounded text-[11px] font-mono">
-              IN-HOUSE STAGING LEDGER
-            </span>
-          </div>
+
           <h1 className="text-2xl font-black text-[#3B0A0F] tracking-tight uppercase mt-1">
             AMO Central Holdings (In-House Inventory)
           </h1>
-          <p className="text-xs text-[#6E2B32] font-medium mt-0.5">
-            Registry of all newly delivered, inspected, and warehouse-held assets currently under AMO custody awaiting transfer to colleges
-          </p>
         </div>
 
         <div className="flex items-center gap-2.5 flex-wrap">
@@ -125,17 +114,16 @@ export default async function AmoCentralHoldingsPage() {
 
           <Link
             href="/inventory/generate-qr"
-            className="bg-[#FFFFFF] text-[#3B0A0F] border border-[#EBD3B2] hover:bg-[#FFF4E0] px-3.5 py-2 text-xs font-bold rounded flex items-center gap-1.5 transition-colors"
+            className="bg-[#FFFFFF] text-[#3B0A0F] border border-border hover:bg-cream px-3.5 py-2 text-xs font-bold rounded flex items-center gap-1.5 transition-colors"
           >
             <span className="material-symbols-outlined text-[16px] text-[#D97B1A]">print</span>
             <span>Batch QR Labels</span>
           </Link>
 
-          <NewTransferModal
+          {canRequestTransfer && <NewTransferModal
             assets={modalAssets}
             units={allUnits.filter((u) => u.code !== "AMO")}
-            persons={modalPersons}
-          />
+          />}
         </div>
       </div>
 
@@ -159,7 +147,6 @@ export default async function AmoCentralHoldingsPage() {
       <AmoCentralTable
         assets={assetRows}
         units={allUnits}
-        persons={persons}
       />
     </div>
   );

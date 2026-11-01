@@ -75,10 +75,10 @@ export function UnitModal({
       )}
 
       {isOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#3B0A0F]/80 backdrop-blur-xs select-none">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#3B0A0F] select-none">
           <div className="bg-[#FFFFFF] border-2 border-[#A60212] rounded w-full max-w-lg max-h-[90vh] overflow-y-auto shadow-2xl p-6">
             {/* Header */}
-            <div className="flex items-center justify-between pb-3 border-b border-[#EBD3B2]">
+            <div className="flex items-center justify-between pb-3 border-b border-border">
               <div className="flex items-center gap-2">
                 <span className="material-symbols-outlined text-[#A60212] text-[22px]">
                   {isEditing ? "edit_square" : "domain_add"}
@@ -87,9 +87,7 @@ export function UnitModal({
                   <h2 className="text-sm font-bold text-[#3B0A0F] uppercase tracking-wide">
                     {isEditing ? `Edit Unit: ${existingUnit?.code}` : "Register New College or Operating Unit"}
                   </h2>
-                  <p className="text-[11px] text-[#6E2B32]">
-                    BulSU Institutional Organizational Hierarchy
-                  </p>
+
                 </div>
               </div>
               <button
@@ -121,7 +119,7 @@ export function UnitModal({
                     required
                     defaultValue={existingUnit?.code || ""}
                     placeholder="e.g. CICT, CON, AMO"
-                    className="w-full uppercase font-mono font-bold px-3 py-2 border border-[#EBD3B2] rounded bg-[#FFF4E0]/30 focus:bg-[#FFFFFF] focus:outline-hidden focus:border-[#A60212]"
+                    className="w-full uppercase font-mono font-bold px-3 py-2 border border-border rounded bg-cream focus:bg-[#FFFFFF] focus:outline-hidden focus:border-[#A60212]"
                   />
                   <span className="text-[10px] text-[#6E2B32]">Unique organizational acronym</span>
                 </div>
@@ -133,7 +131,7 @@ export function UnitModal({
                   <select
                     name="unitType"
                     defaultValue={existingUnit?.unitType || "ACADEMIC"}
-                    className="w-full px-3 py-2 border border-[#EBD3B2] rounded bg-[#FFF4E0]/30 focus:bg-[#FFFFFF] focus:outline-hidden focus:border-[#A60212]"
+                    className="w-full px-3 py-2 border border-border rounded bg-cream focus:bg-[#FFFFFF] focus:outline-hidden focus:border-[#A60212]"
                   >
                     <option value="ACADEMIC">Academic College / Dept</option>
                     <option value="ADMINISTRATIVE">Administrative Office</option>
@@ -153,7 +151,7 @@ export function UnitModal({
                   required
                   defaultValue={existingUnit?.name || ""}
                   placeholder="e.g. College of Information and Communications Technology"
-                  className="w-full px-3 py-2 border border-[#EBD3B2] rounded bg-[#FFF4E0]/30 focus:bg-[#FFFFFF] focus:outline-hidden focus:border-[#A60212]"
+                  className="w-full px-3 py-2 border border-border rounded bg-cream focus:bg-[#FFFFFF] focus:outline-hidden focus:border-[#A60212]"
                 />
               </div>
 
@@ -165,7 +163,7 @@ export function UnitModal({
                   <select
                     name="campus"
                     defaultValue={existingUnit?.campus || "MAIN_CAMPUS"}
-                    className="w-full px-3 py-2 border border-[#EBD3B2] rounded bg-[#FFF4E0]/30 focus:bg-[#FFFFFF] focus:outline-hidden focus:border-[#A60212]"
+                    className="w-full px-3 py-2 border border-border rounded bg-cream focus:bg-[#FFFFFF] focus:outline-hidden focus:border-[#A60212]"
                   >
                     <option value="MAIN_CAMPUS">Main Campus (Malolos)</option>
                     <option value="BUSTOS">Bustos Campus</option>
@@ -182,7 +180,7 @@ export function UnitModal({
                   <select
                     name="parentUnitId"
                     defaultValue={existingUnit?.parentUnitId || "NONE"}
-                    className="w-full px-3 py-2 border border-[#EBD3B2] rounded bg-[#FFF4E0]/30 focus:bg-[#FFFFFF] focus:outline-hidden focus:border-[#A60212]"
+                    className="w-full px-3 py-2 border border-border rounded bg-cream focus:bg-[#FFFFFF] focus:outline-hidden focus:border-[#A60212]"
                   >
                     <option value="NONE">— Independent Top Unit —</option>
                     {allUnits
@@ -197,7 +195,7 @@ export function UnitModal({
               </div>
 
               {/* Action Buttons */}
-              <div className="pt-3 border-t border-[#EBD3B2] flex items-center justify-end gap-2.5">
+              <div className="pt-3 border-t border-border flex items-center justify-end gap-2.5">
                 <Button
                   type="button"
                   variant="outline"

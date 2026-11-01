@@ -49,12 +49,12 @@ export function InventoryTable({ assets }: InventoryTableProps) {
 
   return (
     <div className="relative">
-      <div className="bg-[#FFFFFF] border border-[#EBD3B2] rounded overflow-hidden">
+      <div className="bg-[#FFFFFF] border border-border rounded overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse">
             <thead>
-              <tr className="h-10 bg-[#FFF4E0] border-b-2 border-[#EBD3B2] text-[#3B0A0F] text-xs font-bold uppercase select-none">
-                <th className="w-10 px-3 text-center border-r border-[#EBD3B2]">
+              <tr className="h-10 bg-cream border-b-2 border-border text-[#3B0A0F] text-xs font-bold uppercase select-none">
+                <th className="w-10 px-3 text-center border-r border-border">
                   <input
                     type="checkbox"
                     checked={assets.length > 0 && selectedIds.length === assets.length}
@@ -62,28 +62,28 @@ export function InventoryTable({ assets }: InventoryTableProps) {
                     className="accent-[#A60212] cursor-pointer"
                   />
                 </th>
-                <th className="px-3.5 py-2 tracking-wider border-r border-[#EBD3B2]">
+                <th className="px-3.5 py-2 tracking-wider border-r border-border">
                   Product Code
                 </th>
-                <th className="px-3.5 py-2 tracking-wider border-r border-[#EBD3B2]">
+                <th className="px-3.5 py-2 tracking-wider border-r border-border">
                   Asset Description
                 </th>
-                <th className="px-3.5 py-2 tracking-wider border-r border-[#EBD3B2]">
+                <th className="px-3.5 py-2 tracking-wider border-r border-border">
                   Classification
                 </th>
-                <th className="px-3.5 py-2 tracking-wider border-r border-[#EBD3B2]">
+                <th className="px-3.5 py-2 tracking-wider border-r border-border">
                   Unit / Custodian
                 </th>
-                <th className="px-3.5 py-2 tracking-wider border-r border-[#EBD3B2]">
+                <th className="px-3.5 py-2 tracking-wider border-r border-border">
                   Acq. Date &amp; Cost
                 </th>
-                <th className="px-3.5 py-2 tracking-wider border-r border-[#EBD3B2]">
+                <th className="px-3.5 py-2 tracking-wider border-r border-border">
                   Status
                 </th>
                 <th className="px-3.5 py-2 tracking-wider text-center">Action</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-[#EBD3B2] text-xs">
+            <tbody className="divide-y divide-border text-xs">
               {assets.length === 0 ? (
                 <tr>
                   <td colSpan={8} className="p-8 text-center text-[#6E2B32]">
@@ -98,11 +98,11 @@ export function InventoryTable({ assets }: InventoryTableProps) {
                   return (
                     <tr
                       key={asset.id}
-                      className={`hover:bg-[#FFF4E0] transition-colors ${
-                        isSelected ? "bg-[#FFF4E0]" : "bg-[#FFFFFF]"
+                      className={`hover:bg-cream transition-colors ${
+                        isSelected ? "bg-cream" : "bg-[#FFFFFF]"
                       }`}
                     >
-                      <td className="px-3 py-3 text-center border-r border-[#EBD3B2]">
+                      <td className="px-3 py-3 text-center border-r border-border">
                         <input
                           type="checkbox"
                           checked={isSelected}
@@ -111,7 +111,7 @@ export function InventoryTable({ assets }: InventoryTableProps) {
                         />
                       </td>
 
-                      <td className="px-3.5 py-3 border-r border-[#EBD3B2] whitespace-nowrap">
+                      <td className="px-3.5 py-3 border-r border-border whitespace-nowrap">
                         <Link
                           href={`/inventory/${asset.id}`}
                           className="font-mono font-bold text-[#A60212] hover:underline flex items-center gap-1"
@@ -126,7 +126,7 @@ export function InventoryTable({ assets }: InventoryTableProps) {
                         )}
                       </td>
 
-                      <td className="px-3.5 py-3 border-r border-[#EBD3B2] max-w-[280px]">
+                      <td className="px-3.5 py-3 border-r border-border max-w-[280px]">
                         <div className="font-bold text-[#3B0A0F] leading-tight">
                           {asset.name}
                         </div>
@@ -137,12 +137,12 @@ export function InventoryTable({ assets }: InventoryTableProps) {
                         )}
                       </td>
 
-                      <td className="px-3.5 py-3 border-r border-[#EBD3B2] whitespace-nowrap">
+                      <td className="px-3.5 py-3 border-r border-border whitespace-nowrap">
                         <span
-                          className={`px-2 py-0.5 rounded text-[10px] font-bold border font-mono ${
+                          className={` px-2 py-0.5 rounded text-[10px] font-bold border font-mono  badge-solid ${
                             asset.classification === "PPE"
-                              ? "bg-[#FFF4E0] text-[#A60212] border-[#A60212]"
-                              : "bg-[#FFFFFF] text-[#D97B1A] border-[#D97B1A]"
+                              ? " badge-solid badge-maroon"
+                              : " badge-solid badge-slate"
                           }`}
                         >
                           {asset.classification}
@@ -152,14 +152,14 @@ export function InventoryTable({ assets }: InventoryTableProps) {
                         </div>
                       </td>
 
-                      <td className="px-3.5 py-3 border-r border-[#EBD3B2]">
+                      <td className="px-3.5 py-3 border-r border-border">
                         <div className="font-bold text-[#3B0A0F]">{asset.unitCode}</div>
                         <div className="text-[11px] text-[#6E2B32]">
                           {asset.accountablePerson || "Unassigned"}
                         </div>
                       </td>
 
-                      <td className="px-3.5 py-3 border-r border-[#EBD3B2] whitespace-nowrap font-mono">
+                      <td className="px-3.5 py-3 border-r border-border whitespace-nowrap font-mono">
                         <div className="font-bold text-[#3B0A0F]">
                           {formatCurrency(asset.acquisitionCost)}
                         </div>
@@ -168,9 +168,9 @@ export function InventoryTable({ assets }: InventoryTableProps) {
                         </div>
                       </td>
 
-                      <td className="px-3.5 py-3 border-r border-[#EBD3B2] whitespace-nowrap">
+                      <td className="px-3.5 py-3 border-r border-border whitespace-nowrap">
                         <span
-                          className={`inline-flex items-center gap-1.5 px-2 py-0.5 rounded text-[11px] font-bold border ${badge.bg} ${badge.border} ${badge.text}`}
+                          className={` inline-flex items-center gap-1.5 px-2 py-0.5 rounded text-[11px] font-bold border  badge-solid ${badge.bg} ${badge.border} ${badge.text}`}
                         >
                           <span className={`w-1.5 h-1.5 rounded-full ${badge.dotColor}`} />
                           {badge.label}
@@ -180,7 +180,7 @@ export function InventoryTable({ assets }: InventoryTableProps) {
                       <td className="px-3.5 py-3 text-center whitespace-nowrap">
                         <Link
                           href={`/inventory/${asset.id}`}
-                          className="px-2.5 py-1 rounded bg-[#FFF4E0] border border-[#EBD3B2] text-[#3B0A0F] hover:bg-[#A60212] hover:text-[#FFF4E0] hover:border-[#A60212] text-xs font-bold transition-colors inline-flex items-center gap-1"
+                          className="px-2.5 py-1 rounded bg-cream border border-border text-[#3B0A0F] hover:bg-[#A60212] hover:text-[#FFF4E0] hover:border-[#A60212] text-xs font-bold transition-colors inline-flex items-center gap-1"
                         >
                           <span>View Dossier</span>
                           <span className="material-symbols-outlined text-[13px]">
@@ -197,7 +197,7 @@ export function InventoryTable({ assets }: InventoryTableProps) {
         </div>
 
         {/* Table Footer Summary */}
-        <div className="p-3 bg-[#FFF4E0] border-t border-[#EBD3B2] flex items-center justify-between text-xs text-[#6E2B32] font-medium">
+        <div className="p-3 bg-cream border-t border-border flex items-center justify-between text-xs text-[#6E2B32] font-medium">
           <span>Showing {assets.length} official inventory records</span>
           <span className="font-mono text-[#3B0A0F] font-bold">
             Total Ledger Value:{" "}

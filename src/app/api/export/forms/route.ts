@@ -19,6 +19,7 @@ import { createReportWorkbook } from "@/lib/report-workbook";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
+export const maxDuration = 90;
 const privateHeaders = { "Cache-Control":"private, no-store" };
 function fail(err: unknown) {
   if (err instanceof FormExportError) return NextResponse.json({error:err.message,code:err.code},{status:err.status,headers:privateHeaders});

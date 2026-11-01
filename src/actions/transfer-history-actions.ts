@@ -1,4 +1,5 @@
 "use server";
+import { actualProductDescription, productDescriptionInclude } from "@/lib/product-description";
 import { AuditLogService } from "@/lib/audit-log-service";
 import type { TransactionAttribution } from "@/types/audit-log";
 
@@ -95,7 +96,7 @@ export async function getAssetTransferHistoryAction(
           },
         },
         inspections: {
-          include: { inspector: true },
+          include: { inspector: true, intakeItem: productDescriptionInclude.inspections.select.intakeItem },
           orderBy: { inspectedAt: "asc" },
         },
         transferRequests: {
@@ -193,7 +194,7 @@ export async function getAssetTransferHistoryAction(
           name: "AMO Custodial Registry",
         },
         status: "COMPLETED",
-        remarks: asset.description || "Officially registered into university asset inventory.",
+        remarks: actualProductDescription(asset) || "Officially registered into university asset inventory.",
         metadata: `Initial Property Tag: ${asset.propertyNo}`,
       });
     }
@@ -318,7 +319,7 @@ export async function getAssetTransferHistoryAction(
       assetId: asset.id,
       propertyNo: asset.propertyNo,
       assetName: asset.name,
-      description: asset.description,
+      description: actualProductDescription(asset),
       classification: asset.classification,
       categoryName: asset.category.name,
       acquisitionCost: asset.acquisitionCost,

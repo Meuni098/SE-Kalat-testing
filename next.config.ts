@@ -2,7 +2,7 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   outputFileTracingIncludes: {
-    "/api/export/forms": ["./resources/export-templates/**/*","./resources/workbook-templates/**/*"],
+    "/api/export/forms": ["./resources/export-templates/**/*","./resources/workbook-templates/**/*","./scripts/office-print-preview.ps1","./scripts/word-print-preview.vbs"],
     "/api/export/category-history": ["./resources/export-templates/**/*","./resources/workbook-templates/**/*"],
   },
   async headers() {

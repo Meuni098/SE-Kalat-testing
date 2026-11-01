@@ -38,7 +38,7 @@
   }
 
   * {
-    border-color: #EBD3B2;
+    border-color: var(--color-border);
     box-sizing: border-box;
   }
 
@@ -78,9 +78,6 @@
 }
 
 /* Strict solid background utility classes */
-.bg-cream {
-  background-color: #FFF4E0;
-}
 .bg-crimson {
   background-color: #A60212;
 }
@@ -92,9 +89,6 @@
 }
 .bg-burnt-orange {
   background-color: #D97B1A;
-}
-.bg-sand {
-  background-color: #EBD3B2;
 }
 .bg-solid-white {
   background-color: #FFFFFF;
@@ -122,7 +116,7 @@
 
 /* Border utility classes */
 .border-sand {
-  border-color: #EBD3B2;
+  border-color: var(--color-border);
 }
 .border-crimson {
   border-color: #A60212;
@@ -132,4 +126,113 @@
 }
 .border-maroon {
   border-color: #3B0A0F;
+}
+
+/* Shared fills for classification, type, count and status labels. */
+.badge-solid {
+  background-color: var(--badge-fill, #455468);
+  border-color: var(--badge-fill, #455468);
+  color: #FFFFFF;
+  opacity: 1;
+}
+
+.badge-maroon { --badge-fill: #6E1829; }
+.badge-slate { --badge-fill: #455468; }
+.badge-green { --badge-fill: #27633B; }
+.badge-amber { --badge-fill: #8A4B08; }
+.badge-crimson { --badge-fill: #A60212; }
+
+.badge-solid [class] {
+  color: inherit;
+}
+
+.badge-solid > .rounded-full {
+  background-color: currentColor;
+}
+
+/* Application surfaces only: leave official documents and QR print layouts intact. */
+@media screen {
+  :root {
+    --color-background: #F3F4F6;
+    --color-cream: #E9EDF1;
+    --color-sand: #DFE3E8;
+    --color-border: #9B8D88;
+  }
+
+  body {
+    background-color: var(--color-background);
+  }
+
+  input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="hidden"]),
+  select,
+  textarea {
+    background-color: #FFFFFF;
+    color: #3B0A0F;
+    font-size: 1rem;
+  }
+
+  input:disabled,
+  select:disabled,
+  textarea:disabled {
+    background-color: #DFE3E8;
+    color: #6E2B32;
+    opacity: 1;
+  }
+
+  select option,
+  select optgroup,
+  dialog {
+    background-color: #FFFFFF;
+    color: #3B0A0F;
+  }
+
+  dialog::backdrop {
+    background-color: #3B0A0F;
+    backdrop-filter: none;
+  }
+
+  button:focus-visible,
+  a:focus-visible,
+  summary:focus-visible,
+  input:focus-visible,
+  select:focus-visible,
+  textarea:focus-visible {
+    outline: 2px solid #A60212;
+    outline-offset: 3px;
+  }
+
+  /* Keep existing table content and columns; improve the reading surface. */
+  main table {
+    background-color: #FFFFFF;
+    font-size: 0.875rem;
+  }
+
+  main th,
+  main td {
+    padding-top: 0.625rem;
+    padding-bottom: 0.625rem;
+    overflow-wrap: break-word;
+  }
+
+  main th {
+    background-color: #4E1117;
+    color: #FFFFFF;
+    border-color: #8F6268;
+  }
+
+  main th [class] {
+    color: inherit;
+  }
+
+  main td {
+    border-color: #B5AAA6;
+  }
+
+  main tbody > tr + tr {
+    border-top-color: #B5AAA6;
+  }
+
+  summary {
+    min-height: 2rem;
+  }
 }

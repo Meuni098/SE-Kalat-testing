@@ -5,7 +5,7 @@ import { createReferenceWorkbook } from "./report-workbook";
 import { readBiff } from "./biff-template";
 import { FORM_TEMPLATES,FormExportError } from "./form-templates";
 
-export interface DocumentLayoutPreview {html:string;filename:string;sheets:{id:string;name:string}[];notice:string}
+export interface DocumentLayoutPreview {html:string;filename:string;sheets:{id:string;name:string;width?:number}[];notice:string}
 const escape=(value:unknown)=>String(value??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]!));
 const font=(value:string|undefined)=>escape((value??"Arial").replace(/[^\w ,\-]/g,""));
 const limit=(value:number,min:number,max:number)=>Math.min(max,Math.max(min,value));
@@ -39,10 +39,11 @@ async function workbookPreview(data:Buffer,filename:string){
     for(const [index,sheet] of readBiff(data).sheets.entries())for(const cell of sheet.cells.values()){const target=workbook.worksheets[index].getCell(cell.row,cell.col);if(target.type!==ExcelJS.ValueType.Merge)target.value=cell.text;}
   }else await workbook.xlsx.load(new Uint8Array(data).buffer);
   if(workbook.worksheets.reduce((sum,s)=>sum+s.rowCount,0)>2500||workbook.worksheets.reduce((sum,s)=>sum+s.rowCount*s.columnCount,0)>50000)throw new FormExportError("Choose a narrower scope to preview this document. The complete download remains available.","PREVIEW_TOO_LARGE",422);
-  const sheets=workbook.worksheets.map((s,i)=>({id:`sheet-${i}`,name:s.name}));
+  const sheets=workbook.worksheets.map((s,i)=>({id:`sheet-${i}`,name:s.name,width:0}));
   const content=workbook.worksheets.map((sheet,index)=>{
     const widths=Array.from({length:sheet.columnCount},(_,i)=>sheet.getColumn(i+1).hidden?0:(sheet.getColumn(i+1).width??8.43)*7+5);
     const heights=Array.from({length:sheet.rowCount},(_,i)=>sheet.getRow(i+1).hidden?0:(sheet.getRow(i+1).height??sheet.properties.defaultRowHeight??15)*4/3);
+    sheets[index].width=widths.reduce((a,b)=>a+b,0);
     const merges=(sheet.model.merges??[]).map(range=>{const [a,b]=range.split(":");return {a:address(a),b:address(b??a)};});
     let rows="";
     for(let r=1;r<=sheet.rowCount;r++){
@@ -68,7 +69,8 @@ async function workbookPreview(data:Buffer,filename:string){
       const left=position(widths,tl.col),top=position(heights,tl.row),width=position(widths,br.col)-left,height=position(heights,br.row)-top;
       images+=`<img alt="Template picture" src="data:image/${media.extension};base64,${bytes.toString("base64")}" style="position:absolute;left:${left}px;top:${top}px;width:${width}px;height:${height}px">`;
     }
-    return `<section data-preview-sheet="sheet-${index}"><h2>${escape(sheet.name)}</h2><div class="paper" style="width:${widths.reduce((a,b)=>a+b,0)}px"><table style="width:100%"><colgroup>${widths.filter(Boolean).map(width=>`<col style="width:${width}px">`).join("")}</colgroup>${rows}</table>${images}</div></section>`;
+    const empty=!sheet.getImages().length&&!sheet.getRows(1,sheet.rowCount)?.some(row=>!row.hidden&&Array.from({length:sheet.columnCount},(_,i)=>i+1).some(c=>widths[c-1]>0&&row.getCell(c).text.trim()));
+    return `<section data-preview-sheet="sheet-${index}"><h2>${escape(sheet.name)}</h2>${empty?"<p>This worksheet has no visible content.</p>":`<div class="paper" style="width:${sheets[index].width}px"><table style="width:100%"><colgroup>${widths.filter(Boolean).map(width=>`<col style="width:${width}px">`).join("")}</colgroup>${rows}</table>${images}</div>`}</section>`;
   }).join("");
   return {content,sheets};
 }
@@ -85,16 +87,25 @@ function wordPreview(xml:string){
       return `border-${side}:${["nil","none"].includes(kind??"")?"none":`${width}pt ${kind==="double"?"double":"solid"} ${hex&&/^[a-f\d]{6}$/i.test(hex)?`#${hex}`:"#000"}`};`;
     }).join("");
   };
-  function render(node:XmlNode):string{
+  function render(node:XmlNode,tableGrid=false):string{
     if(node.nodeType!==1)return "";
-    const element=node as XmlElement,children=()=>Array.from(element.childNodes).map(render).join("");
+    const element=node as XmlElement,children=()=>Array.from(element.childNodes).map(child=>render(child,tableGrid)).join("");
     switch(element.nodeName){
       case "w:body":return children();
-      case "w:tbl":return `<table class="word-table" style="${wordBorders(element,"w:tblBorders")}">${children()}</table>`;
+      case "w:tbl":{
+        const grid=Array.from(element.childNodes).find(child=>child.nodeName==="w:tblGrid") as XmlElement|undefined;
+        const columns=grid?Array.from(grid.getElementsByTagName("w:gridCol")).map(col=>Number(col.getAttribute("w:w"))):[];
+        const validGrid=columns.length>0&&columns.every(width=>Number.isFinite(width)&&width>0);
+        const total=columns.reduce((sum,width)=>sum+width,0);
+        const colgroup=validGrid?`<colgroup>${columns.map(width=>`<col style="width:${width/total*100}%">`).join("")}</colgroup>`:"";
+        const width=Number(value(element,"w:tblW","w:w")),widthType=value(element,"w:tblW","w:type");
+        const sizing=width>0&&Number.isFinite(width)?widthType==="pct"?`width:${limit(width/50,1,500)}%;`:widthType==="dxa"?`width:${limit(width/15,1,5000)}px;`:"":"";
+        return `<table class="word-table" style="${sizing}${wordBorders(element,"w:tblBorders")}">${colgroup}${Array.from(element.childNodes).map(child=>render(child,validGrid)).join("")}</table>`;
+      }
       case "w:tr":{const height=Number(value(element,"w:trHeight"))/20;return `<tr${height?` style="height:${limit(height,0,1000)}pt"`:""}>${children()}</tr>`;}
       case "w:tc":{
         const span=limit(Number(value(element,"w:gridSpan")??1),1,100),width=Number(value(element,"w:tcW","w:w")),widthType=value(element,"w:tcW","w:type");
-        return `<td colspan="${span}" style="${Number.isFinite(width)&&width>0?`width:${widthType==="pct"?width/50:width/20}${widthType==="pct"?"%":"pt"};`:""}vertical-align:${value(element,"w:vAlign")==="center"?"middle":value(element,"w:vAlign")==="bottom"?"bottom":"top"};${wordBorders(element,"w:tcBorders")}">${children()}</td>`;
+        return `<td colspan="${span}" style="${!tableGrid&&Number.isFinite(width)&&width>0?`width:${widthType==="pct"?width/50:width/20}${widthType==="pct"?"%":"pt"};`:""}vertical-align:${value(element,"w:vAlign")==="center"?"middle":value(element,"w:vAlign")==="bottom"?"bottom":"top"};${wordBorders(element,"w:tcBorders")}">${children()}</td>`;
       }
       case "w:p":{
         const align=value(element,"w:jc"),css=["left","right","center","justify"].includes(align??"")?`text-align:${align}`:"";
@@ -113,12 +124,20 @@ function wordPreview(xml:string){
   }
   const body=doc.getElementsByTagName("w:body")[0];
   if(!body)throw new FormExportError("This Word document could not be previewed.");
-  return {content:`<section data-preview-sheet="sheet-0"><div class="paper word">${render(body)}</div></section>`,sheets:[{id:"sheet-0",name:"Document"}]};
+  const section=doc.getElementsByTagName("w:sectPr")[0];
+  const pageWidth=section?Number(value(section,"w:pgSz","w:w"))/15:0;
+  const width=Number.isFinite(pageWidth)&&pageWidth>0?limit(pageWidth,100,5000):816;
+  const margin=(side:string)=>{
+    const raw=section?value(section,"w:pgMar",`w:${side}`):undefined;
+    const pixels=raw===undefined?48:Number(raw)/15;
+    return Number.isFinite(pixels)?limit(pixels,0,width/3):48;
+  };
+  return {content:`<section data-preview-sheet="sheet-0"><div class="paper word" style="box-sizing:border-box;width:${width}px;padding:${margin("top")}px ${margin("right")}px ${margin("bottom")}px ${margin("left")}px">${render(body)}</div></section>`,sheets:[{id:"sheet-0",name:"Document",width}]};
 }
 
 export async function renderDocumentPreview(data:Buffer,filename:string):Promise<DocumentLayoutPreview>{
   if(data.length>20000000)throw new FormExportError("Choose a narrower scope to preview this document.","PREVIEW_TOO_LARGE",422);
   const result=filename.endsWith(".docx")?wordPreview(await (await JSZip.loadAsync(data)).file("word/document.xml")!.async("string")):await workbookPreview(data,filename);
-  const notice="Layout preview of the generated file. Excel/Word pagination and some drawing controls or typography may differ. Review the downloaded file in Office before printed submission.";
+  const notice="Approximate layout preview. Fonts, clipped source content and printed page breaks may differ. Check the downloaded file before submission.";
   return {sheets:result.sheets,filename,notice,html:`<!doctype html><html><head><meta charset="utf-8"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; img-src data:; style-src 'unsafe-inline'; base-uri 'none'; form-action 'none'"><title>${escape(filename)}</title><style>body{margin:16px;background:#eee;color:#111;font:11pt Arial}h2{font:14px Arial;color:#555}section{margin-bottom:24px}.paper{position:relative;background:white;padding:0;box-shadow:0 1px 5px #bbb}table{border-collapse:collapse;table-layout:fixed}td{padding:0 2px;overflow:hidden;overflow-wrap:anywhere;box-sizing:border-box}.word{width:720px;padding:48px}.word-table{width:100%;margin:8px 0}.word-table td{padding:0 3px}.word p{margin:2px 0;white-space:pre-wrap}</style></head><body>${result.content}</body></html>`};
 }

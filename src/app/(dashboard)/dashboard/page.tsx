@@ -114,23 +114,20 @@ export default async function DashboardPage() {
   return (
     <div className="space-y-6">
       {/* 1. Page Header & Operational Status Bar */}
-      <div className="flex items-start justify-between border-b border-[#EBD3B2] pb-4">
+      <div className="flex items-start justify-between border-b border-border pb-4">
         <div>
           <h1 className="text-2xl font-black text-[#3B0A0F] tracking-tight uppercase">
             Institutional Asset Overview
           </h1>
-          <p className="text-xs text-[#6E2B32] font-medium mt-1">
-            BulSU Property, Plant and Equipment (PPE) &amp; Semi-Expendable Lifecycle Status
-          </p>
         </div>
         <div className="flex items-center gap-3">
           <div className="bg-[#FFFFFF] border border-[#F5AB29] px-3 py-1.5 rounded flex items-center gap-2">
             <span className="w-2 h-2 rounded-full bg-[#D97B1A] animate-pulse" />
             <span className="text-xs font-mono font-bold text-[#D97B1A]">
-              Live DB Synchronized
+              Data up to date
             </span>
           </div>
-          <div className="bg-[#FFFFFF] border border-[#EBD3B2] px-3 py-1.5 rounded text-xs font-bold text-[#3B0A0F] flex items-center gap-1.5">
+          <div className="bg-[#FFFFFF] border border-border px-3 py-1.5 rounded text-xs font-bold text-[#3B0A0F] flex items-center gap-1.5">
             <span className="material-symbols-outlined text-[16px] text-[#A60212]">
               verified
             </span>
@@ -200,14 +197,14 @@ export default async function DashboardPage() {
           />
 
           {/* Quick Shortcuts Card */}
-          <div className="bg-[#FFFFFF] border border-[#EBD3B2] rounded p-5 select-none">
-            <h3 className="text-xs font-bold uppercase tracking-wider text-[#3B0A0F] pb-3 border-b border-[#EBD3B2]">
-              Institutional AMO Shortcuts
+          <div className="bg-[#FFFFFF] border border-border rounded p-5 select-none">
+            <h3 className="text-xs font-bold uppercase tracking-wider text-[#3B0A0F] pb-3 border-b border-border">
+              Common tasks
             </h3>
             <div className="grid grid-cols-2 gap-2 mt-3">
               <Link
                 href="/inventory"
-                className="p-3 rounded bg-[#FFF4E0] border border-[#EBD3B2] hover:bg-[#FFFFFF] text-left flex flex-col transition-colors"
+                className="p-3 rounded bg-cream border border-border hover:bg-[#FFFFFF] text-left flex flex-col transition-colors"
               >
                 <span className="material-symbols-outlined text-[#A60212] text-[20px] mb-1">
                   table_view
@@ -218,7 +215,7 @@ export default async function DashboardPage() {
 
               <Link
                 href="/missing"
-                className="p-3 rounded bg-[#FFF4E0] border border-[#EBD3B2] hover:bg-[#FFFFFF] text-left flex flex-col transition-colors"
+                className="p-3 rounded bg-cream border border-border hover:bg-[#FFFFFF] text-left flex flex-col transition-colors"
               >
                 <span className="material-symbols-outlined text-[#A60212] text-[20px] mb-1">
                   warning
@@ -229,7 +226,7 @@ export default async function DashboardPage() {
 
               <Link
                 href="/intake"
-                className="p-3 rounded bg-[#FFF4E0] border border-[#EBD3B2] hover:bg-[#FFFFFF] text-left flex flex-col transition-colors"
+                className="p-3 rounded bg-cream border border-border hover:bg-[#FFFFFF] text-left flex flex-col transition-colors"
               >
                 <span className="material-symbols-outlined text-[#D97B1A] text-[20px] mb-1">
                   add_shopping_cart
@@ -240,7 +237,7 @@ export default async function DashboardPage() {
 
               <Link
                 href="/reports"
-                className="p-3 rounded bg-[#FFF4E0] border border-[#EBD3B2] hover:bg-[#FFFFFF] text-left flex flex-col transition-colors"
+                className="p-3 rounded bg-cream border border-border hover:bg-[#FFFFFF] text-left flex flex-col transition-colors"
               >
                 <span className="material-symbols-outlined text-[#F5AB29] text-[20px] mb-1">
                   print

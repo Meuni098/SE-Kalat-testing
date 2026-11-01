@@ -61,8 +61,8 @@ export function RbacMatrixCard() {
   ];
 
   return (
-    <div className="bg-[#FFFFFF] border border-[#EBD3B2] rounded p-5 select-none">
-      <div className="flex items-center justify-between pb-3 border-b border-[#EBD3B2]">
+    <div className="bg-[#FFFFFF] border border-border rounded p-5 select-none">
+      <div className="flex items-center justify-between pb-3 border-b border-border">
         <div className="flex items-center gap-2">
           <span className="material-symbols-outlined text-[#A60212] text-[20px]">
             security
@@ -79,35 +79,35 @@ export function RbacMatrixCard() {
       <div className="overflow-x-auto mt-3">
         <table className="w-full text-left border-collapse text-xs">
           <thead>
-            <tr className="bg-[#FFF4E0] border-b border-[#EBD3B2] text-[#3B0A0F] font-bold uppercase text-[11px]">
-              <th className="py-2 px-3 border-r border-[#EBD3B2]">System Feature / Domain</th>
-              <th className="py-2 px-3 border-r border-[#EBD3B2] text-center w-24">Admin</th>
-              <th className="py-2 px-3 border-r border-[#EBD3B2] text-center w-24">Staff</th>
-              <th className="py-2 px-3 border-r border-[#EBD3B2] text-center w-24">Custodian</th>
+            <tr className="bg-cream border-b border-border text-[#3B0A0F] font-bold uppercase text-[11px]">
+              <th className="py-2 px-3 border-r border-border">System Feature / Domain</th>
+              <th className="py-2 px-3 border-r border-border text-center w-24">Admin</th>
+              <th className="py-2 px-3 border-r border-border text-center w-24">Staff</th>
+              <th className="py-2 px-3 border-r border-border text-center w-24">Custodian</th>
               <th className="py-2 px-3 text-center w-24">COA Auditor</th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-[#EBD3B2]">
+          <tbody className="divide-y divide-border">
             {permissions.map((p) => (
-              <tr key={p.feature} className="hover:bg-[#FFF4E0] transition-colors">
-                <td className="py-2 px-3 border-r border-[#EBD3B2] font-semibold text-[#3B0A0F]">
+              <tr key={p.feature} className="hover:bg-cream transition-colors">
+                <td className="py-2 px-3 border-r border-border font-semibold text-[#3B0A0F]">
                   {p.feature}
                 </td>
-                <td className="py-2 px-3 border-r border-[#EBD3B2] text-center">
+                <td className="py-2 px-3 border-r border-border text-center">
                   {p.admin ? (
                     <span className="text-[#A60212] font-bold">✓ Full</span>
                   ) : (
                     <span className="text-[#6E2B32]">—</span>
                   )}
                 </td>
-                <td className="py-2 px-3 border-r border-[#EBD3B2] text-center">
+                <td className="py-2 px-3 border-r border-border text-center">
                   {p.staff ? (
                     <span className="text-[#D97B1A] font-bold">✓ Read/Write</span>
                   ) : (
                     <span className="text-[#6E2B32]">—</span>
                   )}
                 </td>
-                <td className="py-2 px-3 border-r border-[#EBD3B2] text-center">
+                <td className="py-2 px-3 border-r border-border text-center">
                   {p.custodian ? (
                     <span className="text-[#3B0A0F] font-bold">✓ Unit Scope</span>
                   ) : (

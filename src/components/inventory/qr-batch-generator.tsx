@@ -84,7 +84,7 @@ export function QrBatchGenerator({ assets, units }: QrBatchGeneratorProps) {
       .map(
         (a) => `
         <div class="sticker">
-          <div class="header">BulSU-Bustos Campus Inventory</div>
+          <div class="header">BULSU-MAIN CAMPUS Inventory</div>
           <div class="prop-no">${escapeLabelText(a.propertyNo)}</div>
           <div class="asset-title">${escapeLabelText(a.name)}</div>
           <img class="qr-img" src="${qrMap[a.propertyNo] || ""}" />
@@ -180,7 +180,7 @@ export function QrBatchGenerator({ assets, units }: QrBatchGeneratorProps) {
   return (
     <div className="space-y-6">
       {/* Controls Bar */}
-      <div className="bg-[#FFFFFF] border border-[#EBD3B2] p-4 rounded flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <div className="bg-[#FFFFFF] border border-border p-4 rounded flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div className="flex items-center gap-3">
           <div>
             <label htmlFor="qr-unit-filter" className="text-[11px] font-bold text-[#6E2B32] uppercase tracking-wider block mb-1">
@@ -189,7 +189,7 @@ export function QrBatchGenerator({ assets, units }: QrBatchGeneratorProps) {
             <select id="qr-unit-filter"
               value={selectedUnit}
               onChange={(e) => setSelectedUnit(e.target.value)}
-              className="h-9 px-3 rounded border border-[#EBD3B2] bg-[#FFF4E0] text-xs font-bold text-[#3B0A0F] focus:outline-none focus:border-[#A60212]"
+              className="h-9 px-3 rounded border border-border bg-cream text-xs font-bold text-[#3B0A0F] focus:outline-none focus:border-[#A60212]"
             >
               <option value="ALL">All Campus Units</option>
               {units.map((u) => (
@@ -204,7 +204,7 @@ export function QrBatchGenerator({ assets, units }: QrBatchGeneratorProps) {
             <button type="button"
               disabled={filteredAssets.length === 0}
               onClick={toggleSelectAll}
-              className="h-9 px-3 rounded border border-[#EBD3B2] bg-[#FFFFFF] hover:bg-[#FFF4E0] text-xs font-bold text-[#3B0A0F] transition-colors"
+              className="h-9 px-3 rounded border border-border bg-[#FFFFFF] hover:bg-cream text-xs font-bold text-[#3B0A0F] transition-colors"
             >
               {allVisibleSelected ? "Deselect All Visible" : "Select All Available"}
             </button>
@@ -219,7 +219,7 @@ export function QrBatchGenerator({ assets, units }: QrBatchGeneratorProps) {
           <button type="button"
             onClick={handlePrintSheet}
             disabled={!allReady || isGenerating}
-            className="h-10 px-5 rounded bg-[#A60212] hover:bg-[#85010E] text-[#FFF4E0] font-bold text-xs flex items-center gap-2 shadow-sm disabled:opacity-50 transition-colors"
+            className="h-10 px-5 rounded bg-[#A60212] hover:bg-[#85010E] text-[#FFF4E0] font-bold text-xs flex items-center gap-2 shadow-sm disabled:bg-sand disabled:text-[#6E2B32] disabled:border-border disabled:cursor-not-allowed transition-colors"
           >
             <span className="material-symbols-outlined text-[18px]">print</span>
             <span>
@@ -245,8 +245,8 @@ export function QrBatchGenerator({ assets, units }: QrBatchGeneratorProps) {
               key={asset.id}
               className={`p-4 rounded border-2 transition-all cursor-pointer flex items-start gap-3 select-none ${
                 isSelected
-                  ? "bg-[#FFF4E0] border-[#A60212] shadow-sm"
-                  : "bg-[#FFFFFF] border-[#EBD3B2] hover:border-[#F5AB29]"
+                  ? "bg-cream border-[#A60212] shadow-sm"
+                  : "bg-[#FFFFFF] border-border hover:border-[#F5AB29]"
               }`}
             >
               <div className="pt-0.5">
@@ -264,7 +264,7 @@ export function QrBatchGenerator({ assets, units }: QrBatchGeneratorProps) {
                   <span className="font-mono font-black text-xs text-[#A60212]">
                     {asset.propertyNo}
                   </span>
-                  <span className="text-[10px] font-bold bg-[#3B0A0F] text-[#F5AB29] px-1.5 py-0.2 rounded">
+                  <span className="text-[10px] font-bold px-1.5 py-0.2 rounded badge-solid badge-amber">
                     {asset.unitCode}
                   </span>
                 </div>
@@ -279,12 +279,12 @@ export function QrBatchGenerator({ assets, units }: QrBatchGeneratorProps) {
 
                 {isSelected && !qrUrl && <span className="block text-xs mt-2">{isGenerating ? "Generating QR…" : "QR unavailable — retry labels."}</span>}
                 {isSelected && qrUrl && (
-                  <div className="mt-2 pt-2 border-t border-[#EBD3B2] flex items-center gap-2">
+                  <div className="mt-2 pt-2 border-t border-border flex items-center gap-2">
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img
                       src={qrUrl}
                       alt={asset.propertyNo}
-                      className="w-12 h-12 border border-[#EBD3B2] rounded bg-white p-0.5"
+                      className="w-12 h-12 border border-border rounded bg-white p-0.5"
                     />
                     <span className="text-[10px] text-[#2E7D32] font-bold">
                       ✓ Ready for 3x8 Sheet Print

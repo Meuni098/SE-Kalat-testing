@@ -8,7 +8,7 @@ import { assignReceivingCustodianAction, removeReceivingCustodianAction, getRece
 import { validateDesignation } from "@/lib/receiving-custodian-validation";
 import type { AssignInput, PersonSummary, ReceivingCustodianRow, ReceivingCustodianHistoryEntry } from "@/types/receiving-custodian";
 
-const inputClass = "mt-1 w-full rounded border border-[#EBD3B2] bg-[#FFF4E0]/30 px-3 py-2 text-sm focus:outline-2 focus:outline-[#A60212]";
+const inputClass = "mt-1 w-full rounded border border-border bg-cream px-3 py-2 text-sm focus:outline-2 focus:outline-[#A60212]";
 function date(value: string) { return new Intl.DateTimeFormat("en-PH", { dateStyle: "medium", timeStyle: "short", timeZone: "Asia/Manila" }).format(new Date(value)) + " PHT"; }
 
 export function Dialog({ title, busy, onClose, children }: { title: string; busy: boolean; onClose: () => void; children: ReactNode }) {
@@ -20,8 +20,8 @@ export function Dialog({ title, busy, onClose, children }: { title: string; busy
     dialog?.showModal();
     return () => { dialog?.close(); opener?.focus(); };
   }, []);
-  return <dialog ref={ref} aria-labelledby={titleId} onCancel={event => { event.preventDefault(); if (!busy) onClose(); }} className="m-auto max-h-[90vh] w-[calc(100%-2rem)] max-w-2xl overflow-y-auto rounded-lg border-2 border-[#A60212] bg-white p-6 text-[#3B0A0F] shadow-2xl backdrop:bg-[#3B0A0F]/60">
-    <div className="mb-4 flex items-start justify-between gap-4 border-b border-[#EBD3B2] pb-3"><h2 id={titleId} className="text-xl font-extrabold">{title}</h2><Button size="icon" variant="secondary" aria-label="Close dialog" disabled={busy} onClick={onClose}>×</Button></div>
+  return <dialog ref={ref} aria-labelledby={titleId} onCancel={event => { event.preventDefault(); if (!busy) onClose(); }} className="m-auto max-h-[90vh] w-[calc(100%-2rem)] max-w-2xl overflow-y-auto rounded-lg border-2 border-[#A60212] bg-white p-6 text-[#3B0A0F] shadow-2xl backdrop:bg-[#3B0A0F]">
+    <div className="mb-4 flex items-start justify-between gap-4 border-b border-border pb-3"><h2 id={titleId} className="text-xl font-extrabold">{title}</h2><Button size="icon" variant="secondary" aria-label="Close dialog" disabled={busy} onClick={onClose}>×</Button></div>
     {children}
   </dialog>;
 }
@@ -136,13 +136,13 @@ export function ReceivingDesignationDialog({ initialRow, remove, onClose, onComp
   const proposedName = mode === "NEW" ? newPerson.fullName.trim() : selectedPerson?.fullName;
   return <Dialog title={title} busy={saving} onClose={onClose}>
     <form onSubmit={submit} onInvalid={event => { const form = event.currentTarget; if (event.target === form.querySelector(":invalid")) (event.target as HTMLElement).focus(); }} className="space-y-4">
-      {error && <p role="alert" className="rounded border border-[#A60212] bg-[#FFF4E0] p-3 text-sm text-[#A60212]">{error}</p>}
+      {error && <p role="alert" className="rounded border border-[#A60212] bg-cream p-3 text-sm text-[#A60212]">{error}</p>}
       <fieldset disabled={saving} className="space-y-4">
         {!remove && mode === "NEW" && <label className="block text-xs font-bold">Name *<input className={inputClass} name="fullName" required minLength={2} maxLength={150} value={newPerson.fullName} onChange={e => setNewPerson(old => ({ ...old, fullName: e.target.value }))} aria-invalid={!!fields.fullName} />{fieldError("fullName")}</label>}
         {!initialRow && <div className="space-y-2"><label className="block text-xs font-bold">Find office or college<input className={inputClass} value={unitQuery} maxLength={100} onChange={e => setUnitQuery(e.target.value)} /></label><Button type="button" variant="secondary" onClick={searchUnits} disabled={unitBusy}>{unitBusy ? "Searching…" : "Search Units"}</Button>{unitMore && <p className="text-xs">More than 20 matches. Refine your search.</p>}
           <label className="block text-xs font-bold">College *<select className={inputClass} required value={unitId} onChange={e => { personRequest.current++; setUnitId(e.target.value); setLoading(!!e.target.value); setCurrent(null); setPersonId(""); setCandidates([]); setPersonQuery(""); setError(""); setPersonBusy(false); setFields({}); }}><option value="">Select receiving office or college</option>{unitId && !unitOptions.some(u => u.id === unitId) && current && <option value={unitId}>{current.unit.code} — {current.unit.name}</option>}{unitOptions.map(u => <option key={u.id} value={u.id}>{u.code} — {u.name}</option>)}</select></label>{!unitOptions.length && <p className="text-xs">No matching active offices or colleges. Try another search.</p>}
         </div>}
-        {initialRow && <p className="rounded bg-[#FFF4E0] p-3 text-sm"><strong>{initialRow.unit.code}</strong> — {initialRow.unit.name}</p>}
+        {initialRow && <p className="rounded bg-cream p-3 text-sm"><strong>{initialRow.unit.code}</strong> — {initialRow.unit.name}</p>}
         {!remove && mode === "NEW" && <label className="block text-xs font-bold">Position *<input className={inputClass} name="position" required minLength={2} maxLength={150} value={newPerson.position} onChange={e => setNewPerson(old => ({ ...old, position: e.target.value }))} aria-invalid={!!fields.position} />{fieldError("position")}</label>}
         {loading && <p role="status">Loading current designation…</p>}
         {current && <p className="text-sm">Current receiver: <strong>{current.person ? `${current.person.fullName} (${current.person.employeeNo})` : "Not assigned"}</strong>{!current.unit.isActive && " · Inactive unit"}</p>}
@@ -154,11 +154,11 @@ export function ReceivingDesignationDialog({ initialRow, remove, onClose, onComp
             {personMore && <p className="text-xs">More than 20 matches. Refine your search.</p>}{!candidates.length && !loading && !personBusy && <p className="text-sm">No personnel found for this unit. <button type="button" className="font-bold underline" onClick={() => setMode("NEW")}>Enter custodian details</button></p>}
           </div> : null}
         </>}
-        {current?.person && <p className="rounded border border-[#EBD3B2] p-3 text-sm">{remove ? `Remove ${current.person.fullName} as the receiver for ${current.unit.code}?` : `Replace ${current.person.fullName}${proposedName ? ` with ${proposedName}` : ""} for ${current.unit.code}?`} Existing item receipt history is preserved.</p>}
+        {current?.person && <p className="rounded border border-border p-3 text-sm">{remove ? `Remove ${current.person.fullName} as the receiver for ${current.unit.code}?` : `Replace ${current.person.fullName}${proposedName ? ` with ${proposedName}` : ""} for ${current.unit.code}?`} Existing item receipt history is preserved.</p>}
 
       </fieldset>
       {saving && <p role="status">Saving designation…</p>}
-      <div className="flex justify-end gap-3 border-t border-[#EBD3B2] pt-4"><Button type="button" variant="secondary" disabled={saving} onClick={onClose}>Cancel</Button><Button type="submit" variant={remove ? "danger" : "primary"} disabled={saving || loading || !current || stale || (!remove && (!current.unit.isActive || (mode === "EXISTING" && personBusy))) || (remove && !current.person)}>{saving ? "Saving…" : remove ? "Remove Custodian" : current?.person ? "Replace Custodian" : "Assign Custodian"}</Button></div>
+      <div className="flex justify-end gap-3 border-t border-border pt-4"><Button type="button" variant="secondary" disabled={saving} onClick={onClose}>Cancel</Button><Button type="submit" variant={remove ? "danger" : "primary"} disabled={saving || loading || !current || stale || (!remove && (!current.unit.isActive || (mode === "EXISTING" && personBusy))) || (remove && !current.person)}>{saving ? "Saving…" : remove ? "Remove Custodian" : current?.person ? "Replace Custodian" : "Assign Custodian"}</Button></div>
     </form>
   </Dialog>;
 }
@@ -189,7 +189,7 @@ export function ReceivingHistoryDialog({ row, onClose }: { row: ReceivingCustodi
     {loading && <p role="status">Loading designation history…</p>}
     {error && <div role="alert"><p className="text-[#A60212]">{error}</p><Button variant="outline" onClick={() => { if (cursor && entries.length) { void more(); } else { setLoading(true); setError(""); setRetry(r => r + 1); } }}>Retry</Button></div>}
     {!loading && !error && !entries.length && <p>No receiving-custodian changes recorded.</p>}
-    <ol className="space-y-3">{entries.map(entry => <li key={entry.id} className="rounded border border-[#EBD3B2] p-3 text-sm"><p className="font-bold">{entry.action.replaceAll("_", " ")}</p><p className="text-xs text-[#6E2B32]">{date(entry.createdAt)} · {entry.actorName}</p><p className="mt-2">Previous: {entry.beforePerson ? `${entry.beforePerson.fullName} · ${entry.beforePerson.employeeNo}` : "Not assigned"}</p><p>New: {entry.afterPerson ? `${entry.afterPerson.fullName} · ${entry.afterPerson.employeeNo}` : "Not assigned"}</p><p className="mt-2 break-words">Reason: {entry.reason}</p></li>)}</ol>
+    <ol className="space-y-3">{entries.map(entry => <li key={entry.id} className="rounded border border-border p-3 text-sm"><p className="font-bold">{entry.action.replaceAll("_", " ")}</p><p className="text-xs text-[#6E2B32]">{date(entry.createdAt)} · {entry.actorName}</p><p className="mt-2">Previous: {entry.beforePerson ? `${entry.beforePerson.fullName} · ${entry.beforePerson.employeeNo}` : "Not assigned"}</p><p>New: {entry.afterPerson ? `${entry.afterPerson.fullName} · ${entry.afterPerson.employeeNo}` : "Not assigned"}</p><p className="mt-2 break-words">Reason: {entry.reason}</p></li>)}</ol>
     {cursor && <Button className="mt-4" variant="secondary" onClick={more} disabled={loading}>Load older changes</Button>}
   </Dialog>;
 }

@@ -47,7 +47,7 @@ export function InventoryFilters({ units }: InventoryFiltersProps) {
   const hasActiveFilters = Boolean(search || classification || unitId || status);
 
   return (
-    <div className="bg-[#FFFFFF] border border-[#EBD3B2] rounded p-4 space-y-3">
+    <div className="bg-[#FFFFFF] border border-border rounded p-4 space-y-3">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div className="flex flex-wrap items-center gap-3 flex-1">
           {/* Search Input */}
@@ -60,7 +60,7 @@ export function InventoryFilters({ units }: InventoryFiltersProps) {
               value={localSearch}
               onChange={(e) => setLocalSearch(e.target.value)}
               placeholder="Search product code, serial, name..."
-              className="w-full bg-[#FFF4E0] text-[#3B0A0F] border border-[#EBD3B2] rounded pl-9 pr-3 py-1.5 text-xs font-medium focus:border-[#A60212] focus:outline-none"
+              className="w-full bg-cream text-[#3B0A0F] border border-border rounded pl-9 pr-3 py-1.5 text-xs font-medium focus:border-[#A60212] focus:outline-none"
             />
           </form>
 
@@ -69,7 +69,7 @@ export function InventoryFilters({ units }: InventoryFiltersProps) {
             aria-label="Inventory classification"
             value={classification}
             onChange={(e) => applyFilter("classification", e.target.value)}
-            className="bg-[#FFFFFF] text-[#3B0A0F] border border-[#EBD3B2] rounded px-3 py-1.5 text-xs font-semibold hover:bg-[#FFF4E0] focus:border-[#A60212] focus:outline-none cursor-pointer"
+            className="bg-[#FFFFFF] text-[#3B0A0F] border border-border rounded px-3 py-1.5 text-xs font-semibold hover:bg-cream focus:border-[#A60212] focus:outline-none cursor-pointer"
           >
             <option value="">Classification: All</option>
             <option value="PPE">Property, Plant &amp; Equipment (PPE)</option>
@@ -80,7 +80,7 @@ export function InventoryFilters({ units }: InventoryFiltersProps) {
           <select
             value={unitId}
             onChange={(e) => applyFilter("unitId", e.target.value)}
-            className="bg-[#FFFFFF] text-[#3B0A0F] border border-[#EBD3B2] rounded px-3 py-1.5 text-xs font-semibold hover:bg-[#FFF4E0] focus:border-[#A60212] focus:outline-none cursor-pointer"
+            className="bg-[#FFFFFF] text-[#3B0A0F] border border-border rounded px-3 py-1.5 text-xs font-semibold hover:bg-cream focus:border-[#A60212] focus:outline-none cursor-pointer"
           >
             <option value="">Unit: All Operating Units</option>
             {units.map((u) => (
@@ -94,7 +94,7 @@ export function InventoryFilters({ units }: InventoryFiltersProps) {
           <select
             value={status}
             onChange={(e) => applyFilter("status", e.target.value)}
-            className="bg-[#FFFFFF] text-[#3B0A0F] border border-[#EBD3B2] rounded px-3 py-1.5 text-xs font-semibold hover:bg-[#FFF4E0] focus:border-[#A60212] focus:outline-none cursor-pointer"
+            className="bg-[#FFFFFF] text-[#3B0A0F] border border-border rounded px-3 py-1.5 text-xs font-semibold hover:bg-cream focus:border-[#A60212] focus:outline-none cursor-pointer"
           >
             <option value="">Status: All Statuses</option>
             <option value="IN_USE">In Active Use</option>

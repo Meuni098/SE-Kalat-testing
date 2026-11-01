@@ -4,12 +4,13 @@ import { getFormHistory } from "./form-history";
 import { FORM_TEMPLATES,FormExportError,formClassification,formPurpose } from "./form-templates";
 import { validateReportScope, type ReportScope } from "./report-sections";
 import type { AutofillRecord,AutofillRow } from "./form-autofill-mapping";
+import { actualProductDescription,productDescriptionInclude } from "./product-description";
 
-const include={category:true,unit:true,accountablePerson:true} satisfies Prisma.AssetInclude;
+const include={...productDescriptionInclude,category:true,unit:true,accountablePerson:true} satisfies Prisma.AssetInclude;
 type Asset=Prisma.AssetGetPayload<{include:typeof include}>;
 export interface AutofillScope extends ReportScope {categoryId:string}
 const date=(d:Date)=>new Intl.DateTimeFormat("en-CA",{timeZone:"Asia/Manila",year:"numeric",month:"2-digit",day:"2-digit"}).format(d);
-function row(a:Asset):AutofillRow{return {assetId:a.id,propertyNo:a.propertyNo,name:a.name,description:a.description,classification:a.classification,cost:a.acquisitionCost,acquired:date(a.acquisitionDate),category:a.category.name,condition:a.condition,unitName:a.unit.name,accountableName:a.accountablePerson?.fullName,accountablePosition:a.accountablePerson?.position,usefulLife:a.category.usefulLifeYears};}
+function row(a:Asset):AutofillRow{return {assetId:a.id,propertyNo:a.propertyNo,name:a.name,description:actualProductDescription(a),classification:a.classification,cost:a.acquisitionCost,acquired:date(a.acquisitionDate),category:a.category.name,condition:a.condition,unitName:a.unit.name,accountableName:a.accountablePerson?.fullName,accountablePosition:a.accountablePerson?.position,usefulLife:a.category.usefulLifeYears};}
 function limit<T>(rows:T[],max=5000):T[]{if(rows.length>max)throw new FormExportError("Choose a narrower category or operating unit before filling documents.","SCOPE_TOO_LARGE",422);return rows;}
 
 /** Every option is built from an authorized source query; client record IDs are never trusted as paths or database scopes. */

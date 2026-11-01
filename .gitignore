@@ -79,3 +79,6 @@ Desktop.ini
 /docs/*.jpg
 /docs/*.jpeg
 /docs/*.webp
+
+# PDF viewer assets are generated during npm install
+/public/pdfjs/

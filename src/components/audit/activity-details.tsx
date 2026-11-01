@@ -26,11 +26,11 @@ export function ActivityDetails({ id, personal }: { id: string; personal: boolea
   const display = (state: Record<string, unknown>, key: string) => !(key in state) ? 'Not recorded' : typeof state[key] === 'object' ? JSON.stringify(state[key]) : String(state[key]);
   return <div>
     <button className="underline text-[#A60212]" disabled={loading} aria-expanded={open} aria-controls={`details-${id}`} onClick={() => open ? (setOpen(false), setDetail(null)) : void load()}>{open ? 'Hide changes' : personal ? 'View my changes' : 'View changes'}</button>
-    {open && <div id={`details-${id}`} className="mt-3 min-w-64 rounded border border-[#EBD3B2] bg-[#FFF4E0] p-3">
+    {open && <div id={`details-${id}`} className="mt-3 min-w-64 rounded border border-border bg-cream p-3">
       {loading && <p role="status">Loading changes…</p>}
       {error && <div role="alert"><p>{error}</p><button className="underline" onClick={() => void load()}>Retry</button></div>}
       {detail && <><p className="mb-2 break-all">{detail.entityType}: {detail.entityId}</p>{!personal && <p className="mb-2">IP: {detail.ipAddress ?? 'Not recorded'}</p>}
-        {!detail.payloadVisible ? <p>You no longer have access to this record. Only your activity summary is available.</p> : fields.length ? <table className="w-full text-left text-xs"><thead><tr><th scope="col">Field</th><th scope="col">Before</th><th scope="col">After</th></tr></thead><tbody>{fields.map(key => <tr key={key} className="border-t border-[#EBD3B2]"><th scope="row" className="p-2">{key}</th><td className="max-w-xs break-all p-2">{display(before, key)}</td><td className="max-w-xs break-all p-2">{display(after, key)}</td></tr>)}</tbody></table> : <p>No field changes were recorded for this event.</p>}</>}
+        {!detail.payloadVisible ? <p>You no longer have access to this record. Only your activity summary is available.</p> : fields.length ? <table className="w-full text-left text-xs"><thead><tr><th scope="col">Field</th><th scope="col">Before</th><th scope="col">After</th></tr></thead><tbody>{fields.map(key => <tr key={key} className="border-t border-border"><th scope="row" className="p-2">{key}</th><td className="max-w-xs break-all p-2">{display(before, key)}</td><td className="max-w-xs break-all p-2">{display(after, key)}</td></tr>)}</tbody></table> : <p>No field changes were recorded for this event.</p>}</>}
     </div>}
   </div>;
 }

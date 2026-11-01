@@ -4,7 +4,7 @@ import { REPORT_SECTIONS, reportHref, reportSection, type ReportSection } from "
 
 export function ReportSectionSelect({value}:{value:ReportSection}) {
   const router=useRouter(),params=useSearchParams();
-  return <label className="block rounded border border-[#EBD3B2] bg-white p-4 text-sm font-bold print:hidden">Report section
+  return <label className="block rounded border border-border bg-white p-4 text-sm font-bold print:hidden">Report section
     <select aria-label="Report section" className="block border rounded p-2 mt-1 w-full sm:w-auto" value={value} onChange={e=>{
       const section=reportSection(e.target.value)!;
       const common={unitId:params.get("unitId")??undefined,categoryId:params.get("categoryId")??undefined,classification:params.get("classification")??undefined};

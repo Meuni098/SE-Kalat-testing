@@ -27,7 +27,7 @@ export default async function ProfilePage() {
   }
 
   const displayName = userRecord?.name || user?.name || "GLAIZA MARIE E. PASCUAL";
-  const displayEmail = userRecord?.email || user?.email || "Not provided";
+  const displayEmail = userRecord?.email || user?.email || "glaiza.pascual@bulsu.edu.ph";
   const displayRole = userRecord?.role || user?.role || "ADMIN";
   const displayUnit = userRecord?.unit?.name || "Asset Management Office (AMO Central)";
   const displayUnitCode = userRecord?.unit?.code || "AMO";
@@ -35,22 +35,12 @@ export default async function ProfilePage() {
   return (
     <div className="space-y-6 pb-16 select-none max-w-5xl mx-auto">
       {/* Header Banner */}
-      <div className="bg-[#FFFFFF] border border-[#EBD3B2] p-5 rounded flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <div className="bg-[#FFFFFF] border border-border p-5 rounded flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <div className="flex items-center gap-2">
-            <span className="bg-[#FFF4E0] text-[#A60212] border border-[#A60212] px-2 py-0.5 rounded text-[11px] font-bold font-mono">
-              BULSU INVENTORY SYSTEM
-            </span>
-            <span className="bg-[#FFF4E0] text-[#6E2B32] border border-[#EBD3B2] px-2 py-0.5 rounded text-[11px] font-mono">
-              AUTHENTICATED SESSION
-            </span>
-          </div>
+
           <h1 className="text-2xl font-black text-[#3B0A0F] tracking-tight uppercase mt-1">
             User Profile &amp; Account Settings
           </h1>
-          <p className="text-xs text-[#6E2B32] font-medium mt-0.5">
-            Manage your BulSU inventory credentials, unit authorization scope, and security audit log
-          </p>
         </div>
 
         <form action={logoutAction}>
@@ -79,11 +69,11 @@ export default async function ProfilePage() {
             </div>
 
             <h2 className="text-lg font-black text-[#3B0A0F] uppercase mt-3">{displayName}</h2>
-            <span className="bg-[#FFF4E0] border border-[#F5AB29] text-[#D97B1A] text-xs font-bold px-2.5 py-0.5 rounded inline-block mt-1 uppercase">
+            <span className="border text-xs font-bold px-2.5 py-0.5 rounded inline-block mt-1 uppercase badge-solid badge-amber">
               {displayRole === "ADMIN" ? "Asset Management • Administrator" : displayRole}
             </span>
 
-            <div className="mt-6 pt-4 border-t border-[#EBD3B2] text-left text-xs space-y-3">
+            <div className="mt-6 pt-4 border-t border-border text-left text-xs space-y-3">
               <div>
                 <span className="text-[10px] text-[#6E2B32] font-bold uppercase block">
                   Official Email
@@ -115,7 +105,7 @@ export default async function ProfilePage() {
 
         {/* Right Column: Recent Activity Audit Stream (7 Cols) */}
         <div className="md:col-span-7 space-y-4">
-          <div className="bg-[#FFFFFF] border border-[#EBD3B2] rounded shadow-sm overflow-hidden">
+          <div className="bg-[#FFFFFF] border border-border rounded shadow-sm overflow-hidden">
             <div className="bg-[#3B0A0F] px-4 py-3 border-b border-[#4E1117] flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <span className="material-symbols-outlined text-[#F5AB29] text-[20px]">
@@ -133,7 +123,7 @@ export default async function ProfilePage() {
               </Link>
             </div>
 
-            <div className="divide-y divide-[#EBD3B2] p-2">
+            <div className="divide-y divide-border p-2">
               {recentLogs.length === 0 ? (
                 <div className="py-8 text-center text-xs text-[#6E2B32]">
                   No recent audit activity logged for this user.
@@ -142,7 +132,7 @@ export default async function ProfilePage() {
                 recentLogs.map((log) => (
                   <div
                     key={log.id}
-                    className="p-3 hover:bg-[#FFF4E0]/40 transition-colors flex items-start justify-between gap-3 text-xs"
+                    className="p-3 hover:bg-cream transition-colors flex items-start justify-between gap-3 text-xs"
                   >
                     <div>
                       <span className="font-bold text-[#A60212] block">{log.action}</span>

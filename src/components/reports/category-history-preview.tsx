@@ -11,14 +11,14 @@ export function CategoryHistoryPreview({events,categoryId,unitId,classification,
   const [query,setQuery]=React.useState("");
   const filtered=events.filter(e=>`${e.propertyNo} ${e.assetName} ${e.eventType} ${e.status}`.toLowerCase().includes(query.toLowerCase()));
   return <div className="space-y-5">
-    <section className="bg-white border rounded p-4 space-y-2"><h2 className="font-bold">History and supporting documents</h2><p className="text-sm">The table below is the complete recorded history for the selected filters. Open a linked form on an event to prepare its supporting document. None of the supplied forms is a dedicated full-history report.</p><Link className="text-sm underline" href={reportHref("requests-returns",{templateId:"information"})}>Request copies of documents</Link></section>
-    <section className="rounded border border-[#EBD3B2] bg-white p-5 space-y-3 print:hidden">
+    <section className="bg-white border rounded p-4 space-y-2"><h2 className="font-bold">History and supporting documents</h2><p className="text-sm">Open an event’s linked form for its supporting document. These forms do not export the full history.</p><Link className="text-sm underline" href={reportHref("requests-returns",{templateId:"information"})}>Request copies of documents</Link></section>
+    <section className="rounded border border-border bg-white p-5 space-y-3 print:hidden">
       <h2 className="font-bold text-[#3B0A0F]">Recorded history</h2>
-      <p className="text-sm text-[#6E2B32]">This is the chronological asset history. Use an event’s linked form for its specific transaction. None of the supplied forms is a dedicated full-history report.</p>
+
       {error?<p role="alert">{error}</p>:<>
         <label className="block text-sm">Search history<input className="block mt-1 border rounded p-2 w-full" value={query} onChange={e=>setQuery(e.target.value)}/></label>
         <p className="text-xs">{filtered.length} matching events{filtered.length>300?" · Showing the first 300; search to narrow the results.":""}</p>
-        <div className="overflow-auto"><table className="w-full text-left text-sm border-collapse"><thead><tr className="bg-[#FFF4E0]">{["Date","Property number","Asset","Event","Status","Official document"].map(h=><th key={h} className="p-2 border-b">{h}</th>)}</tr></thead>
+        <div className="overflow-auto"><table className="w-full text-left text-sm border-collapse"><thead><tr className="bg-cream">{["Date","Property number","Asset","Event","Status","Official document"].map(h=><th key={h} className="p-2 border-b">{h}</th>)}</tr></thead>
           <tbody>{filtered.slice(0,300).map(e=><tr key={e.eventId}>{[e.date,e.propertyNo,e.assetName,e.eventType.replaceAll("_"," "),e.status].map((v,i)=><td key={i} className="p-2 border-b">{v}</td>)}<td className="p-2 border-b"><div className="flex flex-col gap-2">
             {e.source?.templateIds.map(id=><Link className="underline" key={id} href={reportHref("category-history",{categoryId,unitId,classification,templateId:id,recordId:e.source!.recordId,eventId:e.eventId})}>{FORM_TEMPLATES.find(t=>t.id===id)?.name}</Link>)}
           </div></td></tr>)}</tbody>

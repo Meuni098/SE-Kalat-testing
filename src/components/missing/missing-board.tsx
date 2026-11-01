@@ -5,6 +5,7 @@ import * as React from "react";
 import Link from "next/link";
 import { formatCurrency, formatDate } from "@/lib/utils";
 import { updateMissingReportStatusAction } from "@/actions/missing-actions";
+import { IncidentFilingModal } from "@/components/missing/incident-filing-modal";
 
 export interface MissingIncident {
   id: string;
@@ -20,32 +21,47 @@ export interface MissingIncident {
   circumstances: string;
   policeBlotterUrl?: string | null;
   status: "REPORTED" | "UNDER_INVESTIGATION" | "FOUND" | "WRITTEN_OFF";
+  needsFiling?: boolean;
 }
 
 interface MissingBoardProps {
   incidents: MissingIncident[];
+  canManage: boolean;
+  canFile?: boolean;
 }
 
-export function MissingBoard({ incidents }: MissingBoardProps) {
+export function MissingBoard({ incidents, canManage, canFile = false }: MissingBoardProps) {
   const [isUpdating, setIsUpdating] = React.useState<string | null>(null);
+  const [error, setError] = React.useState<{ reportId: string; message: string } | null>(null);
+  const pending = React.useRef(false);
 
   const handleStageChange = async (
     reportId: string,
     newStatus: "REPORTED" | "UNDER_INVESTIGATION" | "FOUND" | "WRITTEN_OFF"
   ) => {
+    if (pending.current || !canManage) return;
+    pending.current = true;
     setIsUpdating(reportId);
-    await updateMissingReportStatusAction(reportId, newStatus);
-    setIsUpdating(null);
+    setError(null);
+    try {
+      const result = await updateMissingReportStatusAction(reportId, newStatus);
+      if (result.error) setError({ reportId, message: result.error });
+    } catch {
+      setError({ reportId, message: "The incident could not be updated. Please try again." });
+    } finally {
+      pending.current = false;
+      setIsUpdating(null);
+    }
   };
 
   const columns = [
     {
       status: "REPORTED" as const,
       title: "Newly Reported",
-      headerBg: "bg-[#FEE2E2]",
-      headerBorder: "border-[#FECACA]",
-      headerText: "text-[#A60212]",
-      dotColor: "bg-[#A60212]",
+      headerBg: "bg-[#A60212]",
+      headerBorder: "border-[#A60212]",
+      headerText: "text-[#FFFFFF]",
+      dotColor: "bg-[#FFFFFF]",
       badge: "URGENT",
       nextAction: "Commence Investigation",
       nextStatus: "UNDER_INVESTIGATION" as const,
@@ -53,10 +69,10 @@ export function MissingBoard({ incidents }: MissingBoardProps) {
     {
       status: "UNDER_INVESTIGATION" as const,
       title: "Under Investigation",
-      headerBg: "bg-[#FFF4E0]",
-      headerBorder: "border-[#D97B1A]",
-      headerText: "text-[#D97B1A]",
-      dotColor: "bg-[#D97B1A]",
+      headerBg: "bg-[#8A4B08]",
+      headerBorder: "border-[#8A4B08]",
+      headerText: "text-[#FFFFFF]",
+      dotColor: "bg-[#FFFFFF]",
       badge: "POLICE BLOTTER",
       nextAction: "Mark Recovered",
       nextStatus: "FOUND" as const,
@@ -66,19 +82,19 @@ export function MissingBoard({ incidents }: MissingBoardProps) {
     {
       status: "FOUND" as const,
       title: "Recovered / Found",
-      headerBg: "bg-[#FFF4E0]",
-      headerBorder: "border-[#F5AB29]",
-      headerText: "text-[#3B0A0F]",
-      dotColor: "bg-[#F5AB29]",
+      headerBg: "bg-[#27633B]",
+      headerBorder: "border-[#27633B]",
+      headerText: "text-[#FFFFFF]",
+      dotColor: "bg-[#FFFFFF]",
       badge: "RESTORED",
     },
     {
       status: "WRITTEN_OFF" as const,
       title: "Relief of Accountability",
-      headerBg: "bg-[#FFFFFF]",
-      headerBorder: "border-[#EBD3B2]",
-      headerText: "text-[#6E2B32]",
-      dotColor: "bg-[#6E2B32]",
+      headerBg: "bg-[#455468]",
+      headerBorder: "border-[#455468]",
+      headerText: "text-[#FFFFFF]",
+      dotColor: "bg-[#FFFFFF]",
       badge: "COA SEC 89",
     },
   ];
@@ -91,7 +107,7 @@ export function MissingBoard({ incidents }: MissingBoardProps) {
         return (
           <div
             key={col.status}
-            className="flex flex-col space-y-3 bg-[#FFF4E0] border border-[#EBD3B2] p-3 rounded"
+            className="flex flex-col space-y-3 bg-[#E9EDF1] border border-border p-3 rounded"
           >
             {/* Column Header */}
             <div
@@ -103,7 +119,7 @@ export function MissingBoard({ incidents }: MissingBoardProps) {
                   {col.title} ({colItems.length})
                 </h3>
               </div>
-              <span className="text-[10px] font-bold px-1.5 py-0.5 rounded bg-[#FFFFFF] border border-[#EBD3B2] text-[#3B0A0F]">
+              <span className="text-[10px] font-bold px-1.5 py-0.5 rounded border badge-solid badge-slate">
                 {col.badge}
               </span>
             </div>
@@ -111,17 +127,17 @@ export function MissingBoard({ incidents }: MissingBoardProps) {
             {/* Column Cards */}
             <div className="space-y-3">
               {colItems.length === 0 ? (
-                <div className="p-6 text-center text-xs text-[#6E2B32] border border-dashed border-[#EBD3B2] rounded">
+                <div className="p-6 text-center text-xs text-[#6E2B32] border border-border bg-[#FFFFFF] rounded">
                   No records in this stage.
                 </div>
               ) : (
                 colItems.map((item) => (
                   <div
                     key={item.id}
-                    className="bg-[#FFFFFF] border border-[#EBD3B2] rounded p-3.5 space-y-2.5 hover:border-[#A60212] transition-colors"
+                    className="bg-[#FFFFFF] border border-border rounded p-3.5 space-y-2.5 hover:border-[#A60212] transition-colors"
                   >
                     <div className="flex items-center justify-between">
-                      <span className="font-bold text-[11px] text-[#A60212] bg-[#FEE2E2] px-1.5 py-0.5 rounded border border-[#FECACA] font-mono">
+                      <span className="font-bold text-[11px] px-1.5 py-0.5 rounded border font-mono badge-solid badge-maroon">
                         {item.propertyNo}
                       </span>
                       <span className="text-[10px] text-[#6E2B32] font-mono font-bold">
@@ -134,11 +150,11 @@ export function MissingBoard({ incidents }: MissingBoardProps) {
                         {item.assetName}
                       </h4>
                       <p className="text-[11px] text-[#6E2B32] mt-0.5">
-                        {item.reportedByName}<TransactionAttributionButton entityType="MISSING_REPORT" entityId={item.id} /> • Seen: {formatDate(item.lastSeenDate)}
+                        {item.reportedByName}{!item.needsFiling && <TransactionAttributionButton entityType="MISSING_REPORT" entityId={item.id} />} • {item.needsFiling ? "Status recorded" : "Seen"}: {formatDate(item.lastSeenDate)}
                       </p>
                     </div>
 
-                    <div className="bg-[#FFF4E0] border border-[#EBD3B2] p-2 rounded text-[11px] text-[#3B0A0F] space-y-1">
+                    <div className="bg-cream border border-border p-2 rounded text-[11px] text-[#3B0A0F] space-y-1">
                       <div className="flex items-center justify-between font-mono">
                         <span className="text-[#6E2B32]">Book Value:</span>
                         <span className="font-bold">{formatCurrency(item.cost)}</span>
@@ -158,16 +174,22 @@ export function MissingBoard({ incidents }: MissingBoardProps) {
                         <span className="material-symbols-outlined text-[13px]">
                           local_police
                         </span>
-                        <span>Police Blotter Verified</span>
+                        <span>View attached blotter</span>
                       </a>
                     )}
 
+                    {error?.reportId === item.id && <p role="alert" className="text-xs text-[#A60212]">{error.message}</p>}
                     {/* Actions */}
-                    <div className="pt-2 border-t border-[#EBD3B2] flex items-center justify-between text-xs">
-                      {col.nextAction && (
+                    <div className="pt-2 border-t border-border flex items-center justify-between text-xs">
+                      {item.needsFiling && canFile && <IncidentFilingModal
+                        assets={[{ id: item.assetId, propertyNo: item.propertyNo, name: item.assetName, unitCode: item.unitCode }]}
+                        defaultAssetId={item.assetId}
+                        triggerLabel="Complete incident report"
+                      />}
+                      {canManage && !item.needsFiling && col.nextAction && (
                         <button
                           onClick={() => handleStageChange(item.id, col.nextStatus!)}
-                          disabled={isUpdating === item.id}
+                          disabled={isUpdating !== null}
                           className="font-bold text-xs text-[#D97B1A] hover:text-[#A60212] flex items-center gap-1"
                         >
                           <span>{col.nextAction}</span>
@@ -177,10 +199,10 @@ export function MissingBoard({ incidents }: MissingBoardProps) {
                         </button>
                       )}
 
-                      {col.secondaryAction && (
+                      {canManage && col.secondaryAction && (
                         <button
                           onClick={() => handleStageChange(item.id, col.secondaryStatus!)}
-                          disabled={isUpdating === item.id}
+                          disabled={isUpdating !== null}
                           className="font-bold text-[11px] text-[#A60212] hover:underline"
                         >
                           {col.secondaryAction}

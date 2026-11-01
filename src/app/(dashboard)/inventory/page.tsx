@@ -1,3 +1,4 @@
+import { actualProductDescription, productDescriptionInclude } from "@/lib/product-description";
 import { classificationWhere } from "@/lib/classification-filter";
 import { Suspense } from "react";
 import { prisma } from "@/lib/db";
@@ -53,6 +54,7 @@ export default async function InventoryPage({ searchParams }: InventoryPageProps
       prisma.asset.findMany({
         where: whereClause,
         include: {
+          ...productDescriptionInclude,
           category: true,
           unit: true,
           accountablePerson: true,
@@ -90,7 +92,7 @@ export default async function InventoryPage({ searchParams }: InventoryPageProps
     id: a.id,
     propertyNo: a.propertyNo,
     name: a.name,
-    description: a.description,
+    description: actualProductDescription(a),
     classification: a.classification,
     categoryName: a.category.name,
     unitCode: a.unit.code,
@@ -106,14 +108,11 @@ export default async function InventoryPage({ searchParams }: InventoryPageProps
   return (
     <div className="space-y-5 pb-16">
       {/* Page Header */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-[#FFFFFF] p-5 border border-[#EBD3B2] rounded">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-[#FFFFFF] p-5 border border-border rounded">
         <div>
           <h1 className="text-2xl font-black text-[#3B0A0F] tracking-tight uppercase">
             Asset Inventory Registry
           </h1>
-          <p className="text-xs text-[#6E2B32] font-medium mt-0.5">
-            Official ledger of university property, plant &amp; equipment and semi-expendable supplies
-          </p>
         </div>
 
         <div className="flex items-center gap-2.5 flex-wrap">
@@ -124,7 +123,7 @@ export default async function InventoryPage({ searchParams }: InventoryPageProps
 
           <Link
             href="/inventory/generate-qr"
-            className="bg-[#FFFFFF] text-[#3B0A0F] border border-[#EBD3B2] hover:bg-[#FFF4E0] px-3.5 py-2 text-xs font-bold rounded flex items-center gap-1.5 transition-colors"
+            className="bg-[#FFFFFF] text-[#3B0A0F] border border-border hover:bg-cream px-3.5 py-2 text-xs font-bold rounded flex items-center gap-1.5 transition-colors"
           >
             <span className="material-symbols-outlined text-[16px] text-[#D97B1A]">print</span>
             <span>Batch QR Labels</span>
@@ -132,7 +131,7 @@ export default async function InventoryPage({ searchParams }: InventoryPageProps
 
           <Link
             href="/reports"
-            className="bg-[#FFFFFF] text-[#3B0A0F] border border-[#EBD3B2] hover:bg-[#FFF4E0] px-3.5 py-2 text-xs font-bold rounded flex items-center gap-1.5 transition-colors"
+            className="bg-[#FFFFFF] text-[#3B0A0F] border border-border hover:bg-cream px-3.5 py-2 text-xs font-bold rounded flex items-center gap-1.5 transition-colors"
           >
             <span className="material-symbols-outlined text-[16px]">file_download</span>
             <span>Reports Studio</span>

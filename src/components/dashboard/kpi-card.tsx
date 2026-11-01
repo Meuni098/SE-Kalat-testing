@@ -23,16 +23,16 @@ export function KpiCard({
   className,
 }: KpiCardProps) {
   const badgeColors = {
-    primary: "bg-[#FFF4E0] text-[#A60212] border-[#A60212]",
-    accent: "bg-[#FFF4E0] text-[#D97B1A] border-[#F5AB29]",
-    danger: "bg-[#FEE2E2] text-[#A60212] border-[#FECACA]",
-    support: "bg-[#FFF4E0] text-[#3B0A0F] border-[#EBD3B2]",
+    primary: " badge-solid badge-maroon",
+    accent: " badge-solid badge-amber",
+    danger: " badge-solid badge-crimson",
+    support: " badge-solid badge-slate",
   };
 
   return (
     <div
       className={cn(
-        "bg-[#FFFFFF] border border-[#EBD3B2] rounded p-5 flex flex-col justify-between select-none",
+        "bg-[#FFFFFF] border border-border rounded p-5 flex flex-col justify-between select-none",
         className
       )}
     >
@@ -46,12 +46,12 @@ export function KpiCard({
         </div>
       </div>
 
-      <div className="flex items-center justify-between mt-4 pt-3 border-t border-[#EBD3B2] text-xs">
+      <div className="flex items-center justify-between mt-4 pt-3 border-t border-border text-xs">
         {subtitle && <span className="text-[#6E2B32] font-medium">{subtitle}</span>}
         {badgeText && (
           <span
             className={cn(
-              "px-2 py-0.5 rounded text-[10px] font-bold border font-mono",
+              "px-2 py-0.5 rounded text-[10px] font-bold border font-mono badge-solid",
               badgeColors[badgeVariant]
             )}
           >

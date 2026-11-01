@@ -106,10 +106,10 @@ export function CategoryModal({
       )}
 
       {isOpen && createPortal(
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#3B0A0F]/80 backdrop-blur-xs select-none">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#3B0A0F] select-none">
           <div role="dialog" aria-modal="true" aria-label={isEditing ? "Edit category" : "Create category"} className="bg-[#FFFFFF] border-2 border-[#A60212] rounded w-full max-w-lg max-h-[90vh] overflow-y-auto shadow-2xl p-6">
             {/* Header */}
-            <div className="flex items-center justify-between pb-3 border-b border-[#EBD3B2]">
+            <div className="flex items-center justify-between pb-3 border-b border-border">
               <div className="flex items-center gap-2">
                 <span className="material-symbols-outlined text-[#A60212] text-[22px]">
                   {isEditing ? "edit_note" : "new_label"}
@@ -118,9 +118,7 @@ export function CategoryModal({
                   <h2 className="text-sm font-bold text-[#3B0A0F] uppercase tracking-wide">
                     {isEditing ? `Edit Category: ${existingCategory?.code}` : "Create Asset Category"}
                   </h2>
-                  <p className="text-[11px] text-[#6E2B32]">
-                    COA Circular No. 2020-006 Asset Classification &amp; Useful Life
-                  </p>
+
                 </div>
               </div>
               <button
@@ -158,7 +156,7 @@ export function CategoryModal({
                     minLength={3}
                     maxLength={15}
                     pattern="[A-Za-z0-9-]{3,15}"
-                    className="w-full uppercase font-mono font-bold px-3 py-2 border border-[#EBD3B2] rounded bg-[#FFF4E0]/30 focus:bg-[#FFFFFF] focus:outline-hidden focus:border-[#A60212] disabled:opacity-60 disabled:cursor-not-allowed"
+                    className="w-full uppercase font-mono font-bold px-3 py-2 border border-border rounded bg-cream focus:bg-[#FFFFFF] focus:outline-hidden focus:border-[#A60212] disabled:bg-sand disabled:text-[#6E2B32] disabled:border-border disabled:cursor-not-allowed disabled:cursor-not-allowed"
                   />
                   <span className="text-[10px] text-[#6E2B32]">
                     {isEditing ? "Category code is immutable" : "Standard institutional code (3–15 chars)"}
@@ -172,7 +170,7 @@ export function CategoryModal({
                   <select
                     name="classification"
                     defaultValue={existingCategory?.classification || "PPE"}
-                    className="w-full px-3 py-2 border border-[#EBD3B2] rounded bg-[#FFF4E0]/30 focus:bg-[#FFFFFF] focus:outline-hidden focus:border-[#A60212]"
+                    className="w-full px-3 py-2 border border-border rounded bg-cream focus:bg-[#FFFFFF] focus:outline-hidden focus:border-[#A60212]"
                   >
                     <option value="PPE">Property, Plant &amp; Equipment (PPE ≥ ₱50k)</option>
                     <option value="SEMI_EXPENDABLE">Semi-Expendable Supplies (&lt; ₱50k)</option>
@@ -191,7 +189,7 @@ export function CategoryModal({
                   defaultValue={existingCategory?.name || ""}
                   placeholder="e.g. Laptops, Phones, or Air Conditioners"
                   maxLength={100}
-                  className="w-full px-3 py-2 border border-[#EBD3B2] rounded bg-[#FFF4E0]/30 focus:bg-[#FFFFFF] focus:outline-hidden focus:border-[#A60212]"
+                  className="w-full px-3 py-2 border border-border rounded bg-cream focus:bg-[#FFFFFF] focus:outline-hidden focus:border-[#A60212]"
                 />
               </div>
 
@@ -207,7 +205,7 @@ export function CategoryModal({
                     max="50"
                     required
                     defaultValue={existingCategory?.usefulLifeYears || 5}
-                    className="w-32 font-mono font-bold px-3 py-2 border border-[#EBD3B2] rounded bg-[#FFF4E0]/30 focus:bg-[#FFFFFF] focus:outline-hidden focus:border-[#A60212]"
+                    className="w-32 font-mono font-bold px-3 py-2 border border-border rounded bg-cream focus:bg-[#FFFFFF] focus:outline-hidden focus:border-[#A60212]"
                   />
                   <span className="text-[11px] text-[#6E2B32]">
                     Years (used for Straight-Line Depreciation in COA Form 74-A)
@@ -216,14 +214,14 @@ export function CategoryModal({
               </div>
 
               {/* Action Buttons */}
-              <div className="pt-3 border-t border-[#EBD3B2] flex items-center justify-between">
+              <div className="pt-3 border-t border-border flex items-center justify-between">
                 <div>
                   {isEditing && (
                     <button
                       type="button"
                       onClick={handleDelete}
                       disabled={isPending || isDeleting}
-                      className="text-xs text-[#A60212] hover:underline font-bold flex items-center gap-1 disabled:opacity-50"
+                      className="text-xs text-[#A60212] hover:underline font-bold flex items-center gap-1 disabled:bg-sand disabled:text-[#6E2B32] disabled:border-border disabled:cursor-not-allowed"
                     >
                       <span className="material-symbols-outlined text-[16px]">delete</span>
                       <span>Delete Category</span>

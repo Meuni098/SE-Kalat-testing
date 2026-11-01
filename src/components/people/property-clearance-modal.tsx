@@ -60,7 +60,7 @@ export function PropertyClearanceModal({
           <div class="header">
             <div class="inst">Bulacan State University</div>
             <div class="office">Asset Management Office • Property Custody Division</div>
-            <div class="campus">Bustos Campus, Bulacan</div>
+            <div class="campus">BULSU-MAIN CAMPUS</div>
           </div>
 
           <div class="cert-title">CERTIFICATE OF PROPERTY CLEARANCE</div>
@@ -127,16 +127,16 @@ export function PropertyClearanceModal({
       <button
         onClick={handleOpen}
         title="Check and print COA Property Clearance"
-        className="h-8 px-2.5 rounded bg-[#FFF4E0] hover:bg-[#EBD3B2] text-[#A60212] font-bold text-xs inline-flex items-center gap-1 border border-[#EBD3B2] transition-colors"
+        className="h-8 px-2.5 rounded bg-cream hover:bg-sand text-[#A60212] font-bold text-xs inline-flex items-center gap-1 border border-border transition-colors"
       >
         <span className="material-symbols-outlined text-[15px]">verified_user</span>
         <span>Clearance</span>
       </button>
 
       {isOpen && (
-        <div className="fixed inset-0 z-50 bg-[#3B0A0F]/60 backdrop-blur-[2px] flex items-center justify-center p-4">
+        <div className="fixed inset-0 z-50 bg-[#3B0A0F] flex items-center justify-center p-4">
           <div className="bg-[#FFFFFF] border-2 border-[#A60212] rounded-lg max-w-lg w-full p-6 shadow-2xl relative animate-in fade-in zoom-in duration-150">
-            <div className="flex items-center justify-between pb-3 border-b border-[#EBD3B2]">
+            <div className="flex items-center justify-between pb-3 border-b border-border">
               <div>
                 <span className="text-[10px] uppercase font-bold tracking-wider text-[#A60212]">
                   COA Property Accountability Review
@@ -147,7 +147,7 @@ export function PropertyClearanceModal({
               </div>
               <button
                 onClick={() => setIsOpen(false)}
-                className="text-[#6E2B32] hover:text-[#3B0A0F] p-1 rounded hover:bg-[#FFF4E0]"
+                className="text-[#6E2B32] hover:text-[#3B0A0F] p-1 rounded hover:bg-cream"
               >
                 <span className="material-symbols-outlined text-[20px]">close</span>
               </button>
@@ -159,7 +159,7 @@ export function PropertyClearanceModal({
               </div>
             ) : clearanceData ? (
               <div className="mt-4 space-y-4">
-                <div className="bg-[#FFF4E0] border border-[#EBD3B2] p-3 rounded text-xs space-y-1">
+                <div className="bg-cream border border-border p-3 rounded text-xs space-y-1">
                   <div className="font-bold text-[#3B0A0F] text-sm">{fullName}</div>
                   <div className="text-[11px] text-[#6E2B32]">
                     Emp #{employeeNo} • Unit: {unitCode}
@@ -189,11 +189,11 @@ export function PropertyClearanceModal({
                 </div>
 
                 {!clearanceData.isCleared && (
-                  <div className="max-h-[140px] overflow-y-auto space-y-1.5 border border-[#EBD3B2] p-2 rounded bg-white">
+                  <div className="max-h-[140px] overflow-y-auto space-y-1.5 border border-border p-2 rounded bg-white">
                     {clearanceData.liabilities.map((a: any) => (
                       <div
                         key={a.id}
-                        className="text-xs flex items-center justify-between p-1.5 bg-[#FFF4E0]/40 rounded"
+                        className="text-xs flex items-center justify-between p-1.5 bg-cream rounded"
                       >
                         <div>
                           <span className="font-mono font-bold text-[#A60212]">
@@ -211,10 +211,10 @@ export function PropertyClearanceModal({
                   </div>
                 )}
 
-                <div className="flex items-center justify-end gap-2 pt-3 border-t border-[#EBD3B2]">
+                <div className="flex items-center justify-end gap-2 pt-3 border-t border-border">
                   <button
                     onClick={() => setIsOpen(false)}
-                    className="h-9 px-4 rounded border border-[#EBD3B2] text-[#3B0A0F] text-xs font-bold"
+                    className="h-9 px-4 rounded border border-border text-[#3B0A0F] text-xs font-bold"
                   >
                     Close
                   </button>

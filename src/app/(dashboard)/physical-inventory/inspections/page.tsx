@@ -47,22 +47,12 @@ export default async function InspectionsPage() {
   return (
     <div className="space-y-6 pb-16 select-none">
       {/* Header Banner */}
-      <div className="bg-[#FFFFFF] border border-[#EBD3B2] p-5 rounded flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <div className="bg-[#FFFFFF] border border-border p-5 rounded flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <div className="flex items-center gap-2">
-            <span className="bg-[#FFF4E0] text-[#A60212] border border-[#A60212] px-2 py-0.5 rounded text-[11px] font-bold font-mono">
-              BULSU INVENTORY SYSTEM
-            </span>
-            <span className="bg-[#FFF4E0] text-[#6E2B32] border border-[#EBD3B2] px-2 py-0.5 rounded text-[11px] font-mono">
-              INSPECTION &amp; ACCEPTANCE (IAR)
-            </span>
-          </div>
+
           <h1 className="text-2xl font-black text-[#3B0A0F] tracking-tight uppercase mt-1">
             Inspection Records &amp; Condition Audits
           </h1>
-          <p className="text-xs text-[#6E2B32] font-medium mt-0.5">
-            Technical inspection documentation, pre-delivery acceptance checks, and operational condition grading
-          </p>
         </div>
 
         <div>
@@ -72,7 +62,7 @@ export default async function InspectionsPage() {
 
       {/* KPI Overview Ribbon */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <div className="bg-[#FFFFFF] border border-[#EBD3B2] p-4 rounded flex items-center justify-between">
+        <div className="bg-[#FFFFFF] border border-border p-4 rounded flex items-center justify-between">
           <div>
             <span className="text-xs font-bold text-[#6E2B32] uppercase tracking-wider block">
               Total Inspections
@@ -81,12 +71,12 @@ export default async function InspectionsPage() {
               {inspections.length} <span className="text-xs font-normal text-[#6E2B32]">Logged</span>
             </span>
           </div>
-          <div className="w-10 h-10 rounded bg-[#FFF4E0] border border-[#EBD3B2] text-[#A60212] flex items-center justify-center">
+          <div className="w-10 h-10 rounded bg-cream border border-border text-[#A60212] flex items-center justify-center">
             <span className="material-symbols-outlined text-[20px]">schedule</span>
           </div>
         </div>
 
-        <div className="bg-[#FFFFFF] border border-[#EBD3B2] p-4 rounded flex items-center justify-between">
+        <div className="bg-[#FFFFFF] border border-border p-4 rounded flex items-center justify-between">
           <div>
             <span className="text-xs font-bold text-[#6E2B32] uppercase tracking-wider block">
               Accepted As Compliant
@@ -95,12 +85,12 @@ export default async function InspectionsPage() {
               {acceptedCount} <span className="text-xs font-normal text-[#6E2B32]">Passed</span>
             </span>
           </div>
-          <div className="w-10 h-10 rounded bg-[#FFF4E0] border border-[#EBD3B2] text-[#2E7D32] flex items-center justify-center">
+          <div className="w-10 h-10 rounded bg-cream border border-border text-[#2E7D32] flex items-center justify-center">
             <span className="material-symbols-outlined text-[20px]">check_circle</span>
           </div>
         </div>
 
-        <div className="bg-[#FFFFFF] border border-[#EBD3B2] p-4 rounded flex items-center justify-between">
+        <div className="bg-[#FFFFFF] border border-border p-4 rounded flex items-center justify-between">
           <div>
             <span className="text-xs font-bold text-[#6E2B32] uppercase tracking-wider block">
               Conditional Acceptance
@@ -110,12 +100,12 @@ export default async function InspectionsPage() {
               <span className="text-xs font-normal text-[#6E2B32]">Needs Work</span>
             </span>
           </div>
-          <div className="w-10 h-10 rounded bg-[#FFF4E0] border border-[#EBD3B2] text-[#D97B1A] flex items-center justify-center">
+          <div className="w-10 h-10 rounded bg-cream border border-border text-[#D97B1A] flex items-center justify-center">
             <span className="material-symbols-outlined text-[20px]">warning</span>
           </div>
         </div>
 
-        <div className="bg-[#FFFFFF] border border-[#EBD3B2] p-4 rounded flex items-center justify-between">
+        <div className="bg-[#FFFFFF] border border-border p-4 rounded flex items-center justify-between">
           <div>
             <span className="text-xs font-bold text-[#6E2B32] uppercase tracking-wider block">
               Rejected / Non-Compliant
@@ -124,14 +114,14 @@ export default async function InspectionsPage() {
               {rejectedCount} <span className="text-xs font-normal text-[#6E2B32]">Defective</span>
             </span>
           </div>
-          <div className="w-10 h-10 rounded bg-[#FFF4E0] border border-[#EBD3B2] text-[#C62828] flex items-center justify-center">
+          <div className="w-10 h-10 rounded bg-cream border border-border text-[#C62828] flex items-center justify-center">
             <span className="material-symbols-outlined text-[20px]">error</span>
           </div>
         </div>
       </div>
 
       {/* Main Inspections Table */}
-      <div className="bg-[#FFFFFF] border border-[#EBD3B2] rounded shadow-sm overflow-hidden">
+      <div className="bg-[#FFFFFF] border border-border rounded shadow-sm overflow-hidden">
         <div className="bg-[#3B0A0F] px-4 py-3 border-b border-[#4E1117] flex items-center justify-between">
           <div className="flex items-center gap-2">
             <span className="material-symbols-outlined text-[#F5AB29] text-[20px]">history_edu</span>
@@ -139,7 +129,7 @@ export default async function InspectionsPage() {
               Technical Inspection Logbook
             </span>
           </div>
-          <span className="text-[11px] font-mono text-[#F5AB29] bg-[#4E1117] px-2 py-0.5 rounded border border-[#6E2B32]">
+          <span className="text-[11px] font-mono px-2 py-0.5 rounded border badge-solid badge-amber">
             {inspections.length} Entry/Entries
           </span>
         </div>
@@ -147,7 +137,7 @@ export default async function InspectionsPage() {
         <div className="overflow-x-auto">
           <table className="w-full text-left text-xs border-collapse">
             <thead>
-              <tr className="bg-[#FFF4E0] text-[#3B0A0F] border-b border-[#EBD3B2] font-black uppercase text-[11px]">
+              <tr className="bg-cream text-[#3B0A0F] border-b border-border font-black uppercase text-[11px]">
                 <th className="py-2.5 px-3">Date</th>
                 <th className="py-2.5 px-3">Asset / Item Examined</th>
                 <th className="py-2.5 px-3">Inspector Officer</th>
@@ -156,7 +146,7 @@ export default async function InspectionsPage() {
                 <th className="py-2.5 px-3">Technical Remarks</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-[#EBD3B2]">
+            <tbody className="divide-y divide-border">
               {inspections.length === 0 ? (
                 <tr>
                   <td colSpan={6} className="py-8 text-center text-[#6E2B32] font-medium">
@@ -168,7 +158,7 @@ export default async function InspectionsPage() {
                 </tr>
               ) : (
                 inspections.map((i) => (
-                  <tr key={i.id} className="hover:bg-[#FFF4E0]/40 transition-colors">
+                  <tr key={i.id} className="hover:bg-cream transition-colors">
                     <td className="py-3 px-3 text-[#3B0A0F] font-mono text-[11px] whitespace-nowrap">
                       {formatDate(i.inspectedAt)}<TransactionAttributionButton entityType="INSPECTION" entityId={i.id} />
                     </td>
@@ -215,12 +205,12 @@ export default async function InspectionsPage() {
 
                     <td className="py-3 px-3">
                       <span
-                        className={`inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider ${
+                        className={` inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider  badge-solid ${
                           i.result === "ACCEPTED"
-                            ? "bg-[#E8F5E9] text-[#2E7D32] border border-[#A5D6A7]"
+                            ? "border badge-solid badge-green"
                             : i.result === "CONDITIONAL"
-                            ? "bg-[#FFF4E0] text-[#D97B1A] border border-[#F5AB29]"
-                            : "bg-[#FFEBEE] text-[#C62828] border border-[#FFCDD2]"
+                            ? "border badge-solid badge-amber"
+                            : "border badge-solid badge-crimson"
                         }`}
                       >
                         <span className="w-1.5 h-1.5 rounded-full bg-current" />

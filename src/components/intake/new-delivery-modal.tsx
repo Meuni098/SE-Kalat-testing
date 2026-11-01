@@ -54,10 +54,10 @@ export function NewDeliveryModal({ categories }: NewDeliveryModalProps) {
       </Button>
 
       {isOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#3B0A0F]/80">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#3B0A0F]">
           <div ref={dialogRef} role="dialog" tabIndex={-1} aria-busy={isPending} aria-modal="true" aria-labelledby="delivery-title" className="bg-[#FFFFFF] border-2 border-[#A60212] rounded w-full max-w-lg p-6 select-none max-h-[90vh] overflow-y-auto">
             {/* Header */}
-            <div className="flex items-center justify-between pb-3 border-b border-[#EBD3B2]">
+            <div className="flex items-center justify-between pb-3 border-b border-border">
               <div className="flex items-center gap-2">
                 <span className="material-symbols-outlined text-[#A60212] text-[22px]">
                   local_shipping
@@ -93,7 +93,7 @@ export function NewDeliveryModal({ categories }: NewDeliveryModalProps) {
             </div> : <>
             {!categories.length && <p role="alert">Add a category before logging a delivery.</p>}
             <form onSubmit={handleSubmit} className="mt-4 space-y-3.5">
-              <p className="text-xs text-[#6E2B32]">PO reference, DR reference, product codes and QR labels are generated automatically when you save.</p>
+              <p className="text-xs text-[#6E2B32]">References, product codes, and QR labels are generated on save.</p>
 
               <div>
                 <label htmlFor="delivery-supplierName" className="block text-xs font-bold text-[#3B0A0F] uppercase mb-1">
@@ -104,7 +104,7 @@ export function NewDeliveryModal({ categories }: NewDeliveryModalProps) {
                   name="supplierName"
                   required
                   placeholder="e.g. Micro-D International Solutions Inc."
-                  className="w-full bg-[#FFF4E0] border border-[#EBD3B2] rounded p-2 text-xs text-[#3B0A0F] focus:outline-none focus:border-[#A60212]"
+                  className="w-full bg-cream border border-border rounded p-2 text-xs text-[#3B0A0F] focus:outline-none focus:border-[#A60212]"
                 />
               </div>
 
@@ -117,7 +117,7 @@ export function NewDeliveryModal({ categories }: NewDeliveryModalProps) {
                   name="itemDescription"
                   required
                   placeholder="e.g. Lenovo ThinkPad T14s Gen 4 (Core i7, 32GB RAM)"
-                  className="w-full bg-[#FFF4E0] border border-[#EBD3B2] rounded p-2 text-xs text-[#3B0A0F] focus:outline-none focus:border-[#A60212]"
+                  className="w-full bg-cream border border-border rounded p-2 text-xs text-[#3B0A0F] focus:outline-none focus:border-[#A60212]"
                 />
               </div>
 
@@ -133,7 +133,7 @@ export function NewDeliveryModal({ categories }: NewDeliveryModalProps) {
                     min="1"
                     defaultValue="1"
                     required
-                    className="w-full bg-[#FFF4E0] border border-[#EBD3B2] rounded p-2 text-xs font-mono font-bold text-[#3B0A0F]"
+                    className="w-full bg-cream border border-border rounded p-2 text-xs font-mono font-bold text-[#3B0A0F]"
                   />
                 </div>
 
@@ -149,7 +149,7 @@ export function NewDeliveryModal({ categories }: NewDeliveryModalProps) {
                     required
                     defaultValue="65000"
                     placeholder="65000.00"
-                    className="w-full bg-[#FFF4E0] border border-[#EBD3B2] rounded p-2 text-xs font-mono font-bold text-[#3B0A0F]"
+                    className="w-full bg-cream border border-border rounded p-2 text-xs font-mono font-bold text-[#3B0A0F]"
                   />
                 </div>
               </div>
@@ -160,7 +160,7 @@ export function NewDeliveryModal({ categories }: NewDeliveryModalProps) {
                     <label htmlFor="receiving-unit" className="block text-xs font-bold text-[#3B0A0F] uppercase">
                       Receiving Unit
                     </label>
-                    <span className="text-[9px] font-bold text-[#A60212] bg-[#FFF4E0] px-1 py-0.2 rounded border border-[#EBD3B2]">
+                    <span className="text-[9px] font-bold px-1 py-0.2 rounded border badge-solid badge-maroon">
                       AMO Central
                     </span>
                   </div>
@@ -169,7 +169,7 @@ export function NewDeliveryModal({ categories }: NewDeliveryModalProps) {
                     type="text"
                     value="AMO — Asset Management Office"
                     readOnly
-                    className="w-full bg-[#FFF4E0] border border-[#EBD3B2] rounded p-2 text-xs text-[#3B0A0F] font-semibold"
+                    className="w-full bg-cream border border-border rounded p-2 text-xs text-[#3B0A0F] font-semibold"
                   />
                   <p className="mt-1 text-[10px] text-[#6E2B32]">
                     All deliveries are received and handled by the AMO officer.
@@ -184,7 +184,7 @@ export function NewDeliveryModal({ categories }: NewDeliveryModalProps) {
                   <select id="delivery-categoryId"
                     name="categoryId"
                     required
-                    className="w-full bg-[#FFFFFF] border border-[#EBD3B2] rounded p-2 text-xs text-[#3B0A0F]"
+                    className="w-full bg-[#FFFFFF] border border-border rounded p-2 text-xs text-[#3B0A0F]"
                   >
                     {categories.map((c) => (
                       <option key={c.id} value={c.id}>
@@ -203,11 +203,11 @@ export function NewDeliveryModal({ categories }: NewDeliveryModalProps) {
                   name="remarks"
                   rows={2}
                   placeholder="Inspected and verified against PO specs..."
-                  className="w-full bg-[#FFF4E0] border border-[#EBD3B2] rounded p-2 text-xs text-[#3B0A0F]"
+                  className="w-full bg-cream border border-border rounded p-2 text-xs text-[#3B0A0F]"
                 />
               </div>
 
-              <div className="pt-3 border-t border-[#EBD3B2] flex items-center justify-end gap-2">
+              <div className="pt-3 border-t border-border flex items-center justify-end gap-2">
                 <Button
                   type="button"
                   variant="secondary"

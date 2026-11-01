@@ -9,7 +9,7 @@ import { validateDesignation } from "@/lib/receiving-custodian-validation";
 import type { PersonSummary } from "@/types/receiving-custodian";
 import type { ItemReceiptInput, ReceiptAssetOption } from "@/types/item-receipt";
 
-const inputClass = "mt-1 w-full rounded border border-[#EBD3B2] bg-[#FFF4E0]/30 px-3 py-2 text-sm focus:outline-2 focus:outline-[#A60212]";
+const inputClass = "mt-1 w-full rounded border border-border bg-cream px-3 py-2 text-sm focus:outline-2 focus:outline-[#A60212]";
 
 export function ItemReceiptDialog({ initialUnitId, onClose, onComplete }: { initialUnitId: string; onClose: () => void; onComplete: () => void }) {
   const [unitId, setUnitId] = useState(initialUnitId);
@@ -122,7 +122,7 @@ export function ItemReceiptDialog({ initialUnitId, onClose, onComplete }: { init
   const chosenPerson = people.find(p => p.id === personId);
   return <Dialog title="Record Item Receipt" busy={saving} onClose={onClose}><form onSubmit={submit} onInvalid={event => { const form = event.currentTarget; if (event.target === form.querySelector(":invalid")) (event.target as HTMLElement).focus(); }} className="space-y-4">
     <p className="text-sm">Enter the details of the person who received this item.</p>
-    {error && <p role="alert" className="rounded border border-[#A60212] bg-[#FFF4E0] p-3 text-sm text-[#A60212]">{error}</p>}
+    {error && <p role="alert" className="rounded border border-[#A60212] bg-cream p-3 text-sm text-[#A60212]">{error}</p>}
     <fieldset disabled={saving || uncertain} className="space-y-4">
       {mode === "NEW" && <label className="block text-xs font-bold">Name *<input className={inputClass} required minLength={2} maxLength={150} value={draft.fullName} onChange={e => setDraft(old => ({ ...old, fullName: e.target.value }))} aria-invalid={!!fields.fullName} />{fieldError("fullName")}</label>}
       <div className="flex items-end gap-2"><label className="flex-1 text-xs font-bold">Find office / college<input className={inputClass} value={unitQuery} maxLength={100} onChange={e => setUnitQuery(e.target.value)} /></label><Button type="button" size="sm" variant="secondary" disabled={searching} onClick={() => search("unit")}>Search Units</Button></div>
@@ -135,15 +135,15 @@ export function ItemReceiptDialog({ initialUnitId, onClose, onComplete }: { init
         <div className="flex items-end gap-2"><label className="flex-1 text-xs font-bold">Find item<input className={inputClass} value={assetQuery} maxLength={100} onChange={e => setAssetQuery(e.target.value)} placeholder="Property number or item name" /></label><Button type="button" size="sm" variant="secondary" disabled={searching} onClick={() => search("asset")}>Search Items</Button></div>
         <label className="block text-xs font-bold">Item being received *<select className={inputClass} required value={assetId} disabled={searching} onChange={e => { setAssetId(e.target.value); operation.current = ""; }}><option value="">Choose a specific property-tagged item</option>{assets.map(a => <option key={a.id} value={a.id}>{a.propertyNo} — {a.name}</option>)}</select></label>
         {!assets.length && <p className="text-sm">No available items found in this unit. Register the item or complete its transfer into this unit before recording receipt.</p>}{moreAssets && <p className="text-xs">Showing 20 matches. Search by property number to find another item.</p>}
-        {suggestion && <div className="rounded bg-[#FFF4E0] p-3 text-sm">Suggested office contact: <strong>{suggestion.fullName}</strong>. You may choose someone else.<Button type="button" className="mt-2" size="sm" variant="outline" onClick={() => { setMode("EXISTING"); setPeople(old => old.some(p => p.id === suggestion.id) ? old : [suggestion, ...old]); setPersonId(suggestion.id); }}>Use suggested contact</Button></div>}
+        {suggestion && <div className="rounded bg-cream p-3 text-sm">Suggested office contact: <strong>{suggestion.fullName}</strong>. You may choose someone else.<Button type="button" className="mt-2" size="sm" variant="outline" onClick={() => { setMode("EXISTING"); setPeople(old => old.some(p => p.id === suggestion.id) ? old : [suggestion, ...old]); setPersonId(suggestion.id); }}>Use suggested contact</Button></div>}
         <fieldset className="flex flex-wrap gap-4 text-sm"><legend className="mb-2 text-xs font-bold">Actual receiver</legend><label><input name="receiverMode" type="radio" checked={mode === "NEW"} onChange={() => { setMode("NEW"); setFields({}); setError(""); }} /> Enter receiver details</label><label><input name="receiverMode" type="radio" checked={mode === "EXISTING"} onChange={() => { setMode("EXISTING"); setFields({}); setError(""); }} /> Use a registered person</label></fieldset>
         {mode === "EXISTING" ? <><div className="flex items-end gap-2"><label className="flex-1 text-xs font-bold">Find receiver<input className={inputClass} value={personQuery} maxLength={100} onChange={e => setPersonQuery(e.target.value)} placeholder="Employee name or number" /></label><Button type="button" size="sm" variant="secondary" disabled={searching} onClick={() => search("person")}>Search Personnel</Button></div><label className="block text-xs font-bold">Received by *<select className={inputClass} value={personId} required disabled={searching} onChange={e => setPersonId(e.target.value)} aria-invalid={!!fields.personId} aria-describedby={fields.personId ? `${errorPrefix}-personId` : undefined}><option value="">Choose actual receiver</option>{people.map(p => <option key={p.id} value={p.id}>{p.fullName} · {p.employeeNo} · {p.position}</option>)}</select>{fieldError("personId")}</label>{!people.length && <p className="text-sm">No matching personnel. Enter receiver details if they are not yet in People.</p>}{morePeople && <p className="text-xs">Showing 20 matches. Refine your personnel search.</p>}</> : null}
-        {selectedAsset && <p className="rounded border border-[#EBD3B2] p-3 text-sm">Record receipt of <strong>{selectedAsset.propertyNo}</strong> by <strong>{mode === "NEW" ? draft.fullName || "the new receiver" : chosenPerson?.fullName || "the selected receiver"}</strong>.</p>}
+        {selectedAsset && <p className="rounded border border-border p-3 text-sm">Record receipt of <strong>{selectedAsset.propertyNo}</strong> by <strong>{mode === "NEW" ? draft.fullName || "the new receiver" : chosenPerson?.fullName || "the selected receiver"}</strong>.</p>}
       </>}
 
-      <p className="text-xs text-[#6E2B32]">The receipt will be timestamped when saved. Previous receipts remain in history.</p>
+      <p className="text-xs text-[#6E2B32]">Saving timestamps this receipt and preserves previous receipts.</p>
     </fieldset>
     {saving && <p role="status">Saving receipt…</p>}
-    <div className="flex justify-end gap-3 border-t border-[#EBD3B2] pt-4"><Button type="button" variant="secondary" onClick={onClose} disabled={saving}>Cancel</Button><Button type="submit" disabled={saving || (!uncertain && (loading || searching || !unitReady || !selectedAsset))}>{saving ? "Saving…" : uncertain ? "Retry same receipt" : "Record Receipt"}</Button></div>
+    <div className="flex justify-end gap-3 border-t border-border pt-4"><Button type="button" variant="secondary" onClick={onClose} disabled={saving}>Cancel</Button><Button type="submit" disabled={saving || (!uncertain && (loading || searching || !unitReady || !selectedAsset))}>{saving ? "Saving…" : uncertain ? "Retry same receipt" : "Record Receipt"}</Button></div>
   </form></Dialog>;
 }

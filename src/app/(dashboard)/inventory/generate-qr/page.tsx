@@ -30,22 +30,12 @@ export default async function GenerateQrPage() {
   return (
     <div className="space-y-6 pb-16 select-none">
       {/* Header Banner */}
-      <div className="bg-[#FFFFFF] border border-[#EBD3B2] p-5 rounded flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <div className="bg-[#FFFFFF] border border-border p-5 rounded flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <div className="flex items-center gap-2">
-            <span className="bg-[#FFF4E0] text-[#A60212] border border-[#A60212] px-2 py-0.5 rounded text-[11px] font-bold font-mono">
-              BULSU INVENTORY SYSTEM
-            </span>
-            <span className="bg-[#FFF4E0] text-[#6E2B32] border border-[#EBD3B2] px-2 py-0.5 rounded text-[11px] font-mono">
-              BATCH QR LABEL ENGINE
-            </span>
-          </div>
+
           <h1 className="text-2xl font-black text-[#3B0A0F] tracking-tight uppercase mt-1">
             Generate QR Code Sticker Sheets
           </h1>
-          <p className="text-xs text-[#6E2B32] font-medium mt-0.5">
-            Select university assets to batch produce official adhesive barcode tags formatted for standard A4 and thermal printers
-          </p>
         </div>
       </div>
 

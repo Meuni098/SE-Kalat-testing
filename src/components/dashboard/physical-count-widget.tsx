@@ -23,9 +23,9 @@ export function PhysicalCountWidget({
   const pendingPercent = totalAssets > 0 ? Math.round((pendingCount / totalAssets) * 100) : 0;
 
   return (
-    <section className="bg-[#FFFFFF] border border-[#EBD3B2] rounded p-5 flex flex-col justify-between">
+    <section className="bg-[#FFFFFF] border border-border rounded p-5 flex flex-col justify-between">
       <div>
-        <div className="flex items-center justify-between pb-3 border-b border-[#EBD3B2]">
+        <div className="flex items-center justify-between pb-3 border-b border-border">
           <div className="flex items-center gap-2">
             <span
               className="material-symbols-outlined text-[#F5AB29] text-[22px]"
@@ -40,7 +40,7 @@ export function PhysicalCountWidget({
               <p className="text-[11px] text-[#6E2B32] font-mono">FY {fiscalYear} COA Audit</p>
             </div>
           </div>
-          <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-[#FFF4E0] text-[#D97B1A] border border-[#F5AB29]">
+          <span className="px-2 py-0.5 rounded text-[10px] font-bold border badge-solid badge-amber">
             ACTIVE CYCLE
           </span>
         </div>
@@ -59,7 +59,7 @@ export function PhysicalCountWidget({
           </div>
 
           {/* Segmented solid bar */}
-          <div className="w-full h-3 bg-[#FFF4E0] border border-[#EBD3B2] rounded flex overflow-hidden">
+          <div className="w-full h-3 bg-cream border border-border rounded flex overflow-hidden">
             <div
               style={{ width: `${verifiedPercent}%` }}
               className="bg-[#A60212] h-full"
@@ -72,13 +72,13 @@ export function PhysicalCountWidget({
             />
             <div
               style={{ width: `${pendingPercent}%` }}
-              className="bg-[#EBD3B2] h-full"
+              className="bg-sand h-full"
               title={`Pending: ${pendingCount}`}
             />
           </div>
 
           {/* Legend */}
-          <div className="grid grid-cols-3 gap-2 mt-3 pt-3 border-t border-[#EBD3B2] text-[11px]">
+          <div className="grid grid-cols-3 gap-2 mt-3 pt-3 border-t border-border text-[11px]">
             <div className="flex items-center gap-1.5">
               <span className="w-2.5 h-2.5 rounded-full bg-[#A60212]" />
               <span className="text-[#3B0A0F] font-semibold">Verified ({verifiedCount})</span>
@@ -88,14 +88,14 @@ export function PhysicalCountWidget({
               <span className="text-[#3B0A0F] font-semibold">Relocated ({relocatedCount})</span>
             </div>
             <div className="flex items-center gap-1.5">
-              <span className="w-2.5 h-2.5 rounded-full bg-[#EBD3B2]" />
+              <span className="w-2.5 h-2.5 rounded-full bg-sand" />
               <span className="text-[#6E2B32] font-semibold">Pending ({pendingCount})</span>
             </div>
           </div>
         </div>
       </div>
 
-      <div className="mt-5 pt-3 border-t border-[#EBD3B2] flex items-center gap-2">
+      <div className="mt-5 pt-3 border-t border-border flex items-center gap-2">
         <Link
           href="/scan"
           className="flex-1 py-2 px-3 rounded bg-[#A60212] text-[#FFF4E0] hover:bg-[#85010E] text-xs font-bold flex items-center justify-center gap-1.5 transition-colors border border-[#A60212]"
@@ -105,7 +105,7 @@ export function PhysicalCountWidget({
         </Link>
         <Link
           href="/physical-inventory/sessions/current"
-          className="py-2 px-3 rounded bg-[#FFF4E0] text-[#3B0A0F] border border-[#EBD3B2] hover:bg-[#FFFFFF] text-xs font-bold flex items-center justify-center gap-1 transition-colors"
+          className="py-2 px-3 rounded bg-cream text-[#3B0A0F] border border-border hover:bg-[#FFFFFF] text-xs font-bold flex items-center justify-center gap-1 transition-colors"
         >
           <span>Audit Sheet</span>
           <span className="material-symbols-outlined text-[14px]">arrow_forward</span>

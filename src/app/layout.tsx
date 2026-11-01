@@ -2,12 +2,13 @@ import type { Metadata, Viewport } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "CUSTODIA — BulSU Asset Management Office",
+  title: "BULSU-MAIN CAMPUS — Asset Management Office",
   description:
     "Institutional Property, Plant & Equipment (PPE) and Semi-Expendable Supplies Lifecycle System for Bulacan State University.",
   manifest: "/manifest.json",
   icons: {
-    icon: "/favicon.ico",
+    icon: "/branding/bulsu-main-campus.png",
+    apple: "/branding/bulsu-main-campus.png",
   },
 };
 
@@ -37,7 +38,7 @@ export default function RootLayout({
           rel="stylesheet"
         />
       </head>
-      <body className="bg-[#FFF4E0] text-[#3B0A0F] antialiased min-h-screen">
+      <body className="bg-cream text-[#3B0A0F] antialiased min-h-screen">
         {children}
       </body>
     </html>

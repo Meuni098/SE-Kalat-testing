@@ -74,29 +74,19 @@ export default function WebQRScannerPage() {
   return (
     <div className="space-y-6 pb-16 select-none">
       {/* Header */}
-      <div className="bg-[#FFFFFF] border border-[#EBD3B2] p-5 rounded flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <div className="bg-[#FFFFFF] border border-border p-5 rounded flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <div className="flex items-center gap-2">
-            <span className="bg-[#FFF4E0] text-[#A60212] border border-[#A60212] px-2 py-0.5 rounded text-[11px] font-bold font-mono">
-              BULSU INVENTORY SYSTEM
-            </span>
-            <span className="bg-[#FFF4E0] text-[#6E2B32] border border-[#EBD3B2] px-2 py-0.5 rounded text-[11px] font-mono">
-              OPTICAL BARCODE &amp; QR DECODER
-            </span>
-          </div>
+
           <h1 className="text-2xl font-black text-[#3B0A0F] tracking-tight uppercase mt-1">
             Desktop QR Scanner &amp; Quick Verification
           </h1>
-          <p className="text-xs text-[#6E2B32] font-medium mt-0.5">
-            Instant camera or handheld barcode scanner lookup for field asset tagging and physical count audit
-          </p>
         </div>
 
         <div className="flex items-center gap-2">
           <Link
             href="/scan"
             target="_blank"
-            className="h-10 px-4 rounded bg-[#FFF4E0] hover:bg-[#EBD3B2] text-[#3B0A0F] font-bold text-xs flex items-center gap-1.5 border border-[#EBD3B2] transition-colors shadow-sm"
+            className="h-10 px-4 rounded bg-cream hover:bg-sand text-[#3B0A0F] font-bold text-xs flex items-center gap-1.5 border border-border transition-colors shadow-sm"
           >
             <span className="material-symbols-outlined text-[18px] text-[#A60212]">
               phone_android
@@ -110,7 +100,7 @@ export default function WebQRScannerPage() {
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
         {/* Left Column: Optical Viewfinder & Input (7 Cols) */}
         <div className="lg:col-span-7 space-y-4">
-          <div className="bg-[#FFFFFF] border border-[#EBD3B2] rounded shadow-sm overflow-hidden">
+          <div className="bg-[#FFFFFF] border border-border rounded shadow-sm overflow-hidden">
             <div className="bg-[#3B0A0F] px-4 py-3 border-b border-[#4E1117] flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <span className="material-symbols-outlined text-[#F5AB29] text-[20px]">
@@ -136,9 +126,9 @@ export default function WebQRScannerPage() {
             </div>
 
             {/* Viewfinder simulation box */}
-            <div className="bg-[#240508] p-8 flex flex-col items-center justify-center min-h-[300px] relative border-b border-[#EBD3B2]">
+            <div className="bg-[#240508] p-8 flex flex-col items-center justify-center min-h-[300px] relative border-b border-border">
               {isCameraActive ? (
-                <div className="w-[240px] h-[240px] border-2 border-dashed border-[#F5AB29] rounded-lg relative flex flex-col items-center justify-center bg-[#3B0A0F]/60 animate-pulse">
+                <div className="w-[240px] h-[240px] border-2 border-dashed border-[#F5AB29] rounded-lg relative flex flex-col items-center justify-center bg-[#3B0A0F] animate-pulse">
                   <div className="absolute top-0 left-0 w-6 h-6 border-t-4 border-l-4 border-[#F5AB29]" />
                   <div className="absolute top-0 right-0 w-6 h-6 border-t-4 border-r-4 border-[#F5AB29]" />
                   <div className="absolute bottom-0 left-0 w-6 h-6 border-b-4 border-l-4 border-[#F5AB29]" />
@@ -157,14 +147,14 @@ export default function WebQRScannerPage() {
                   </div>
                   <h4 className="text-sm font-bold text-[#FFF4E0]">Camera Standby</h4>
                   <p className="text-xs text-[#EBD3B2] max-w-sm mx-auto">
-                    Click &quot;Turn On Camera&quot; to scan with your webcam, or use the manual Product Code input or sample tags below.
+                    Turn on the camera or enter a product code.
                   </p>
                 </div>
               )}
             </div>
 
             {/* Fast Manual / Handheld Scanner Barcode Input */}
-            <div className="p-4 bg-[#FFF4E0]">
+            <div className="p-4 bg-cream">
               <label className="text-xs font-bold text-[#3B0A0F] block mb-1">
                 Product Code / Barcode Scan Input
               </label>
@@ -175,12 +165,12 @@ export default function WebQRScannerPage() {
                   onChange={(e) => setPropertyInput(e.target.value)}
                   onKeyDown={(e) => e.key === "Enter" && handleLookup(propertyInput)}
                   placeholder="e.g. BULSU-2024-PPE-0104"
-                  className="flex-1 h-10 px-3 rounded border border-[#EBD3B2] bg-[#FFFFFF] text-xs font-bold text-[#3B0A0F] font-mono focus:outline-none focus:border-[#A60212]"
+                  className="flex-1 h-10 px-3 rounded border border-border bg-[#FFFFFF] text-xs font-bold text-[#3B0A0F] font-mono focus:outline-none focus:border-[#A60212]"
                 />
                 <button
                   onClick={() => handleLookup(propertyInput)}
                   disabled={isSearching}
-                  className="h-10 px-5 rounded bg-[#A60212] hover:bg-[#85010E] text-[#FFF4E0] font-bold text-xs flex items-center gap-1.5 shadow-sm disabled:opacity-50"
+                  className="h-10 px-5 rounded bg-[#A60212] hover:bg-[#85010E] text-[#FFF4E0] font-bold text-xs flex items-center gap-1.5 shadow-sm disabled:bg-sand disabled:text-[#6E2B32] disabled:border-border disabled:cursor-not-allowed"
                 >
                   <span className="material-symbols-outlined text-[16px]">search</span>
                   <span>{isSearching ? "Searching..." : "Lookup Code"}</span>
@@ -194,7 +184,7 @@ export default function WebQRScannerPage() {
                   <button
                     key={tag}
                     onClick={() => handleLookup(tag)}
-                    className="px-2 py-0.5 rounded bg-[#FFFFFF] hover:bg-[#EBD3B2] border border-[#EBD3B2] text-[10px] font-mono font-bold text-[#A60212] transition-colors"
+                    className="px-2 py-0.5 rounded bg-[#FFFFFF] hover:bg-sand border border-border text-[10px] font-mono font-bold text-[#A60212] transition-colors"
                   >
                     {tag}
                   </button>
@@ -206,7 +196,7 @@ export default function WebQRScannerPage() {
 
         {/* Right Column: Scanned Asset Dossier (5 Cols) */}
         <div className="lg:col-span-5">
-          <div className="bg-[#FFFFFF] border border-[#EBD3B2] rounded shadow-sm overflow-hidden h-full flex flex-col justify-between">
+          <div className="bg-[#FFFFFF] border border-border rounded shadow-sm overflow-hidden h-full flex flex-col justify-between">
             <div>
               <div className="bg-[#3B0A0F] px-4 py-3 border-b border-[#4E1117] flex items-center justify-between">
                 <div className="flex items-center gap-2">
@@ -216,7 +206,7 @@ export default function WebQRScannerPage() {
                   </span>
                 </div>
                 {scannedAsset && (
-                  <span className="bg-[#F5AB29] text-[#3B0A0F] text-[10px] font-black px-2 py-0.5 rounded">
+                  <span className="text-[10px] font-black px-2 py-0.5 rounded badge-solid badge-amber">
                     TAG RESOLVED
                   </span>
                 )}
@@ -251,7 +241,7 @@ export default function WebQRScannerPage() {
                     <p className="text-xs text-[#6E2B32] mt-0.5">{scannedAsset.description}</p>
                   </div>
 
-                  <div className="grid grid-cols-2 gap-3 pt-3 border-t border-[#EBD3B2] text-xs">
+                  <div className="grid grid-cols-2 gap-3 pt-3 border-t border-border text-xs">
                     <div>
                       <span className="text-[10px] text-[#6E2B32] font-semibold block">
                         Assigned Unit:
@@ -304,7 +294,7 @@ export default function WebQRScannerPage() {
                   </div>
 
                   {/* Operational Action Controls */}
-                  <div className="pt-4 border-t border-[#EBD3B2] space-y-2">
+                  <div className="pt-4 border-t border-border space-y-2">
                     <button
                       onClick={handleConfirmPresence}
                       disabled={isSearching}
@@ -317,7 +307,7 @@ export default function WebQRScannerPage() {
                     <div className="grid grid-cols-2 gap-2">
                       <Link
                         href={`/inventory/transfers?propertyNo=${scannedAsset.propertyNo}`}
-                        className="h-9 px-3 rounded bg-[#FFF4E0] hover:bg-[#EBD3B2] border border-[#EBD3B2] text-[#3B0A0F] font-bold text-xs flex items-center justify-center gap-1 transition-colors text-center"
+                        className="h-9 px-3 rounded bg-cream hover:bg-sand border border-border text-[#3B0A0F] font-bold text-xs flex items-center justify-center gap-1 transition-colors text-center"
                       >
                         <span className="material-symbols-outlined text-[16px]">sync_alt</span>
                         <span>Request Transfer</span>
@@ -325,7 +315,7 @@ export default function WebQRScannerPage() {
 
                       <Link
                         href={`/inventory/${scannedAsset.id}`}
-                        className="h-9 px-3 rounded bg-[#FFFFFF] hover:bg-[#FFF4E0] border border-[#EBD3B2] text-[#3B0A0F] font-bold text-xs flex items-center justify-center gap-1 transition-colors text-center"
+                        className="h-9 px-3 rounded bg-[#FFFFFF] hover:bg-cream border border-border text-[#3B0A0F] font-bold text-xs flex items-center justify-center gap-1 transition-colors text-center"
                       >
                         <span className="material-symbols-outlined text-[16px]">visibility</span>
                         <span>Full Dossier</span>
@@ -335,18 +325,18 @@ export default function WebQRScannerPage() {
                 </div>
               ) : (
                 <div className="p-10 text-center space-y-3">
-                  <div className="w-14 h-14 rounded-full bg-[#FFF4E0] border border-[#EBD3B2] text-[#6E2B32] flex items-center justify-center mx-auto">
+                  <div className="w-14 h-14 rounded-full bg-cream border border-border text-[#6E2B32] flex items-center justify-center mx-auto">
                     <span className="material-symbols-outlined text-[28px]">search</span>
                   </div>
                   <h4 className="text-sm font-bold text-[#3B0A0F]">No Asset Currently Loaded</h4>
                   <p className="text-xs text-[#6E2B32] max-w-xs mx-auto">
-                    Scan an asset tag using the optical viewfinder or enter a product code on the left to inspect its custody dossier.
+                    Scan or enter a product code to view the item.
                   </p>
                 </div>
               )}
             </div>
 
-            <div className="p-3 bg-[#FFF4E0] border-t border-[#EBD3B2] text-[11px] text-[#6E2B32] flex items-center justify-between">
+            <div className="p-3 bg-cream border-t border-border text-[11px] text-[#6E2B32] flex items-center justify-between">
               <span>COA Physical Verification System</span>
               <span className="font-mono font-bold text-[#A60212]">BulSU-AMO-2024</span>
             </div>

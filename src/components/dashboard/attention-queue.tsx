@@ -22,16 +22,16 @@ interface AttentionQueueProps {
 
 export function AttentionQueue({ items }: AttentionQueueProps) {
   const badgeStyles = {
-    MISSING: "bg-[#FEE2E2] text-[#A60212] border-[#FECACA]",
-    TRANSFER: "bg-[#FFF4E0] text-[#D97B1A] border-[#F5AB29]",
-    RETURN: "bg-[#FFFFFF] text-[#3B0A0F] border-[#EBD3B2]",
-    DISPOSAL: "bg-[#FFF4E0] text-[#A60212] border-[#A60212]",
+    MISSING: " badge-solid badge-crimson",
+    TRANSFER: " badge-solid badge-amber",
+    RETURN: " badge-solid badge-slate",
+    DISPOSAL: " badge-solid badge-maroon",
   };
 
   return (
-    <section className="bg-[#FFFFFF] border border-[#EBD3B2] rounded flex flex-col">
+    <section className="bg-[#FFFFFF] border border-border rounded flex flex-col">
       {/* Header */}
-      <div className="p-4 border-b border-[#EBD3B2] flex items-center justify-between bg-[#FFF4E0]">
+      <div className="p-4 border-b border-border flex items-center justify-between bg-cream">
         <div className="flex items-center gap-2">
           <span className="material-symbols-outlined text-[#A60212] text-[20px]">
             assignment_late
@@ -40,13 +40,13 @@ export function AttentionQueue({ items }: AttentionQueueProps) {
             Operational Attention Queue
           </h2>
         </div>
-        <span className="px-2.5 py-0.5 rounded bg-[#FFFFFF] text-[#A60212] font-bold text-xs border border-[#EBD3B2] font-mono">
+        <span className="px-2.5 py-0.5 rounded font-bold text-xs border font-mono badge-solid badge-maroon">
           {items.length} Pending Actions
         </span>
       </div>
 
       {/* Queue Items */}
-      <div className="divide-y divide-[#EBD3B2]">
+      <div className="divide-y divide-border">
         {items.length === 0 ? (
           <div className="p-8 text-center text-[#6E2B32] text-xs">
             No pending items in the attention queue. All records are up to date!
@@ -55,11 +55,11 @@ export function AttentionQueue({ items }: AttentionQueueProps) {
           items.map((item) => (
             <div
               key={item.id}
-              className="p-4 flex items-start justify-between hover:bg-[#FFF4E0] transition-colors"
+              className="p-4 flex items-start justify-between hover:bg-cream transition-colors"
             >
               <div className="flex items-start gap-3">
                 <span
-                  className={`px-2 py-0.5 rounded text-[10px] font-extrabold uppercase border mt-0.5 font-mono ${
+                  className={` px-2 py-0.5 rounded text-[10px] font-extrabold uppercase border mt-0.5 font-mono  badge-solid ${
                     badgeStyles[item.type]
                   }`}
                 >
@@ -85,7 +85,7 @@ export function AttentionQueue({ items }: AttentionQueueProps) {
 
               <Link
                 href={item.actionUrl}
-                className="px-3 py-1.5 rounded bg-[#FFF4E0] text-[#3B0A0F] border border-[#EBD3B2] hover:bg-[#A60212] hover:text-[#FFF4E0] hover:border-[#A60212] text-xs font-bold transition-colors flex items-center gap-1"
+                className="px-3 py-1.5 rounded bg-cream text-[#3B0A0F] border border-border hover:bg-[#A60212] hover:text-[#FFF4E0] hover:border-[#A60212] text-xs font-bold transition-colors flex items-center gap-1"
               >
                 <span>{item.actionText}</span>
                 <span className="material-symbols-outlined text-[14px]">arrow_forward</span>

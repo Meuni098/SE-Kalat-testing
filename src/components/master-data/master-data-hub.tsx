@@ -80,14 +80,14 @@ export function MasterDataHub({
   return (
     <div className="space-y-6 select-none">
       {/* Tab Navigation Pill Bar */}
-      <div className="bg-[#FFFFFF] border border-[#EBD3B2] rounded p-1.5 flex items-center justify-between flex-wrap gap-2">
+      <div className="bg-[#FFFFFF] border border-border rounded p-1.5 flex items-center justify-between flex-wrap gap-2">
         <div className="flex items-center gap-1.5">
           <button
             onClick={() => setTab("colleges")}
             className={`px-4 py-2 rounded text-xs font-bold flex items-center gap-2 transition-all ${
               activeTab === "colleges"
                 ? "bg-[#3B0A0F] text-[#FFFFFF] shadow-sm"
-                : "text-[#6E2B32] hover:bg-[#FFF4E0] hover:text-[#3B0A0F]"
+                : "text-[#6E2B32] hover:bg-cream hover:text-[#3B0A0F]"
             }`}
           >
             <span className="material-symbols-outlined text-[18px]">domain</span>
@@ -99,7 +99,7 @@ export function MasterDataHub({
             className={`px-4 py-2 rounded text-xs font-bold flex items-center gap-2 transition-all ${
               activeTab === "categories"
                 ? "bg-[#3B0A0F] text-[#FFFFFF] shadow-sm"
-                : "text-[#6E2B32] hover:bg-[#FFF4E0] hover:text-[#3B0A0F]"
+                : "text-[#6E2B32] hover:bg-cream hover:text-[#3B0A0F]"
             }`}
           >
             <span className="material-symbols-outlined text-[18px]">category</span>
@@ -111,7 +111,7 @@ export function MasterDataHub({
             className={`px-4 py-2 rounded text-xs font-bold flex items-center gap-2 transition-all ${
               activeTab === "products"
                 ? "bg-[#3B0A0F] text-[#FFFFFF] shadow-sm"
-                : "text-[#6E2B32] hover:bg-[#FFF4E0] hover:text-[#3B0A0F]"
+                : "text-[#6E2B32] hover:bg-cream hover:text-[#3B0A0F]"
             }`}
           >
             <span className="material-symbols-outlined text-[18px]">inventory_2</span>
@@ -142,7 +142,7 @@ export function MasterDataHub({
       </div>
 
       {/* Search & Filter Strip */}
-      <div className="bg-[#FFFFFF] border border-[#EBD3B2] p-4 rounded flex flex-col md:flex-row md:items-center justify-between gap-3 text-xs">
+      <div className="bg-[#FFFFFF] border border-border p-4 rounded flex flex-col md:flex-row md:items-center justify-between gap-3 text-xs">
         <div className="flex items-center gap-2 flex-1 max-w-md">
           <div className="relative w-full">
             <span className="material-symbols-outlined absolute left-3 top-2.5 text-[#6E2B32] text-[18px]">
@@ -159,7 +159,7 @@ export function MasterDataHub({
                   ? "by code or category name..."
                   : "by standard product name or category..."
               }`}
-              className="w-full pl-9 pr-4 py-2 border border-[#EBD3B2] rounded bg-[#FFF4E0]/20 focus:bg-[#FFFFFF] focus:outline-hidden focus:border-[#A60212] text-xs font-medium"
+              className="w-full pl-9 pr-4 py-2 border border-border rounded bg-cream focus:bg-[#FFFFFF] focus:outline-hidden focus:border-[#A60212] text-xs font-medium"
             />
           </div>
         </div>
@@ -176,7 +176,7 @@ export function MasterDataHub({
                   className={`px-2.5 py-1 rounded text-[11px] font-bold uppercase transition-colors ${
                     typeFilter === t
                       ? "bg-[#A60212] text-[#FFFFFF]"
-                      : "bg-[#FFF4E0] text-[#3B0A0F] border border-[#EBD3B2] hover:bg-[#EBD3B2]"
+                      : "bg-cream text-[#3B0A0F] border border-border hover:bg-sand"
                   }`}
                 >
                   {t.replace("_", " ")}
@@ -194,7 +194,7 @@ export function MasterDataHub({
                   className={`px-2.5 py-1 rounded text-[11px] font-bold uppercase transition-colors ${
                     typeFilter === t
                       ? "bg-[#A60212] text-[#FFFFFF]"
-                      : "bg-[#FFF4E0] text-[#3B0A0F] border border-[#EBD3B2] hover:bg-[#EBD3B2]"
+                      : "bg-cream text-[#3B0A0F] border border-border hover:bg-sand"
                   }`}
                 >
                   {t === "PPE" ? "PPE (≥ ₱50k)" : t === "SEMI_EXPENDABLE" ? "Semi-Expendable (< ₱50k)" : "All"}
@@ -209,7 +209,7 @@ export function MasterDataHub({
           TAB 1: COLLEGES & OPERATING UNITS TABLE
       ───────────────────────────────────────────────────────────── */}
       {activeTab === "colleges" && (
-        <div className="bg-[#FFFFFF] border border-[#EBD3B2] rounded overflow-hidden shadow-xs">
+        <div className="bg-[#FFFFFF] border border-border rounded overflow-hidden shadow-xs">
           <div className="overflow-x-auto">
             <table className="w-full text-left text-xs border-collapse">
               <thead>
@@ -223,7 +223,7 @@ export function MasterDataHub({
                   <th className="py-2.5 px-4 font-bold text-right">Actions</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-[#EBD3B2]">
+              <tbody className="divide-y divide-border">
                 {filteredUnits.length === 0 ? (
                   <tr>
                     <td colSpan={7} className="py-12 text-center text-[#6E2B32]">
@@ -238,7 +238,7 @@ export function MasterDataHub({
                   </tr>
                 ) : (
                   filteredUnits.map((u) => (
-                    <tr key={u.id} className="hover:bg-[#FFF4E0]/30 transition-colors">
+                    <tr key={u.id} className="hover:bg-cream transition-colors">
                       <td className="py-3 px-4 font-mono font-bold text-[#A60212] whitespace-nowrap">
                         {u.code}
                       </td>
@@ -252,14 +252,14 @@ export function MasterDataHub({
                       </td>
                       <td className="py-3 px-3 whitespace-nowrap">
                         <span
-                          className={`inline-block px-2 py-0.5 rounded text-[10px] font-bold uppercase ${
+                          className={` inline-block px-2 py-0.5 rounded text-[10px] font-bold uppercase  badge-solid ${
                             u.unitType === "ACADEMIC"
-                              ? "bg-[#FFF4E0] text-[#A60212] border border-[#A60212]"
+                              ? "border badge-solid badge-maroon"
                               : u.unitType === "ADMINISTRATIVE"
-                              ? "bg-[#FFFFFF] text-[#3B0A0F] border border-[#EBD3B2]"
+                              ? "border badge-solid badge-slate"
                               : u.unitType === "AUXILIARY"
-                              ? "bg-[#FFF4E0] text-[#D97B1A] border border-[#D97B1A]"
-                              : "bg-[#E8F5E9] text-[#2E7D32] border border-[#2E7D32]"
+                              ? "border badge-solid badge-amber"
+                              : "border badge-solid badge-green"
                           }`}
                         >
                           {u.unitType.replace("_", " ")}
@@ -269,17 +269,17 @@ export function MasterDataHub({
                         {u.campus ? u.campus.replace("_", " ") : "Main Campus"}
                       </td>
                       <td className="py-3 px-3 text-center whitespace-nowrap">
-                        <span className="inline-flex items-center gap-1 font-mono font-bold bg-[#FFF4E0] text-[#3B0A0F] px-2.5 py-0.5 rounded border border-[#EBD3B2]">
+                        <span className="inline-flex items-center gap-1 font-mono font-bold px-2.5 py-0.5 rounded border badge-solid badge-slate">
                           <span className="material-symbols-outlined text-[13px] text-[#A60212]">inventory_2</span>
                           {u.assetCount ?? 0}
                         </span>
                       </td>
                       <td className="py-3 px-3 text-center whitespace-nowrap">
                         <span
-                          className={`inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-bold uppercase ${
+                          className={` inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-bold uppercase  badge-solid ${
                             u.isActive
-                              ? "bg-[#E8F5E9] text-[#2E7D32]"
-                              : "bg-[#FFEBEE] text-[#C62828]"
+                              ? " badge-solid badge-green"
+                              : " badge-solid badge-crimson"
                           }`}
                         >
                           <span className={`w-1.5 h-1.5 rounded-full ${u.isActive ? "bg-[#2E7D32]" : "bg-[#C62828]"}`} />
@@ -291,7 +291,7 @@ export function MasterDataHub({
                           <button
                             onClick={() => handleToggleUnit(u.id)}
                             title={u.isActive ? "Deactivate Unit" : "Activate Unit"}
-                            className="p-1 rounded text-[#6E2B32] hover:bg-[#FFF4E0] hover:text-[#3B0A0F]"
+                            className="p-1 rounded text-[#6E2B32] hover:bg-cream hover:text-[#3B0A0F]"
                           >
                             <span className="material-symbols-outlined text-[17px]">
                               {u.isActive ? "toggle_on" : "toggle_off"}
@@ -302,7 +302,7 @@ export function MasterDataHub({
                             existingUnit={u}
                             allUnits={units.map((item) => ({ id: item.id, code: item.code, name: item.name }))}
                             triggerButton={
-                              <span className="px-2.5 py-1 rounded bg-[#FFF4E0] text-[#3B0A0F] border border-[#EBD3B2] hover:bg-[#EBD3B2] text-[11px] font-bold inline-flex items-center gap-1">
+                              <span className="px-2.5 py-1 rounded border hover:bg-sand text-[11px] font-bold inline-flex items-center gap-1 badge-solid badge-slate">
                                 <span className="material-symbols-outlined text-[14px]">edit</span>
                                 <span>Edit</span>
                               </span>
@@ -324,7 +324,7 @@ export function MasterDataHub({
           TAB 2: PRODUCT CATEGORIES & USEFUL LIFE
       ───────────────────────────────────────────────────────────── */}
       {activeTab === "categories" && (
-        <div className="bg-[#FFFFFF] border border-[#EBD3B2] rounded overflow-hidden shadow-xs">
+        <div className="bg-[#FFFFFF] border border-border rounded overflow-hidden shadow-xs">
           <div className="overflow-x-auto">
             <table className="w-full text-left text-xs border-collapse">
               <thead>
@@ -338,7 +338,7 @@ export function MasterDataHub({
                   <th className="py-2.5 px-4 font-bold text-right">Actions</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-[#EBD3B2]">
+              <tbody className="divide-y divide-border">
                 {filteredCategories.length === 0 ? (
                   <tr>
                     <td colSpan={7} className="py-12 text-center text-[#6E2B32]">
@@ -353,7 +353,7 @@ export function MasterDataHub({
                   </tr>
                 ) : (
                   filteredCategories.map((c) => (
-                    <tr key={c.id} className="hover:bg-[#FFF4E0]/30 transition-colors">
+                    <tr key={c.id} className="hover:bg-cream transition-colors">
                       <td className="py-3 px-4 font-mono font-bold text-[#A60212] whitespace-nowrap">
                         {c.code}
                       </td>
@@ -362,10 +362,10 @@ export function MasterDataHub({
                       </td>
                       <td className="py-3 px-3 whitespace-nowrap">
                         <span
-                          className={`inline-block px-2 py-0.5 rounded text-[10px] font-bold uppercase ${
+                          className={` inline-block px-2 py-0.5 rounded text-[10px] font-bold uppercase  badge-solid ${
                             c.classification === "PPE"
-                              ? "bg-[#FFF4E0] text-[#A60212] border border-[#A60212]"
-                              : "bg-[#FFFFFF] text-[#D97B1A] border border-[#D97B1A]"
+                              ? "border badge-solid badge-maroon"
+                              : "border badge-solid badge-slate"
                           }`}
                         >
                           {c.classification === "PPE" ? "PPE (≥ ₱50k)" : "Semi-Expendable"}
@@ -375,7 +375,7 @@ export function MasterDataHub({
                         {c.usefulLifeYears} Years
                       </td>
                       <td className="py-3 px-3 text-center whitespace-nowrap">
-                        <span className="font-mono font-bold text-[#3B0A0F] bg-[#FFF4E0] px-2 py-0.5 rounded border border-[#EBD3B2]">
+                        <span className="font-mono font-bold px-2 py-0.5 rounded border badge-solid badge-slate">
                           {c.assetCount ?? 0}
                         </span>
                       </td>
@@ -386,7 +386,7 @@ export function MasterDataHub({
                         <CategoryModal
                           existingCategory={c}
                           triggerButton={
-                            <span className="px-2.5 py-1 rounded bg-[#FFF4E0] text-[#3B0A0F] border border-[#EBD3B2] hover:bg-[#EBD3B2] text-[11px] font-bold inline-flex items-center gap-1">
+                            <span className="px-2.5 py-1 rounded border hover:bg-sand text-[11px] font-bold inline-flex items-center gap-1 badge-solid badge-slate">
                               <span className="material-symbols-outlined text-[14px]">tune</span>
                               <span>Configure</span>
                             </span>
@@ -407,7 +407,7 @@ export function MasterDataHub({
           TAB 3: STANDARD PRODUCT CATALOG & ITEM TEMPLATES
       ───────────────────────────────────────────────────────────── */}
       {activeTab === "products" && (
-        <div className="bg-[#FFFFFF] border border-[#EBD3B2] rounded overflow-hidden shadow-xs">
+        <div className="bg-[#FFFFFF] border border-border rounded overflow-hidden shadow-xs">
           <div className="overflow-x-auto">
             <table className="w-full text-left text-xs border-collapse">
               <thead>
@@ -420,7 +420,7 @@ export function MasterDataHub({
                   <th className="py-2.5 px-4 font-bold text-right">Actions</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-[#EBD3B2]">
+              <tbody className="divide-y divide-border">
                 {filteredProducts.length === 0 ? (
                   <tr>
                     <td colSpan={6} className="py-12 text-center text-[#6E2B32]">
@@ -437,7 +437,7 @@ export function MasterDataHub({
                   </tr>
                 ) : (
                   filteredProducts.map((p) => (
-                    <tr key={p.id} className="hover:bg-[#FFF4E0]/30 transition-colors">
+                    <tr key={p.id} className="hover:bg-cream transition-colors">
                       <td className="py-3 px-4 font-bold text-[#3B0A0F]">
                         {p.name}
                       </td>
@@ -451,10 +451,10 @@ export function MasterDataHub({
                       </td>
                       <td className="py-3 px-3 whitespace-nowrap">
                         <span
-                          className={`inline-block px-1.5 py-0.5 rounded text-[10px] font-bold uppercase ${
+                          className={` inline-block px-1.5 py-0.5 rounded text-[10px] font-bold uppercase  badge-solid ${
                             p.classification === "PPE"
-                              ? "bg-[#FFF4E0] text-[#A60212] border border-[#A60212]"
-                              : "bg-[#FFFFFF] text-[#D97B1A] border border-[#D97B1A]"
+                              ? "border badge-solid badge-maroon"
+                              : "border badge-solid badge-slate"
                           }`}
                         >
                           {p.classification}
@@ -471,7 +471,7 @@ export function MasterDataHub({
                           existingProduct={p}
                           categories={categories}
                           triggerButton={
-                            <span className="px-2.5 py-1 rounded bg-[#FFF4E0] text-[#3B0A0F] border border-[#EBD3B2] hover:bg-[#EBD3B2] text-[11px] font-bold inline-flex items-center gap-1">
+                            <span className="px-2.5 py-1 rounded border hover:bg-sand text-[11px] font-bold inline-flex items-center gap-1 badge-solid badge-slate">
                               <span className="material-symbols-outlined text-[14px]">edit</span>
                               <span>Edit</span>
                             </span>

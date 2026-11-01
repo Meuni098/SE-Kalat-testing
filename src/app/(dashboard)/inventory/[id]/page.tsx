@@ -1,3 +1,4 @@
+import { actualProductDescription, productDescriptionInclude } from "@/lib/product-description";
 import { TransactionAttribution } from "@/components/audit/transaction-attribution";
 import { prisma } from "@/lib/db";
 import { getSession } from "@/lib/auth";
@@ -25,11 +26,12 @@ export default async function AssetDetailPage({ params }: AssetDetailPageProps) 
       category: true,
       unit: true,
       accountablePerson: true,
-      inspections: { include: { inspector: true } },
+      inspections: { include: { inspector: true, intakeItem: productDescriptionInclude.inspections.select.intakeItem } },
       transferRequests: { include: { fromUnit: true, toUnit: true, requestedBy: true } },
       physicalCountEntries: { include: { session: true } },
       missingReports: { include: { reportedBy: true } },
       disposals: true,
+      returnRequests: { where: { status: "PENDING" }, select: { id: true } },
     },
   });
 
@@ -136,7 +138,7 @@ export default async function AssetDetailPage({ params }: AssetDetailPageProps) 
     <div className="space-y-6 pb-16">
       <TransactionAttribution entityType="ASSET" entityId={asset.id} />
       {/* Back Bar */}
-      <div className="flex items-center justify-between pb-3 border-b border-[#EBD3B2] flex-wrap gap-2">
+      <div className="flex items-center justify-between pb-3 border-b border-border flex-wrap gap-2">
         <div className="flex items-center gap-2.5">
           <Link
             href={
@@ -171,7 +173,22 @@ export default async function AssetDetailPage({ params }: AssetDetailPageProps) 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
         {/* Left Column (8 cols): Identity & Timeline */}
         <div className="lg:col-span-8 space-y-6">
-          <AssetIdentityCard asset={asset} allUnits={allUnits} />
+          <AssetIdentityCard
+            canReportMissing={["ADMIN", "STAFF", "CUSTODIAN"].includes(viewer.role) && ["IN_USE", "IN_STORAGE", "UNDER_REPAIR", "MISSING"].includes(asset.status)}
+            hasActiveMissingReport={asset.missingReports.some(report => ["REPORTED", "UNDER_INVESTIGATION"].includes(report.status))}
+            canTransfer={["ADMIN", "STAFF", "CUSTODIAN"].includes(viewer.role) && ["IN_USE", "IN_STORAGE", "UNDER_REPAIR"].includes(asset.status) && !asset.transferRequests.some((transfer) => transfer.status === "PENDING") && asset.returnRequests.length === 0} asset={{
+            id: asset.id, propertyNo: asset.propertyNo, name: asset.name,
+            description: actualProductDescription(asset), classification: asset.classification,
+            category: { name: asset.category.name, usefulLifeYears: asset.category.usefulLifeYears },
+            unit: { id: asset.unit.id, code: asset.unit.code, name: asset.unit.name },
+            accountablePerson: asset.accountablePerson ? {
+              id: asset.accountablePerson.id, fullName: asset.accountablePerson.fullName,
+              position: asset.accountablePerson.position,
+            } : null,
+            serialNo: asset.serialNo, acquisitionCost: asset.acquisitionCost,
+            acquisitionDate: asset.acquisitionDate, status: asset.status,
+            condition: asset.condition, lastVerifiedAt: asset.lastVerifiedAt,
+          }} allUnits={allUnits} />
           <LifecycleTimeline events={events} />
         </div>
 
@@ -184,13 +201,13 @@ export default async function AssetDetailPage({ params }: AssetDetailPageProps) 
           />
 
           {/* Received By Card */}
-          <div className="bg-[#FFFFFF] border border-[#EBD3B2] rounded p-5 select-none">
-            <h3 className="text-xs font-bold uppercase tracking-wider text-[#3B0A0F] pb-2 border-b border-[#EBD3B2]">
+          <div className="bg-[#FFFFFF] border border-border rounded p-5 select-none">
+            <h3 className="text-xs font-bold uppercase tracking-wider text-[#3B0A0F] pb-2 border-b border-border">
               College &amp; Received By
             </h3>
 
             <div className="mt-3 flex items-start gap-3">
-              <div className="w-10 h-10 rounded bg-[#FFF4E0] border border-[#EBD3B2] flex items-center justify-center text-[#A60212]">
+              <div className="w-10 h-10 rounded bg-cream border border-border flex items-center justify-center text-[#A60212]">
                 <span className="material-symbols-outlined text-[22px]">badge</span>
               </div>
               <div>

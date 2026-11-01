@@ -20,8 +20,8 @@ export function AuditActorFilter({ initialId = '' }: { initialId?: string }) {
     finally { setPending(false); }
   }
   return <fieldset className="text-xs"><legend className="font-bold">Logged by account</legend>
-    <div className="flex gap-2"><input aria-label="Search account names" maxLength={120} value={query} onChange={e => setQuery(e.target.value)} className="rounded border border-[#EBD3B2] p-2" /><button type="button" disabled={pending} className="underline" onClick={() => void search()}>Find accounts</button></div>
-    <select aria-label="Filter by account" name="actorId" value={id} onChange={e => setId(e.target.value)} className="mt-1 w-full rounded border border-[#EBD3B2] p-2"><option value="">All accounts</option>{id && !items.some(i => i.id === id) && <option value={id}>Selected account ({id})</option>}{items.map(account => <option key={account.id} value={account.id}>{account.name}{account.isActive ? '' : ' (inactive)'}</option>)}</select>
+    <div className="flex gap-2"><input aria-label="Search account names" maxLength={120} value={query} onChange={e => setQuery(e.target.value)} className="rounded border border-border p-2" /><button type="button" disabled={pending} className="underline" onClick={() => void search()}>Find accounts</button></div>
+    <select aria-label="Filter by account" name="actorId" value={id} onChange={e => setId(e.target.value)} className="mt-1 w-full rounded border border-border p-2"><option value="">All accounts</option>{id && !items.some(i => i.id === id) && <option value={id}>Selected account ({id})</option>}{items.map(account => <option key={account.id} value={account.id}>{account.name}{account.isActive ? '' : ' (inactive)'}</option>)}</select>
     {cursor && <button type="button" disabled={pending} onClick={() => void search(true)} className="mt-1 underline">More accounts</button>}{error && <p role="alert">{error}</p>}{pending && <p role="status">Loading accounts…</p>}
   </fieldset>;
 }

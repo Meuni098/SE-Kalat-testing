@@ -106,10 +106,10 @@ export function ProductModal({
       )}
 
       {isOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#3B0A0F]/80 backdrop-blur-xs select-none">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#3B0A0F] select-none">
           <div className="bg-[#FFFFFF] border-2 border-[#A60212] rounded w-full max-w-lg max-h-[90vh] overflow-y-auto shadow-2xl p-6">
             {/* Header */}
-            <div className="flex items-center justify-between pb-3 border-b border-[#EBD3B2]">
+            <div className="flex items-center justify-between pb-3 border-b border-border">
               <div className="flex items-center gap-2">
                 <span className="material-symbols-outlined text-[#A60212] text-[22px]">
                   {isEditing ? "edit_document" : "playlist_add"}
@@ -118,9 +118,7 @@ export function ProductModal({
                   <h2 className="text-sm font-bold text-[#3B0A0F] uppercase tracking-wide">
                     {isEditing ? "Edit Product Template" : "Catalog Standard Product Item"}
                   </h2>
-                  <p className="text-[11px] text-[#6E2B32]">
-                    Standardized Item Nomenclature &amp; Technical Specifications
-                  </p>
+
                 </div>
               </div>
               <button
@@ -151,7 +149,7 @@ export function ProductModal({
                   required
                   defaultValue={existingProduct?.name || ""}
                   placeholder="e.g. Desktop Computer Core i7 Workstation"
-                  className="w-full px-3 py-2 border border-[#EBD3B2] rounded bg-[#FFF4E0]/30 focus:bg-[#FFFFFF] focus:outline-hidden focus:border-[#A60212]"
+                  className="w-full px-3 py-2 border border-border rounded bg-cream focus:bg-[#FFFFFF] focus:outline-hidden focus:border-[#A60212]"
                 />
                 <span className="text-[10px] text-[#6E2B32]">
                   Consistent title used across inventory and procurement delivery intake
@@ -169,7 +167,7 @@ export function ProductModal({
                     required
                     value={selectedCategoryId}
                     onChange={(event) => setSelectedCategoryId(event.target.value)}
-                    className="w-full px-3 py-2 border border-[#EBD3B2] rounded bg-[#FFF4E0]/30 focus:bg-[#FFFFFF] focus:outline-hidden focus:border-[#A60212]"
+                    className="w-full px-3 py-2 border border-border rounded bg-cream focus:bg-[#FFFFFF] focus:outline-hidden focus:border-[#A60212]"
                   >
                     <option value="" disabled>Select a category</option>
                     {availableCategories.map((c) => (
@@ -198,7 +196,7 @@ export function ProductModal({
                   <select
                     name="classification"
                     defaultValue={existingProduct?.classification || "PPE"}
-                    className="w-full px-3 py-2 border border-[#EBD3B2] rounded bg-[#FFF4E0]/30 focus:bg-[#FFFFFF] focus:outline-hidden focus:border-[#A60212]"
+                    className="w-full px-3 py-2 border border-border rounded bg-cream focus:bg-[#FFFFFF] focus:outline-hidden focus:border-[#A60212]"
                   >
                     <option value="PPE">PPE (≥ ₱50k)</option>
                     <option value="SEMI_EXPENDABLE">Semi-Expendable (&lt; ₱50k)</option>
@@ -219,7 +217,7 @@ export function ProductModal({
                     min="0"
                     defaultValue={existingProduct?.benchmarkCost || ""}
                     placeholder="e.g. 55000"
-                    className="w-full pl-7 pr-3 py-2 border border-[#EBD3B2] rounded bg-[#FFF4E0]/30 focus:bg-[#FFFFFF] focus:outline-hidden focus:border-[#A60212] font-mono"
+                    className="w-full pl-7 pr-3 py-2 border border-border rounded bg-cream focus:bg-[#FFFFFF] focus:outline-hidden focus:border-[#A60212] font-mono"
                   />
                 </div>
                 <span className="text-[10px] text-[#6E2B32]">
@@ -236,19 +234,19 @@ export function ProductModal({
                   rows={3}
                   defaultValue={existingProduct?.specifications || ""}
                   placeholder="e.g. Intel Core i7 13th Gen, 16GB DDR5 RAM, 1TB NVMe SSD, 24-inch IPS Monitor, Windows 11 Pro Edu"
-                  className="w-full px-3 py-2 border border-[#EBD3B2] rounded bg-[#FFF4E0]/30 focus:bg-[#FFFFFF] focus:outline-hidden focus:border-[#A60212]"
+                  className="w-full px-3 py-2 border border-border rounded bg-cream focus:bg-[#FFFFFF] focus:outline-hidden focus:border-[#A60212]"
                 />
               </div>
 
               {/* Action Buttons */}
-              <div className="pt-3 border-t border-[#EBD3B2] flex items-center justify-between">
+              <div className="pt-3 border-t border-border flex items-center justify-between">
                 <div>
                   {isEditing && (
                     <button
                       type="button"
                       onClick={handleDelete}
                       disabled={isPending || isDeleting}
-                      className="text-xs text-[#A60212] hover:underline font-bold flex items-center gap-1 disabled:opacity-50"
+                      className="text-xs text-[#A60212] hover:underline font-bold flex items-center gap-1 disabled:bg-sand disabled:text-[#6E2B32] disabled:border-border disabled:cursor-not-allowed"
                     >
                       <span className="material-symbols-outlined text-[16px]">delete</span>
                       <span>Delete Template</span>

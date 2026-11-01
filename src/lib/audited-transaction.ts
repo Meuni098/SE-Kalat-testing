@@ -32,7 +32,10 @@ export async function auditedTransaction<T>(db: PrismaClient, actorId: string, o
         return result;
       }, { ...options, isolationLevel: options?.isolationLevel ?? 'Serializable', timeout: options?.timeout ?? 15000 });
     } catch (error) {
-      if (attempt < 2 && error instanceof Prisma.PrismaClientKnownRequestError && error.code === 'P2034') continue;
+      // Raw PostgreSQL row locks report serialization failures as P2010 rather than P2034.
+      const retryable = error instanceof Prisma.PrismaClientKnownRequestError &&
+        (error.code === 'P2034' || (error.code === 'P2010' && (error.meta?.code === '40001' || error.meta?.code === '40P01')));
+      if (attempt < 2 && retryable) continue;
       throw error;
     }
   }

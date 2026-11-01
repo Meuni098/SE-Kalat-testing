@@ -74,7 +74,7 @@ export default function MobileScanPage() {
   return (
     <div className="min-h-screen bg-[#3B0A0F] flex items-center justify-center p-0 sm:py-6 select-none">
       {/* 375px PWA Mobile Shell */}
-      <main className="w-full max-w-[420px] bg-[#FFF4E0] min-h-screen sm:min-h-[820px] sm:h-[820px] flex flex-col relative sm:border sm:border-[#EBD3B2] overflow-hidden">
+      <main className="w-full max-w-[420px] bg-cream min-h-screen sm:min-h-[820px] sm:h-[820px] flex flex-col relative sm:border sm:border-border overflow-hidden">
         {/* Top Header */}
         <header className="h-14 px-4 bg-[#3B0A0F] border-b border-[#4E1117] flex items-center justify-between shrink-0 z-30">
           <Link
@@ -102,7 +102,7 @@ export default function MobileScanPage() {
         </header>
 
         {/* Viewfinder Section */}
-        <section className="h-[320px] w-full bg-[#3B0A0F] flex flex-col items-center justify-center relative shrink-0 border-b border-[#EBD3B2]">
+        <section className="h-[320px] w-full bg-[#3B0A0F] flex flex-col items-center justify-center relative shrink-0 border-b border-border">
           {/* Target Bounding Box (220x220) */}
           <div className="w-[220px] h-[220px] rounded relative flex items-center justify-center">
             {/* 4 Amber Corners */}
@@ -158,13 +158,13 @@ export default function MobileScanPage() {
           {scannedAsset ? (
             <div className="space-y-4">
               {/* Asset Identity Card */}
-              <div className="p-3.5 bg-[#FFF4E0] border border-[#EBD3B2] rounded">
+              <div className="p-3.5 bg-cream border border-border rounded">
                 <div className="flex items-center justify-between mb-1">
                   <span className="font-mono text-xs font-black text-[#A60212]">
                     {scannedAsset.propertyNo}
                   </span>
                   <span
-                    className={`px-2 py-0.5 rounded text-[10px] font-bold border ${
+                    className={` px-2 py-0.5 rounded text-[10px] font-bold border  badge-solid ${
                       getStatusBadgeStyle(scannedAsset.status).bg
                     } ${getStatusBadgeStyle(scannedAsset.status).border} ${
                       getStatusBadgeStyle(scannedAsset.status).text
@@ -178,7 +178,7 @@ export default function MobileScanPage() {
                   {scannedAsset.name}
                 </h2>
 
-                <div className="mt-2 pt-2 border-t border-[#EBD3B2] grid grid-cols-2 gap-2 text-[11px] text-[#6E2B32]">
+                <div className="mt-2 pt-2 border-t border-border grid grid-cols-2 gap-2 text-[11px] text-[#6E2B32]">
                   <div>
                     <span className="block font-bold text-[#3B0A0F]">Operating Unit:</span>
                     <span>
@@ -203,7 +203,7 @@ export default function MobileScanPage() {
               </div>
 
               {verifySuccess && (
-                <div className="p-3 bg-[#FFF4E0] border border-[#D97B1A] rounded text-xs text-[#3B0A0F] font-bold flex items-center gap-2">
+                <div className="p-3 bg-cream border border-[#D97B1A] rounded text-xs text-[#3B0A0F] font-bold flex items-center gap-2">
                   <span className="material-symbols-outlined text-[#A60212] text-[18px]">
                     check_circle
                   </span>
@@ -227,7 +227,7 @@ export default function MobileScanPage() {
                 <div className="grid grid-cols-2 gap-2">
                   <Link
                     href={`/inventory/${scannedAsset.id}`}
-                    className="py-2 px-3 rounded bg-[#FFFFFF] border border-[#EBD3B2] hover:bg-[#FFF4E0] text-xs font-bold text-[#3B0A0F] text-center transition-colors"
+                    className="py-2 px-3 rounded bg-[#FFFFFF] border border-border hover:bg-cream text-xs font-bold text-[#3B0A0F] text-center transition-colors"
                   >
                     View Dossier
                   </Link>
@@ -266,9 +266,9 @@ export default function MobileScanPage() {
 
         {/* Manual Input Modal */}
         {manualModalOpen && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#3B0A0F]/80">
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#3B0A0F]">
             <div className="bg-[#FFFFFF] border-2 border-[#A60212] rounded w-full max-w-sm p-5 select-none">
-              <div className="flex items-center justify-between pb-2 border-b border-[#EBD3B2]">
+              <div className="flex items-center justify-between pb-2 border-b border-border">
                 <h3 className="text-xs font-bold uppercase tracking-wider text-[#3B0A0F]">
                   Product Code Lookup
                 </h3>
@@ -289,7 +289,7 @@ export default function MobileScanPage() {
                   value={propertyInput}
                   onChange={(e) => setPropertyInput(e.target.value)}
                   placeholder="BULSU-2024-PPE-0104"
-                  className="w-full bg-[#FFF4E0] border border-[#EBD3B2] rounded p-2 text-xs font-mono font-bold text-[#3B0A0F] focus:outline-none focus:border-[#A60212]"
+                  className="w-full bg-cream border border-border rounded p-2 text-xs font-mono font-bold text-[#3B0A0F] focus:outline-none focus:border-[#A60212]"
                 />
               </div>
 

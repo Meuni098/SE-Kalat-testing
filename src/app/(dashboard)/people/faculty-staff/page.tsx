@@ -27,29 +27,19 @@ export default async function FacultyStaffPage() {
   return (
     <div className="space-y-6 pb-16 select-none">
       {/* Header Banner */}
-      <div className="bg-[#FFFFFF] border border-[#EBD3B2] p-5 rounded flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <div className="bg-[#FFFFFF] border border-border p-5 rounded flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <div className="flex items-center gap-2">
-            <span className="bg-[#FFF4E0] text-[#A60212] border border-[#A60212] px-2 py-0.5 rounded text-[11px] font-bold font-mono">
-              BULSU INVENTORY SYSTEM
-            </span>
-            <span className="bg-[#FFF4E0] text-[#6E2B32] border border-[#EBD3B2] px-2 py-0.5 rounded text-[11px] font-mono">
-              PERSONNEL PROPERTY CUSTODY
-            </span>
-          </div>
+
           <h1 className="text-2xl font-black text-[#3B0A0F] tracking-tight uppercase mt-1">
             Faculty &amp; Staff Asset Custody Directory
           </h1>
-          <p className="text-xs text-[#6E2B32] font-medium mt-0.5">
-            Monitor university property issued to faculty members, audit equipment liabilities, and issue official Property Clearance certificates
-          </p>
         </div>
 
       </div>
 
       {/* KPI Overview Ribbon */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <div className="bg-[#FFFFFF] border border-[#EBD3B2] p-4 rounded flex items-center justify-between">
+        <div className="bg-[#FFFFFF] border border-border p-4 rounded flex items-center justify-between">
           <div>
             <span className="text-xs font-bold text-[#6E2B32] uppercase tracking-wider block">
               Total Faculty &amp; Staff Registered
@@ -58,12 +48,12 @@ export default async function FacultyStaffPage() {
               {staff.length} <span className="text-xs font-normal text-[#6E2B32]">Employees</span>
             </span>
           </div>
-          <div className="w-10 h-10 rounded bg-[#FFF4E0] border border-[#EBD3B2] text-[#A60212] flex items-center justify-center">
+          <div className="w-10 h-10 rounded bg-cream border border-border text-[#A60212] flex items-center justify-center">
             <span className="material-symbols-outlined text-[20px]">badge</span>
           </div>
         </div>
 
-        <div className="bg-[#FFFFFF] border border-[#EBD3B2] p-4 rounded flex items-center justify-between">
+        <div className="bg-[#FFFFFF] border border-border p-4 rounded flex items-center justify-between">
           <div>
             <span className="text-xs font-bold text-[#6E2B32] uppercase tracking-wider block">
               Staff With Active Custody
@@ -73,12 +63,12 @@ export default async function FacultyStaffPage() {
               <span className="text-xs font-normal text-[#6E2B32]">Holding Property</span>
             </span>
           </div>
-          <div className="w-10 h-10 rounded bg-[#FFF4E0] border border-[#EBD3B2] text-[#A60212] flex items-center justify-center">
+          <div className="w-10 h-10 rounded bg-cream border border-border text-[#A60212] flex items-center justify-center">
             <span className="material-symbols-outlined text-[20px]">inventory_2</span>
           </div>
         </div>
 
-        <div className="bg-[#FFFFFF] border border-[#EBD3B2] p-4 rounded flex items-center justify-between">
+        <div className="bg-[#FFFFFF] border border-border p-4 rounded flex items-center justify-between">
           <div>
             <span className="text-xs font-bold text-[#6E2B32] uppercase tracking-wider block">
               Total Custody Valuation
@@ -87,14 +77,14 @@ export default async function FacultyStaffPage() {
               {formatCurrency(totalAssignedValue)}
             </span>
           </div>
-          <div className="w-10 h-10 rounded bg-[#FFF4E0] border border-[#EBD3B2] text-[#D97B1A] flex items-center justify-center">
+          <div className="w-10 h-10 rounded bg-cream border border-border text-[#D97B1A] flex items-center justify-center">
             <span className="material-symbols-outlined text-[20px]">payments</span>
           </div>
         </div>
       </div>
 
       {/* Main Staff Directory Table */}
-      <div className="bg-[#FFFFFF] border border-[#EBD3B2] rounded shadow-sm overflow-hidden">
+      <div className="bg-[#FFFFFF] border border-border rounded shadow-sm overflow-hidden">
         <div className="bg-[#3B0A0F] px-4 py-3 border-b border-[#4E1117] flex items-center justify-between">
           <div className="flex items-center gap-2">
             <span className="material-symbols-outlined text-[#F5AB29] text-[20px]">group</span>
@@ -102,7 +92,7 @@ export default async function FacultyStaffPage() {
               Faculty / Staff Custody Register
             </span>
           </div>
-          <span className="text-[11px] font-mono text-[#F5AB29] bg-[#4E1117] px-2 py-0.5 rounded border border-[#6E2B32]">
+          <span className="text-[11px] font-mono px-2 py-0.5 rounded border badge-solid badge-amber">
             {staff.length} Personnel
           </span>
         </div>
@@ -110,7 +100,7 @@ export default async function FacultyStaffPage() {
         <div className="overflow-x-auto">
           <table className="w-full text-left text-xs border-collapse">
             <thead>
-              <tr className="bg-[#FFF4E0] text-[#3B0A0F] border-b border-[#EBD3B2] font-black uppercase text-[11px]">
+              <tr className="bg-cream text-[#3B0A0F] border-b border-border font-black uppercase text-[11px]">
                 <th className="py-2.5 px-3">Employee No.</th>
                 <th className="py-2.5 px-3">Full Name &amp; Position</th>
                 <th className="py-2.5 px-3">Campus Unit / College</th>
@@ -120,13 +110,13 @@ export default async function FacultyStaffPage() {
                 <th className="py-2.5 px-3 text-right">Actions</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-[#EBD3B2]">
+            <tbody className="divide-y divide-border">
               {staff.map((p) => {
                 const totalVal = p.assets.reduce((sum, a) => sum + (a.acquisitionCost || 0), 0);
                 const isCleared = p.assets.length === 0;
 
                 return (
-                  <tr key={p.id} className="hover:bg-[#FFF4E0]/40 transition-colors">
+                  <tr key={p.id} className="hover:bg-cream transition-colors">
                     <td className="py-3 px-3 font-mono font-bold text-[#A60212]">
                       {p.employeeNo}
                     </td>
@@ -151,10 +141,10 @@ export default async function FacultyStaffPage() {
 
                     <td className="py-3 px-3">
                       <span
-                        className={`inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider ${
+                        className={` inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider  badge-solid ${
                           isCleared
-                            ? "bg-[#E8F5E9] text-[#2E7D32] border border-[#A5D6A7]"
-                            : "bg-[#FFF4E0] text-[#D97B1A] border border-[#F5AB29]"
+                            ? "border badge-solid badge-green"
+                            : "border badge-solid badge-amber"
                         }`}
                       >
                         <span className="w-1.5 h-1.5 rounded-full bg-current" />

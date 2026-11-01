@@ -1,1 +1,1 @@
-export default function Loading() { return <div role="status" aria-live="polite" className="animate-pulse space-y-4 p-5"><p>Loading activity history...</p>{[1,2,3,4].map(n => <div key={n} className="h-12 rounded bg-[#EBD3B2]" />)}</div>; }
+export default function Loading() { return <div role="status" aria-live="polite" className="animate-pulse space-y-4 p-5"><p>Loading activity history...</p>{[1,2,3,4].map(n => <div key={n} className="h-12 rounded bg-sand" />)}</div>; }

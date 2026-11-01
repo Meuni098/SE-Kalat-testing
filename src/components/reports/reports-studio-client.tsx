@@ -18,7 +18,7 @@ export function ReportsStudioClient({assets,units,selectedUnitName,reportSection
   return <div className="space-y-5">
     <ReportSectionSelect value={reportSection}/>
     <OfficialFormPanel reportSection={reportSection} categoryId={params.get("categoryId")||undefined} unitId={unitId} classification={classification}/>
-    <section className="bg-white rounded border border-[#EBD3B2] p-5 space-y-4 print:hidden">
+    <section className="bg-white rounded border border-border p-5 space-y-4 print:hidden">
       <h2 className="font-bold">Current inventory source records</h2>
       <div className="flex flex-wrap gap-3 items-end">
         <label className="text-sm">Product category<select className="block border rounded p-2 mt-1" value={params.get("categoryId")||""} onChange={e=>filter("categoryId",e.target.value)}><option value="">All categories</option>{categories.map(c=><option key={c.id} value={c.id}>{c.name}</option>)}</select></label>
@@ -27,7 +27,7 @@ export function ReportsStudioClient({assets,units,selectedUnitName,reportSection
         <Link className="text-sm underline p-2" href={`/reports/category-history?${new URLSearchParams({categoryId:params.get("categoryId")||"ALL",unitId:unitId||"ALL",classification:classification||"ALL"})}`}>View recorded history</Link>
       </div>
       <p className="text-sm">{selectedUnitName} · {assets.length} assets · {formatCurrency(assets.reduce((total,a)=>total+a.acquisitionCost,0))} acquisition cost</p>
-      <div className="overflow-auto"><table className="w-full text-left text-sm"><thead><tr className="bg-[#FFF4E0]">{["Property number","Asset","Unit","Accountable person","Cost","Status"].map(h=><th key={h} className="p-2 border-b">{h}</th>)}</tr></thead>
+      <div className="overflow-auto"><table className="w-full text-left text-sm"><thead><tr className="bg-cream">{["Property number","Asset","Unit","Accountable person","Cost","Status"].map(h=><th key={h} className="p-2 border-b">{h}</th>)}</tr></thead>
         <tbody>{assets.map(a=><tr key={a.id}>{[a.propertyNo,a.name,a.unitCode,a.accountablePerson,formatCurrency(a.acquisitionCost),a.status].map((value,i)=><td key={i} className="p-2 border-b">{value}</td>)}</tr>)}</tbody>
       </table></div>{!assets.length&&<p>No assets match this scope.</p>}
     </section>

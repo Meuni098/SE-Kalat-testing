@@ -5,14 +5,20 @@ import { formatDate, formatCurrency } from "@/lib/utils";
 import { NewTransferModal } from "@/components/inventory/new-transfer-modal";
 import { TransferDecisionButtons } from "@/components/inventory/transfer-decision-button";
 import Link from "next/link";
+import { redirect } from "next/navigation";
 
 export const dynamic = "force-dynamic";
 
-export default async function TransfersPage() {
+export default async function TransfersPage({ searchParams }: { searchParams: Promise<{ status?: string | string[] }> }) {
   const user = await getSession();
+  if (!user) redirect("/login");
+  const status = (await searchParams).status;
+  const statusFilter = typeof status === "string" && ["PENDING", "APPROVED", "REJECTED"].includes(status) ? status : "ALL";
+  const requestScope = user.role === "CUSTODIAN" ? { OR: [{ fromUnitId: user.unitId ?? "" }, { toUnitId: user.unitId ?? "" }] } : {};
 
-  const [transfers, assets, units, persons] = await Promise.all([
+  const [transfers, assets, units] = await Promise.all([
     prisma.transferRequest.findMany({
+      where: requestScope,
       include: {
         asset: {
           include: { category: true, unit: true },
@@ -21,18 +27,17 @@ export default async function TransfersPage() {
         toUnit: true,
         fromPerson: true,
         toPerson: true,
-        requestedBy: true,
-        decidedBy: true,
+        requestedBy: { select: { name: true } },
+        decidedBy: { select: { name: true } },
       },
       orderBy: { requestedAt: "desc" },
     }),
     prisma.asset.findMany({
-      where: { isDeleted: false },
+      where: { isDeleted: false, status: { in: ["IN_USE", "IN_STORAGE", "UNDER_REPAIR"] }, transferRequests: { none: { status: "PENDING" } }, returnRequests: { none: { status: "PENDING" } }, ...(user?.role === "CUSTODIAN" ? { unitId: user.unitId ?? "" } : {}) },
       include: { unit: true, accountablePerson: true },
       orderBy: { propertyNo: "asc" },
     }),
     prisma.unit.findMany({ where: { isActive: true }, orderBy: { code: "asc" } }),
-    prisma.person.findMany({ orderBy: { fullName: "asc" } }),
   ]);
 
   const canDecide = user?.role === "ADMIN" || user?.role === "STAFF";
@@ -50,42 +55,27 @@ export default async function TransfersPage() {
     currentCustodian: a.accountablePerson?.fullName || null,
   }));
 
-  const modalPersons = persons.map((p) => ({
-    id: p.id,
-    fullName: p.fullName,
-    position: p.position,
-    unitId: p.unitId,
-  }));
+  const visibleTransfers = transfers.filter((transfer) => statusFilter === "ALL" || transfer.status === statusFilter);
 
   return (
     <div className="space-y-6 pb-16 select-none">
       {/* Header Banner */}
-      <div className="bg-[#FFFFFF] border border-[#EBD3B2] p-5 rounded flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <div className="bg-[#FFFFFF] border border-border p-5 rounded flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <div className="flex items-center gap-2">
-            <span className="bg-[#FFF4E0] text-[#A60212] border border-[#A60212] px-2 py-0.5 rounded text-[11px] font-bold font-mono">
-              BULSU INVENTORY SYSTEM
-            </span>
-            <span className="bg-[#FFF4E0] text-[#6E2B32] border border-[#EBD3B2] px-2 py-0.5 rounded text-[11px] font-mono">
-              PROPERTY TRANSFER REPORT (PTR)
-            </span>
-          </div>
+
           <h1 className="text-2xl font-black text-[#3B0A0F] tracking-tight uppercase mt-1">
             Transfer Requests &amp; Custody Reassignments
           </h1>
-          <p className="text-xs text-[#6E2B32] font-medium mt-0.5">
-            Manage inter-college asset movements, temporary loans, and official COA property transfer vouchers
-          </p>
         </div>
 
         <div>
-          <NewTransferModal assets={modalAssets} units={units} persons={modalPersons} />
+          {["ADMIN", "STAFF", "CUSTODIAN"].includes(user?.role ?? "") && <NewTransferModal assets={modalAssets} units={units} />}
         </div>
       </div>
 
       {/* KPI Overview Ribbon */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <div className="bg-[#FFFFFF] border border-[#EBD3B2] p-4 rounded flex items-center justify-between">
+        <div className="bg-[#FFFFFF] border border-border p-4 rounded flex items-center justify-between">
           <div>
             <span className="text-xs font-bold text-[#6E2B32] uppercase tracking-wider block">
               Pending Decisions
@@ -95,12 +85,12 @@ export default async function TransfersPage() {
               <span className="text-xs font-normal text-[#6E2B32]">Awaiting AMO</span>
             </span>
           </div>
-          <div className="w-10 h-10 rounded bg-[#FFF4E0] border border-[#EBD3B2] text-[#A60212] flex items-center justify-center">
+          <div className="w-10 h-10 rounded bg-cream border border-border text-[#A60212] flex items-center justify-center">
             <span className="material-symbols-outlined text-[20px]">pending_actions</span>
           </div>
         </div>
 
-        <div className="bg-[#FFFFFF] border border-[#EBD3B2] p-4 rounded flex items-center justify-between">
+        <div className="bg-[#FFFFFF] border border-border p-4 rounded flex items-center justify-between">
           <div>
             <span className="text-xs font-bold text-[#6E2B32] uppercase tracking-wider block">
               Approved Transfers
@@ -109,12 +99,12 @@ export default async function TransfersPage() {
               {approvedCount} <span className="text-xs font-normal text-[#6E2B32]">Completed</span>
             </span>
           </div>
-          <div className="w-10 h-10 rounded bg-[#FFF4E0] border border-[#EBD3B2] text-[#D97B1A] flex items-center justify-center">
+          <div className="w-10 h-10 rounded bg-cream border border-border text-[#D97B1A] flex items-center justify-center">
             <span className="material-symbols-outlined text-[20px]">check_circle</span>
           </div>
         </div>
 
-        <div className="bg-[#FFFFFF] border border-[#EBD3B2] p-4 rounded flex items-center justify-between">
+        <div className="bg-[#FFFFFF] border border-border p-4 rounded flex items-center justify-between">
           <div>
             <span className="text-xs font-bold text-[#6E2B32] uppercase tracking-wider block">
               Rejected Requests
@@ -123,12 +113,12 @@ export default async function TransfersPage() {
               {rejectedCount} <span className="text-xs font-normal text-[#6E2B32]">Archived</span>
             </span>
           </div>
-          <div className="w-10 h-10 rounded bg-[#FFF4E0] border border-[#EBD3B2] text-[#6E2B32] flex items-center justify-center">
+          <div className="w-10 h-10 rounded bg-cream border border-border text-[#6E2B32] flex items-center justify-center">
             <span className="material-symbols-outlined text-[20px]">cancel</span>
           </div>
         </div>
 
-        <div className="bg-[#FFFFFF] border border-[#EBD3B2] p-4 rounded flex items-center justify-between">
+        <div className="bg-[#FFFFFF] border border-border p-4 rounded flex items-center justify-between">
           <div>
             <span className="text-xs font-bold text-[#6E2B32] uppercase tracking-wider block">
               Total Logged PTRs
@@ -137,14 +127,18 @@ export default async function TransfersPage() {
               {transfers.length} <span className="text-xs font-normal text-[#6E2B32]">Historical</span>
             </span>
           </div>
-          <div className="w-10 h-10 rounded bg-[#FFF4E0] border border-[#EBD3B2] text-[#A60212] flex items-center justify-center">
+          <div className="w-10 h-10 rounded bg-cream border border-border text-[#A60212] flex items-center justify-center">
             <span className="material-symbols-outlined text-[20px]">receipt_long</span>
           </div>
         </div>
       </div>
 
+      {user.role === "CUSTODIAN" && !user.unitId && <p role="status" className="text-sm text-[#6E2B32]">Your account is not linked to a college or unit. Contact AMO.</p>}
+      <nav aria-label="Transfer request status" className="flex flex-wrap gap-2">
+        {["ALL", "PENDING", "APPROVED", "REJECTED"].map((filter) => <Link key={filter} href={filter === "ALL" ? "/inventory/transfers" : `/inventory/transfers?status=${filter}`} aria-current={statusFilter === filter ? "page" : undefined} className={`rounded border px-4 py-2 text-xs font-bold ${statusFilter === filter ? "bg-[#A60212] text-[#FFF4E0] border-[#A60212]" : "bg-white text-[#3B0A0F] border-border"}`}>{filter === "ALL" ? "All Requests" : filter.charAt(0) + filter.slice(1).toLowerCase()}</Link>)}
+      </nav>
       {/* Main Transfers Table */}
-      <div className="bg-[#FFFFFF] border border-[#EBD3B2] rounded shadow-sm overflow-hidden">
+      <div className="bg-[#FFFFFF] border border-border rounded shadow-sm overflow-hidden">
         <div className="bg-[#3B0A0F] px-4 py-3 border-b border-[#4E1117] flex items-center justify-between">
           <div className="flex items-center gap-2">
             <span className="material-symbols-outlined text-[#F5AB29] text-[20px]">sync_alt</span>
@@ -152,37 +146,37 @@ export default async function TransfersPage() {
               Transfer Request Docket
             </span>
           </div>
-          <span className="text-[11px] font-mono text-[#F5AB29] bg-[#4E1117] px-2 py-0.5 rounded border border-[#6E2B32]">
-            {transfers.length} Record(s) Found
+          <span className="text-[11px] font-mono px-2 py-0.5 rounded border badge-solid badge-amber">
+            {visibleTransfers.length} Record(s) Found
           </span>
         </div>
 
         <div className="overflow-x-auto">
           <table className="w-full text-left text-xs border-collapse">
             <thead>
-              <tr className="bg-[#FFF4E0] text-[#3B0A0F] border-b border-[#EBD3B2] font-black uppercase text-[11px]">
+              <tr className="bg-cream text-[#3B0A0F] border-b border-border font-black uppercase text-[11px]">
                 <th className="py-2.5 px-3">Date Requested</th>
                 <th className="py-2.5 px-3">Asset Product Code &amp; Name</th>
                 <th className="py-2.5 px-3">Origin Unit / Custodian</th>
-                <th className="py-2.5 px-3">Destination Unit / Recipient</th>
+                <th className="py-2.5 px-3">Receiving College / Unit</th>
                 <th className="py-2.5 px-3">Status</th>
                 <th className="py-2.5 px-3">Remarks / Reason</th>
                 <th className="py-2.5 px-3 text-right">Actions</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-[#EBD3B2]">
-              {transfers.length === 0 ? (
+            <tbody className="divide-y divide-border">
+              {visibleTransfers.length === 0 ? (
                 <tr>
                   <td colSpan={7} className="py-8 text-center text-[#6E2B32] font-medium">
                     <span className="material-symbols-outlined text-[32px] block text-[#EBD3B2] mb-1">
                       move_to_inbox
                     </span>
-                    No asset transfer requests recorded. Click &quot;Initiate Transfer Request&quot; above to log a new movement.
+                    {statusFilter === "ALL" ? "No transfer requests recorded for your view." : `No ${statusFilter.toLowerCase()} transfer requests found. Choose All Requests to view other statuses.`}
                   </td>
                 </tr>
               ) : (
-                transfers.map((t) => (
-                  <tr key={t.id} className="hover:bg-[#FFF4E0]/40 transition-colors">
+                visibleTransfers.map((t) => (
+                  <tr key={t.id} className="hover:bg-cream transition-colors">
                     <td className="py-3 px-3 text-[#3B0A0F] font-mono text-[11px] whitespace-nowrap">
                       {formatDate(t.requestedAt)}
 <TransactionAttributionButton entityType="TRANSFER" entityId={t.id} />
@@ -219,18 +213,18 @@ export default async function TransfersPage() {
                         <span>{t.toUnit.code}</span>
                       </div>
                       <span className="text-[11px] text-[#6E2B32]">
-                        {t.toPerson?.fullName || "To be designated"}
+                        {t.toPerson?.fullName || "College custody"}
                       </span>
                     </td>
 
                     <td className="py-3 px-3">
                       <span
-                        className={`inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider ${
+                        className={` inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider  badge-solid ${
                           t.status === "PENDING"
-                            ? "bg-[#FFF4E0] text-[#D97B1A] border border-[#F5AB29]"
+                            ? "border badge-solid badge-amber"
                             : t.status === "APPROVED"
-                            ? "bg-[#E8F5E9] text-[#2E7D32] border border-[#A5D6A7]"
-                            : "bg-[#FFEBEE] text-[#C62828] border border-[#FFCDD2]"
+                            ? "border badge-solid badge-green"
+                            : "border badge-solid badge-crimson"
                         }`}
                       >
                         <span className="w-1.5 h-1.5 rounded-full bg-current" />

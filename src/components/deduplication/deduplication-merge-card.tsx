@@ -57,15 +57,15 @@ export function DeduplicationMergeCard({
   };
 
   return (
-    <div className="bg-[#FFFFFF] border border-[#EBD3B2] rounded p-5 select-none">
+    <div className="bg-[#FFFFFF] border border-border rounded p-5 select-none">
       {/* Cluster Header */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between pb-3 border-b border-[#EBD3B2] gap-2">
+      <div className="flex flex-col md:flex-row md:items-center justify-between pb-3 border-b border-border gap-2">
         <div className="flex items-center gap-2.5">
           <span className="w-3 h-3 bg-[#D97B1A] rounded-full" />
           <h2 className="text-sm font-bold text-[#3B0A0F] uppercase">
             Duplicate Candidate Cluster: Reversible Consolidation
           </h2>
-          <span className="bg-[#FFF4E0] text-[#A60212] text-[10px] font-bold px-2 py-0.5 rounded border border-[#A60212] font-mono">
+          <span className="text-[10px] font-bold px-2 py-0.5 rounded border font-mono badge-solid badge-maroon">
             COA CONFLICT RESOLUTION
           </span>
         </div>
@@ -75,7 +75,7 @@ export function DeduplicationMergeCard({
       </div>
 
       {mergeResult && (
-        <div className="mt-3 p-3 bg-[#FFF4E0] border border-[#D97B1A] rounded text-xs text-[#3B0A0F] font-bold flex items-center gap-2">
+        <div className="mt-3 p-3 bg-cream border border-[#D97B1A] rounded text-xs text-[#3B0A0F] font-bold flex items-center gap-2">
           <span className="material-symbols-outlined text-[#A60212] text-[18px]">
             verified
           </span>
@@ -88,14 +88,14 @@ export function DeduplicationMergeCard({
         {/* Candidate A (Master Framing) */}
         <div
           onClick={() => setSelectedMaster("A")}
-          className={`bg-[#FFFFFF] border-2 rounded p-4 flex flex-col justify-between cursor-pointer transition-colors ${
+          className={`border-2 rounded p-4 flex flex-col justify-between cursor-pointer transition-colors ${
             selectedMaster === "A"
-              ? "border-[#A60212] bg-[#FFF4E0]/30"
-              : "border-[#EBD3B2] hover:border-[#A60212]"
+              ? "border-[#A60212] bg-[#F4E5E8]"
+              : "bg-[#FFFFFF] border-border hover:border-[#A60212]"
           }`}
         >
           <div>
-            <div className="flex items-center justify-between pb-2 border-b border-[#EBD3B2]">
+            <div className="flex items-center justify-between pb-2 border-b border-border">
               <label className="flex items-center gap-2 cursor-pointer font-bold text-xs text-[#3B0A0F]">
                 <input
                   type="radio"
@@ -106,35 +106,35 @@ export function DeduplicationMergeCard({
                 />
                 <span>Candidate A (Master Record)</span>
               </label>
-              <span className="bg-[#FFF4E0] text-[#A60212] text-[10px] font-bold px-2 py-0.5 rounded border border-[#A60212] font-mono">
+              <span className="text-[10px] font-bold px-2 py-0.5 rounded border font-mono badge-solid badge-maroon">
                 {selectedMaster === "A" ? "SELECTED MASTER" : "CANONICAL"}
               </span>
             </div>
 
             <div className="mt-3 space-y-2 text-xs">
-              <div className="flex justify-between py-1 border-b border-[#EBD3B2]">
+              <div className="flex justify-between py-1 border-b border-border">
                 <span className="text-[#6E2B32]">Property Number</span>
                 <span className="font-mono font-bold text-[#A60212]">
                   {candidateA.propertyNo}
                 </span>
               </div>
-              <div className="flex justify-between py-1 border-b border-[#EBD3B2]">
+              <div className="flex justify-between py-1 border-b border-border">
                 <span className="text-[#6E2B32]">Serial Number</span>
                 <span className="font-mono font-bold text-[#3B0A0F]">
                   {candidateA.serialNo || "NO SERIAL"}
                 </span>
               </div>
-              <div className="flex justify-between py-1 border-b border-[#EBD3B2]">
+              <div className="flex justify-between py-1 border-b border-border">
                 <span className="text-[#6E2B32]">Description</span>
                 <span className="font-semibold text-[#3B0A0F] text-right truncate max-w-[180px]">
                   {candidateA.name}
                 </span>
               </div>
-              <div className="flex justify-between py-1 border-b border-[#EBD3B2]">
+              <div className="flex justify-between py-1 border-b border-border">
                 <span className="text-[#6E2B32]">Operating Unit</span>
                 <span className="font-medium text-[#3B0A0F]">{candidateA.unit.code}</span>
               </div>
-              <div className="flex justify-between py-1 border-b border-[#EBD3B2]">
+              <div className="flex justify-between py-1 border-b border-border">
                 <span className="text-[#6E2B32]">Acquisition Cost</span>
                 <span className="font-mono font-bold text-[#3B0A0F]">
                   {formatCurrency(candidateA.acquisitionCost)}
@@ -151,14 +151,14 @@ export function DeduplicationMergeCard({
         {/* Candidate B (Duplicate Framing) */}
         <div
           onClick={() => setSelectedMaster("B")}
-          className={`bg-[#FFFFFF] border-2 rounded p-4 flex flex-col justify-between cursor-pointer transition-colors ${
+          className={`border-2 rounded p-4 flex flex-col justify-between cursor-pointer transition-colors ${
             selectedMaster === "B"
-              ? "border-[#A60212] bg-[#FFF4E0]/30"
+              ? "border-[#A60212] bg-[#F4E5E8]"
               : "border-[#D97B1A] hover:border-[#A60212]"
           }`}
         >
           <div>
-            <div className="flex items-center justify-between pb-2 border-b border-[#EBD3B2]">
+            <div className="flex items-center justify-between pb-2 border-b border-border">
               <label className="flex items-center gap-2 cursor-pointer font-bold text-xs text-[#3B0A0F]">
                 <input
                   type="radio"
@@ -169,35 +169,35 @@ export function DeduplicationMergeCard({
                 />
                 <span>Candidate B (Conflicting Record)</span>
               </label>
-              <span className="bg-[#FFF4E0] text-[#D97B1A] text-[10px] font-bold px-2 py-0.5 rounded border border-[#D97B1A] font-mono">
+              <span className="text-[10px] font-bold px-2 py-0.5 rounded border font-mono badge-solid badge-amber">
                 {selectedMaster === "B" ? "SELECTED MASTER" : "DUPLICATE TARGET"}
               </span>
             </div>
 
             <div className="mt-3 space-y-2 text-xs">
-              <div className="flex justify-between py-1 border-b border-[#EBD3B2]">
+              <div className="flex justify-between py-1 border-b border-border">
                 <span className="text-[#6E2B32]">Property Number</span>
                 <span className="font-mono font-bold text-[#A60212]">
                   {candidateB.propertyNo}
                 </span>
               </div>
-              <div className="flex justify-between py-1 border-b border-[#EBD3B2]">
+              <div className="flex justify-between py-1 border-b border-border">
                 <span className="text-[#6E2B32]">Serial Number</span>
                 <span className="font-mono font-bold text-[#3B0A0F]">
                   {candidateB.serialNo || "NO SERIAL"}
                 </span>
               </div>
-              <div className="flex justify-between py-1 border-b border-[#EBD3B2]">
+              <div className="flex justify-between py-1 border-b border-border">
                 <span className="text-[#6E2B32]">Description</span>
                 <span className="font-semibold text-[#3B0A0F] text-right truncate max-w-[180px]">
                   {candidateB.name}
                 </span>
               </div>
-              <div className="flex justify-between py-1 border-b border-[#EBD3B2]">
+              <div className="flex justify-between py-1 border-b border-border">
                 <span className="text-[#6E2B32]">Operating Unit</span>
                 <span className="font-medium text-[#3B0A0F]">{candidateB.unit.code}</span>
               </div>
-              <div className="flex justify-between py-1 border-b border-[#EBD3B2]">
+              <div className="flex justify-between py-1 border-b border-border">
                 <span className="text-[#6E2B32]">Acquisition Cost</span>
                 <span className="font-mono font-bold text-[#3B0A0F]">
                   {formatCurrency(candidateB.acquisitionCost)}
@@ -213,7 +213,7 @@ export function DeduplicationMergeCard({
       </div>
 
       {/* Merge Action Footer */}
-      <div className="mt-4 pt-3 border-t border-[#EBD3B2] flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+      <div className="mt-4 pt-3 border-t border-border flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
         <div className="text-xs text-[#6E2B32]">
           Retaining <strong className="text-[#3B0A0F]">{selectedMaster === "A" ? candidateA.propertyNo : candidateB.propertyNo}</strong> as the master record. Conflicting history will be consolidated with full COA audit log.
         </div>
